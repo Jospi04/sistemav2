@@ -54,6 +54,11 @@ switch ($url) {
         $controller->index();
         break;
 
+    case 'reabastecer':
+        $controller = new Controller\DashboardController();
+        $controller->reabastecer();
+        break;
+
     case 'ventas':
         $controller = new Controller\VentasController();
         $controller->registrar();
