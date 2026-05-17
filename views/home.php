@@ -44,7 +44,7 @@
             <!-- Columna Derecha: Botones Funcionales -->
             <div class="nav-right">
                 <button type="button" class="btn-watch-demo" onclick="openDemoModal()">
-                    VER DEMO
+                    SIMULADOR
                     <span class="play-circle-icon">
                         <svg class="play-arrow-svg" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M8 5v14l11-7z" />
@@ -152,18 +152,18 @@
         <div class="prices-container">
             <div class="price-box">
                 <span class="fuel-type">Gasolina 95 Oct</span>
-                <span class="fuel-price font-mono">S/ 18.50</span>
-                <span class="fuel-metric font-mono">Por Galón</span>
+                <span class="fuel-price font-mono">S/ 22.14 / G</span>
+                <span class="fuel-metric font-mono">Equivale a S/ 5.85 por Litro</span>
             </div>
             <div class="price-box">
                 <span class="fuel-type">Gasolina 90 Oct</span>
-                <span class="fuel-price font-mono">S/ 16.20</span>
-                <span class="fuel-metric font-mono">Por Galón</span>
+                <span class="fuel-price font-mono">S/ 19.30 / G</span>
+                <span class="fuel-metric font-mono">Equivale a S/ 5.10 por Litro</span>
             </div>
             <div class="price-box">
-                <span class="fuel-type">Diesel B5 S-50</span>
-                <span class="fuel-price font-mono">S/ 15.80</span>
-                <span class="fuel-metric font-mono">Por Galón</span>
+                <span class="fuel-type">Diesel (Petróleo)</span>
+                <span class="fuel-price font-mono">S/ 19.68 / G</span>
+                <span class="fuel-metric font-mono">Equivale a S/ 5.20 por Litro</span>
             </div>
         </div>
     </section>
@@ -171,7 +171,7 @@
     <!-- PIE DE PÁGINA -->
     <footer id="seguridad" class="footer-adaline">
         <div class="footer-container">
-            <p class="brand-text">JOSPERÚN</p>
+            <p class="brand-text">JOSPERÚ</p>
             <p class="copyright">&copy; 2026. Todos los derechos reservados. Estación de Control Central.</p>
             <p class="compliance font-mono">Compliance Normativo Hidrocarburos v4.2</p>
         </div>
@@ -181,17 +181,25 @@
     <div id="demoModal" class="demo-modal-overlay">
         <div class="demo-modal-card">
             <header class="demo-modal-header">
-                <h3>Simulador Despachador en Vivo</h3>
+                <h3>Simulador Despachador de Combustible</h3>
                 <button type="button" class="btn-close-modal" onclick="closeDemoModal()">&times;</button>
             </header>
             <div class="demo-modal-body">
-                <p class="demo-desc">Introduce la cantidad de litros para calcular el costo proyectado en base a
-                    Gasolina 95 Oct (S/ 4.88 por Litro).</p>
+                <p class="demo-desc">Selecciona el tipo de combustible e introduce la cantidad en galones para proyectar el costo en tiempo real.</p>
 
                 <div class="demo-simulator-box">
                     <div class="sim-group">
-                        <label for="demoLitros" class="font-mono">CANTIDAD EN LITROS</label>
+                        <label for="demoCombustible" class="font-mono">TIPO DE COMBUSTIBLE</label>
+                        <select id="demoCombustible" onchange="actualizarPrecioCombustible()">
+                            <option value="22.14" data-stock="5000">Gasolina 95 — S/ 22.14 por Galón</option>
+                            <option value="19.30" data-stock="3000">Gasolina 90 — S/ 19.30 por Galón</option>
+                            <option value="19.68" data-stock="8000">Diesel — S/ 19.68 por Galón</option>
+                        </select>
+                    </div>
+                    <div class="sim-group">
+                        <label for="demoLitros" class="font-mono">CANTIDAD EN GALONES</label>
                         <input type="number" id="demoLitros" placeholder="0.00" oninput="calcularDemoTotal()" min="0">
+                        <span id="demoStockLabel" class="font-mono" style="font-size: 11px; margin-top: 4px; display: block; color: var(--color-valley-green);">Stock Disponible: 5000 Galones</span>
                     </div>
                     <div class="sim-divider"></div>
                     <div class="sim-result">
@@ -212,6 +220,7 @@
         function openDemoModal() {
             document.getElementById('demoModal').classList.add('active');
             document.body.style.overflow = 'hidden'; // Detener scroll de fondo
+            actualizarPrecioCombustible();
         }
 
         function closeDemoModal() {
@@ -219,16 +228,42 @@
             document.body.style.overflow = 'auto'; // Restaurar scroll
         }
 
+        function actualizarPrecioCombustible() {
+            const combustibleSelect = document.getElementById('demoCombustible');
+            const selectedOption = combustibleSelect.options[combustibleSelect.selectedIndex];
+            const stock = selectedOption.getAttribute('data-stock');
+            const stockLabel = document.getElementById('demoStockLabel');
+
+            stockLabel.textContent = `Stock Disponible: ${stock} Galones`;
+            stockLabel.style.color = "var(--color-valley-green)";
+
+            calcularDemoTotal();
+        }
+
         function calcularDemoTotal() {
             const litrosInput = document.getElementById('demoLitros');
+            const combustibleSelect = document.getElementById('demoCombustible');
             const totalSpan = document.getElementById('demoTotal');
-            const precioPorLitro = 4.88; // Aprox S/ 18.50 por galón (3.785 L)
+            const stockLabel = document.getElementById('demoStockLabel');
 
-            const litros = parseFloat(litrosInput.value);
-            if (isNaN(litros) || litros <= 0) {
+            const selectedOption = combustibleSelect.options[combustibleSelect.selectedIndex];
+            const stock = parseFloat(selectedOption.getAttribute('data-stock'));
+            const precioPorGalon = parseFloat(combustibleSelect.value);
+
+            const galones = parseFloat(litrosInput.value);
+            if (isNaN(galones) || galones <= 0) {
                 totalSpan.textContent = 'S/ 0.00';
+                stockLabel.textContent = `Stock Disponible: ${stock} Galones`;
+                stockLabel.style.color = "var(--color-valley-green)";
             } else {
-                const total = litros * precioPorLitro;
+                if (galones > stock) {
+                    stockLabel.textContent = `⚠️ Excede el Stock disponible (${stock} G)`;
+                    stockLabel.style.color = "#d9534f"; // Rojo/alerta
+                } else {
+                    stockLabel.textContent = `Stock Disponible: ${stock} Galones`;
+                    stockLabel.style.color = "var(--color-valley-green)";
+                }
+                const total = galones * precioPorGalon;
                 totalSpan.textContent = 'S/ ' + total.toFixed(2);
             }
         }

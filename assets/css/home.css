@@ -560,20 +560,23 @@ body {
     color: var(--color-valley-green);
 }
 
-.sim-group input {
+.sim-group input,
+.sim-group select {
     width: 100%;
     background-color: var(--color-canvas-ice);
     border: 1px solid var(--color-stone-moss);
     border-radius: var(--radius-inputs);
     padding: var(--spacing-12);
     font-family: var(--font-fragmentmono);
-    font-size: 16px;
+    font-size: 14px;
     color: var(--color-adaline-ink);
     outline: none;
     transition: border-color 0.2s ease;
+    cursor: pointer;
 }
 
-.sim-group input:focus {
+.sim-group input:focus,
+.sim-group select:focus {
     border-color: var(--color-valley-green);
 }
 
