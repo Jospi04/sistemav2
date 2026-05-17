@@ -1,21 +1,13 @@
-/* ==========================================
-   ESTILOS DE LA BOLETA DE VENTA (boleta.css)
-   ========================================== */
+/* ==========================================================================
+   ADALINE DESIGN SYSTEM — ESTILOS DE LA BOLETA DE VENTA (boleta.css)
+   ========================================================================== */
 
-/* Variables CSS */
+/* Variables locales */
 :root {
-    --bg-primary: #0F172A;
-    --bg-secondary: #1E293B;
-    --text-main: #F8FAFC;
-    --text-muted: #94A3B8;
-    --accent-color: #0EA5E9;
-    --accent-hover: #0284C7;
-    --border-color: #334155;
-    
     /* Variables de papel térmico */
     --paper-bg: #FFFFFF;
-    --paper-text: #1E293B;
-    --paper-muted: #64748B;
+    --paper-text: #0a1d08; /* Adaline Ink para la tinta del ticket */
+    --paper-muted: #5c6b55; /* Tono oliva oscuro secundario del ticket */
 }
 
 .receipt-container {
@@ -30,11 +22,11 @@
 .no-receipt-box {
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: var(--radius-cards);
     padding: 40px;
     max-width: 500px;
     text-align: center;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-subtle);
 }
 
 .box-icon {
@@ -45,7 +37,9 @@
 .no-receipt-box h2 {
     font-size: 1.35rem;
     font-weight: 700;
+    letter-spacing: -0.04em;
     margin-bottom: 12px;
+    color: var(--text-main);
 }
 
 .no-receipt-box p {
@@ -56,11 +50,11 @@
 
 .btn-primary-go {
     background-color: var(--accent-color);
-    color: #FFFFFF;
+    color: var(--bg-primary);
     text-decoration: none;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-weight: 600;
+    padding: 12px 28px;
+    border-radius: var(--radius-buttons);
+    font-weight: 700;
     display: inline-block;
     transition: background-color 0.2s ease;
 }
@@ -76,12 +70,13 @@
     background-color: var(--paper-bg);
     color: var(--paper-text);
     width: 320px;
-    padding: 24px 18px;
-    border-radius: 4px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.82rem;
+    padding: 28px 20px;
+    border-radius: 6px;
+    box-shadow: rgba(32, 59, 20, 0.08) 0px 12px 32px;
+    font-family: 'JetBrains Mono', monospace; /* Tipografía técnica */
+    font-size: 0.8rem;
     line-height: 1.4;
+    border: 1px solid var(--border-color);
 }
 
 /* Encabezado del ticket */
@@ -91,9 +86,10 @@
 }
 
 .ticket-header h3 {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 800;
     margin-bottom: 4px;
+    color: var(--paper-text);
 }
 
 .company-name {
@@ -108,21 +104,22 @@
 
 /* Separadores */
 .ticket-separator {
-    border-top: 1px dashed #94A3B8;
+    border-top: 1px dashed var(--border-color);
     margin: 14px 0;
     height: 0;
 }
 
 /* Detalles */
 .ticket-details h4 {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 800;
     text-align: center;
     margin-bottom: 6px;
+    color: var(--paper-text);
 }
 
 .serial-number {
-    font-weight: 700;
+    font-weight: 800;
     text-align: center;
     margin-bottom: 12px;
 }
@@ -150,15 +147,16 @@
 
 .ticket-items-table th {
     font-weight: 700;
-    border-bottom: 1px dashed #94A3B8;
+    border-bottom: 1px dashed var(--border-color);
     padding-bottom: 6px;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
+    color: var(--paper-text);
 }
 
 .ticket-items-table td {
     padding: 8px 0;
     vertical-align: top;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
 }
 
 .align-left {
@@ -183,8 +181,8 @@
 
 .grand-total {
     font-weight: 800;
-    font-size: 0.95rem;
-    border-top: 1px solid #1E293B;
+    font-size: 0.92rem;
+    border-top: 1px solid var(--paper-text);
     padding-top: 6px;
     margin-top: 4px;
 }
@@ -202,20 +200,21 @@
 .qr-container {
     width: 70px;
     height: 70px;
-    border: 1px solid #94A3B8;
-    padding: 3px;
+    border: 1px solid var(--border-color);
+    padding: 4px;
     margin-top: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #ffffff;
 }
 
 .simulated-qr-pattern {
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(circle, #1E293B 25%, transparent 26%),
-        radial-gradient(circle, #1E293B 25%, transparent 26%);
+        radial-gradient(circle, var(--paper-text) 25%, transparent 26%),
+        radial-gradient(circle, var(--paper-text) 25%, transparent 26%);
     background-size: 8px 8px;
     background-position: 0 0, 4px 4px;
     opacity: 0.85;
@@ -240,10 +239,10 @@
 
 .btn-action-print {
     background-color: var(--accent-color);
-    color: #FFFFFF;
+    color: var(--bg-primary);
     border: none;
-    border-radius: 6px;
-    padding: 12px 24px;
+    border-radius: var(--radius-buttons);
+    padding: 12px 28px;
     font-size: 0.9rem;
     font-weight: 700;
     cursor: pointer;
@@ -258,16 +257,16 @@
     background-color: transparent;
     color: var(--text-main);
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 12px 24px;
+    border-radius: var(--radius-buttons);
+    padding: 12px 28px;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 700;
     text-decoration: none;
     transition: all 0.2s ease;
 }
 
 .btn-action-new:hover {
-    background-color: var(--bg-secondary);
+    background-color: #f6f8f2;
 }
 
 /* ==========================================

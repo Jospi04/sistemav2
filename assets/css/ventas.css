@@ -1,18 +1,10 @@
-/* ==========================================
-   ESTILOS DE LA INTERFAZ DE VENTAS (ventas.css)
-   ========================================== */
+/* ==========================================================================
+   ADALINE DESIGN SYSTEM — ESTILOS DE LA INTERFAZ DE VENTAS (ventas.css)
+   ========================================================================== */
 
-/* Variables CSS Globales */
+/* Variables locales */
 :root {
-    --bg-primary: #0F172A;
-    --bg-secondary: #1E293B;
-    --text-main: #F8FAFC;
-    --text-muted: #94A3B8;
-    --accent-color: #0EA5E9;
-    --accent-hover: #0284C7;
-    --border-color: #334155;
-    --success-color: #10B981;
-    --danger-color: #EF4444;
+    --danger-color: #b82d1d; /* Rojo de error */
 }
 
 /* Contenedor General */
@@ -25,12 +17,12 @@
 }
 
 /* ==========================================
-   ALERTAS Y NOTIFICACIONES
+   ALERTAS Y NOTIFICACIONES (HIGH CONTRAST & SERENE)
    ========================================== */
 .alert-success {
-    background-color: rgba(16, 185, 129, 0.06);
+    background-color: rgba(32, 59, 20, 0.05);
     border: 1px solid var(--success-color);
-    border-radius: 8px;
+    border-radius: var(--radius-cards);
     padding: 16px 20px;
     display: flex;
     gap: 16px;
@@ -39,16 +31,16 @@
 
 .alert-icon-box {
     background-color: var(--success-color);
-    color: #FFFFFF;
-    width: 24px;
-    height: 24px;
+    color: var(--bg-primary);
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
     flex-shrink: 0;
-    font-size: 0.85rem;
+    font-size: 1rem;
 }
 
 .alert-content {
@@ -60,7 +52,8 @@
 .alert-title {
     font-weight: 700;
     font-size: 0.95rem;
-    color: #A7F3D0;
+    color: var(--success-color);
+    letter-spacing: -0.02em;
 }
 
 .alert-message {
@@ -72,7 +65,7 @@
     color: var(--accent-color);
     text-decoration: none;
     font-size: 0.88rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-top: 8px;
     display: inline-block;
     transition: color 0.2s ease;
@@ -80,14 +73,13 @@
 
 .btn-receipt-shortcut:hover {
     color: var(--accent-hover);
-    text-decoration: underline;
 }
 
 /* Alerta de Error */
 .alert-error {
-    background-color: rgba(239, 68, 68, 0.06);
+    background-color: rgba(184, 45, 29, 0.05);
     border: 1px solid var(--danger-color);
-    border-radius: 8px;
+    border-radius: var(--radius-cards);
     padding: 16px 20px;
     display: flex;
     gap: 16px;
@@ -96,10 +88,11 @@
 
 .alert-error .alert-icon-box {
     background-color: var(--danger-color);
+    color: #ffffff;
 }
 
 .alert-error .alert-title {
-    color: #FCA5A5;
+    color: var(--danger-color);
 }
 
 /* ==========================================
@@ -108,21 +101,22 @@
 .dispatch-card {
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-cards);
+    box-shadow: var(--shadow-subtle);
     overflow: hidden;
 }
 
 .card-title-bar {
     padding: 28px 32px;
     border-bottom: 1px solid var(--border-color);
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: #fbfdf6; /* Canvas Ice de cabecera */
 }
 
 .card-title-bar h2 {
     font-size: 1.25rem;
     font-weight: 700;
     margin-bottom: 6px;
+    letter-spacing: -0.04em;
     color: var(--text-main);
 }
 
@@ -146,10 +140,10 @@
 }
 
 .form-group label {
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.78rem;
+    font-weight: 700;
     color: var(--text-muted);
-    letter-spacing: 0.5px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 
@@ -162,10 +156,10 @@
 .dispatch-form input[type="text"],
 .dispatch-form input[type="number"] {
     width: 100%;
-    background-color: var(--bg-primary);
+    background-color: #ffffff;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 12px 16px;
+    border-radius: var(--radius-inputs);
+    padding: 14px 16px;
     color: var(--text-main);
     font-family: inherit;
     font-size: 0.95rem;
@@ -176,11 +170,11 @@
 .dispatch-form select:focus,
 .dispatch-form input:focus {
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
+    box-shadow: 0 0 0 3px rgba(74, 50, 18, 0.08);
 }
 
 .dispatch-form input::placeholder {
-    color: #475569;
+    color: #a4b39b;
 }
 
 /* Filas dobles */
@@ -195,7 +189,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: #fbfdf6;
     border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 16px;
@@ -208,9 +202,9 @@
 }
 
 .info-block-label {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.08em;
     color: var(--text-muted);
 }
 
@@ -220,32 +214,33 @@
     color: var(--text-main);
 }
 
-/* Billboard Total (Estilo Surtidor) */
+/* Billboard Total (Estilo Surtidor Digital de Lujo) */
 .billboard-total {
-    background-color: #090D16;
+    background-color: var(--color-sidebar-bg); /* Adaline Ink profundo */
     border: 1px solid var(--border-color);
-    border-left: 4px solid var(--accent-color);
-    border-radius: 6px;
-    padding: 24px;
+    border-left: 5px solid var(--accent-color);
+    border-radius: var(--radius-cards);
+    padding: 24px 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 10px;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .billboard-label {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 700;
-    color: var(--text-muted);
-    letter-spacing: 1px;
+    color: var(--color-sidebar-muted);
+    letter-spacing: 0.1em;
 }
 
 .billboard-amount {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 2.2rem;
     font-weight: 800;
-    color: #38BDF8; /* Color cian luminoso de surtidor */
-    text-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+    color: #d7e8b5; /* Forest Dew luminoso digital */
+    text-shadow: 0 0 10px rgba(215, 232, 181, 0.4);
     letter-spacing: -1px;
 }
 
@@ -257,18 +252,24 @@
 .btn-submit-dispatch {
     width: 100%;
     background-color: var(--accent-color);
-    color: #FFFFFF;
+    color: var(--bg-primary);
     border: none;
-    border-radius: 6px;
+    border-radius: var(--radius-buttons);
     padding: 16px;
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .btn-submit-dispatch:hover {
     background-color: var(--accent-hover);
+}
+
+.btn-submit-dispatch:active {
+    transform: scale(0.98);
 }
 
 /* Responsividad */
