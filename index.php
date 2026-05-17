@@ -7,9 +7,17 @@ session_start();
 // Definir constante del directorio raíz de la aplicación
 define('BASE_DIR', __DIR__);
 
-// Registro de Autocarga (PSR-4 simplificado para nuestro namespace)
+// Registro de Autocarga (PSR-4 adaptado para case-sensitivity en Linux/Docker)
 spl_autoload_register(function ($class) {
     $classPath = str_replace('\\', '/', $class);
+    
+    // Convertir el nombre de la carpeta raíz del namespace a minúsculas (ej. Controller -> controller, Model -> model)
+    $parts = explode('/', $classPath);
+    if (count($parts) > 1) {
+        $parts[0] = strtolower($parts[0]);
+    }
+    $classPath = implode('/', $parts);
+    
     $file = BASE_DIR . '/' . ltrim($classPath, '/') . '.php';
     if (file_exists($file)) {
         require_once $file;

@@ -24,10 +24,10 @@ services:
     ports:
       - "3309:3306"
     environment:
-      MYSQL_ROOT_PASSWORD=grifo_root_secure_pass
-      MYSQL_DATABASE=sistema_grifo
-      MYSQL_USER=grifo_user
-      MYSQL_PASSWORD=grifo_secure_pass
+      - MYSQL_ROOT_PASSWORD=grifo_root_secure_pass
+      - MYSQL_DATABASE=sistema_grifo
+      - MYSQL_USER=grifo_user
+      - MYSQL_PASSWORD=grifo_secure_pass
     volumes:
       - grifo_db_data:/var/lib/mysql
 
