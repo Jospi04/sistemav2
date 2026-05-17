@@ -74,13 +74,13 @@ INSERT INTO `usuarios` (`nombre`, `usuario`, `password`, `rol`) VALUES
 ('Administrador del Grifo', 'admin', '$2y$10$w0M8jVfE4.rT4aQ9gN3YVud7E5qM/u6T6yYQ/BvXk8hTqLp5fN/8a', 'admin'),
 ('Carlos Grisfero', 'operador', '$2y$10$0zX7f7q8MvUeX5bZ7Wf2be2r4YyK8M07Xw7fNqZ4r2M6YV3Z6n5d.', 'operario');
 
--- Combustibles del catálogo
+-- Combustibles del catálogo (Precios oficiales por Galón en Perú)
 INSERT INTO `combustibles` (`nombre`, `precio_litro`) VALUES
-('Gasolina 90 Octanos', 4.36),
-('Gasolina 95 Octanos', 4.81),
-('Gasolina 97 Octanos', 5.23),
-('Diesel B5 S-50', 4.52),
-('GLP Vehicular', 2.25);
+('Gasolina 90 Octanos', 19.30),
+('Gasolina 95 Octanos', 22.14),
+('Gasolina 97 Octanos', 23.50),
+('Diesel B5 S-50', 19.68),
+('GLP Vehicular', 9.50);
 
 -- Tanques físicos (Inventario inicial en litros)
 INSERT INTO `inventario` (`combustible_id`, `capacidad_maxima`, `stock_actual`) VALUES

@@ -93,6 +93,8 @@ body {
     font-size: 0.95rem;
     font-weight: 500;
     transition: all 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .nav-item:hover {
@@ -107,6 +109,14 @@ body {
 
 .nav-icon {
     font-size: 1.1rem;
+    flex-shrink: 0; /* Evita que el icono se achique */
+}
+
+.nav-text,
+.logo-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
 }
 
 /* Footer del Sidebar (Usuario y Logout) */
@@ -126,6 +136,8 @@ body {
     padding: 12px;
     border-radius: 8px;
     border: 1px solid rgba(251, 253, 246, 0.08);
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .avatar {
@@ -139,11 +151,14 @@ body {
     align-items: center;
     font-weight: 700;
     font-size: 0.95rem;
+    flex-shrink: 0;
 }
 
 .user-details {
     display: flex;
     flex-direction: column;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .username {
@@ -177,6 +192,8 @@ body {
     font-size: 0.88rem;
     font-weight: 600;
     transition: all 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .btn-logout:hover {
@@ -301,10 +318,117 @@ body {
 /* Responsividad */
 @media (max-width: 768px) {
     .layout-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
     }
     
     .sidebar {
-        display: none;
+        display: none !important;
+    }
+    
+    .btn-toggle-sidebar {
+        display: none !important;
     }
 }
+
+/* ==========================================================================
+   ESTADOS DEL SIDEBAR COLAPSADO (COLLAPSED STATE)
+   ========================================================================== */
+.layout-container {
+    transition: grid-template-columns 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.layout-container.sidebar-collapsed {
+    grid-template-columns: 80px 1fr;
+}
+
+/* Transición en el contenedor de barra lateral */
+.sidebar {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ocultar elementos descriptivos suavemente al colapsar */
+.layout-container.sidebar-collapsed .logo-text,
+.layout-container.sidebar-collapsed .sidebar-nav .nav-text,
+.layout-container.sidebar-collapsed .user-details,
+.layout-container.sidebar-collapsed .btn-logout .nav-text {
+    display: none !important;
+}
+
+/* Centrar elementos y mangueras en estado encogido */
+.layout-container.sidebar-collapsed .sidebar-brand .brand-link {
+    justify-content: center !important;
+}
+
+.layout-container.sidebar-collapsed .sidebar-brand {
+    padding: 24px 12px;
+}
+
+.layout-container.sidebar-collapsed .sidebar-nav {
+    padding: 24px 12px;
+}
+
+.layout-container.sidebar-collapsed .nav-item {
+    justify-content: center;
+    padding: 12px;
+    gap: 0;
+}
+
+.layout-container.sidebar-collapsed .nav-icon {
+    font-size: 1.4rem; /* Destacar iconos cuando no hay texto */
+    margin: 0;
+}
+
+/* Ajustes de Perfil de Usuario en estado encogido */
+.layout-container.sidebar-collapsed .sidebar-footer {
+    padding: 20px 12px;
+}
+
+.layout-container.sidebar-collapsed .user-card {
+    justify-content: center;
+    padding: 8px;
+    border: none;
+    background-color: transparent;
+}
+
+.layout-container.sidebar-collapsed .btn-logout {
+    padding: 0;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border: 1px solid rgba(255, 136, 136, 0.2);
+}
+
+.layout-container.sidebar-collapsed .btn-logout .logout-icon {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+/* Botón Toggle de la Barra Superior */
+.btn-toggle-sidebar {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-main);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    border: 1px solid transparent;
+}
+
+.btn-toggle-sidebar:hover {
+    background-color: rgba(32, 59, 20, 0.05);
+    border-color: rgba(32, 59, 20, 0.08);
+}
+
+.btn-toggle-sidebar:active {
+    transform: scale(0.92);
+}
+

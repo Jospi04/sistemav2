@@ -38,28 +38,31 @@ $rolUsuario = $_SESSION['rol'] ?? 'operario';
         <aside class="sidebar">
             <!-- Logotipo Corporativo -->
             <div class="sidebar-brand">
-                <a href="home" class="brand-link" style="display: flex; align-items: center; text-decoration: none; color: var(--color-sidebar-text); gap: 8px;">
+                <div class="brand-link" style="display: flex; align-items: center; color: var(--color-sidebar-text); gap: 8px; cursor: default; user-select: none;">
                     <svg class="logo-leaf-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 20px; height: 20px; flex-shrink: 0; color: #fbfdf6;">
                         <path d="M12 2C6.48 2 2 6.48 2 12c0 3.65 1.95 6.84 4.88 8.61l.03-.03c.59-.59.95-1.4.95-2.3 0-1.79-1.46-3.25-3.25-3.25h-.06C4.2 13.9 4 12.97 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 .97-.2 1.9-.55 2.75l-.01.03c-.22.53-.55.99-.95 1.35l-.03.03c-.59.59-.95 1.4-.95 2.3 0 1.79 1.46 3.25 3.25 3.25.04 0 .07 0 .11-.01C19.78 18.06 21.6 15.22 21.6 12c0-5.52-4.48-10-10-10zm-1.25 15.5c0-.69.56-1.25 1.25-1.25s1.25.56 1.25 1.25-.56 1.25-1.25 1.25-1.25-.56-1.25-1.25z" />
                     </svg>
                     <span class="logo-text" style="font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -0.04em;">JOSPERÚ</span>
-                </a>
+                </div>
             </div>
 
             <!-- Menú de Opciones -->
             <nav class="sidebar-nav">
                 <?php if ($rolUsuario === 'admin'): ?>
                     <a href="dashboard" class="nav-item <?php echo ($activePage ?? '') === 'dashboard' ? 'active' : ''; ?>">
-                        <span class="nav-icon"><i class="bx bx-bar-chart-alt-2"></i></span> Panel de Control
+                        <span class="nav-icon"><i class="bx bx-bar-chart-alt-2"></i></span>
+                        <span class="nav-text">Panel de Control</span>
                     </a>
                 <?php endif; ?>
 
                 <a href="ventas" class="nav-item <?php echo ($activePage ?? '') === 'ventas' ? 'active' : ''; ?>">
-                    <span class="nav-icon"><i class="bx bx-gas-pump"></i></span> Despacho de Ventas
+                    <span class="nav-icon"><i class="bx bx-gas-pump"></i></span>
+                    <span class="nav-text">Despacho de Ventas</span>
                 </a>
 
                 <a href="boleta" class="nav-item <?php echo ($activePage ?? '') === 'boleta' ? 'active' : ''; ?>">
-                    <span class="nav-icon"><i class="bx bx-receipt"></i></span> Comprobante Boleta
+                    <span class="nav-icon"><i class="bx bx-receipt"></i></span>
+                    <span class="nav-text">Comprobante Boleta</span>
                 </a>
             </nav>
 
@@ -76,7 +79,8 @@ $rolUsuario = $_SESSION['rol'] ?? 'operario';
                 </div>
 
                 <a href="logout" class="btn-logout">
-                    <span class="logout-icon"><i class="bx bx-log-out"></i></span> Cerrar Sesión
+                    <span class="logout-icon"><i class="bx bx-log-out"></i></span>
+                    <span class="nav-text">Cerrar Sesión</span>
                 </a>
             </div>
         </aside>
@@ -86,9 +90,14 @@ $rolUsuario = $_SESSION['rol'] ?? 'operario';
 
             <!-- CABECERA SUPERIOR (HEADER) -->
             <header class="header-top">
-                <div class="header-title">
-                    <h1><?php echo htmlspecialchars($pageTitle ?? 'Panel de Operaciones'); ?></h1>
-                    <span class="header-badge">Terminal Activo #01</span>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <button type="button" id="sidebarToggle" class="btn-toggle-sidebar" style="background: none; border: none; font-size: 1.5rem; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 6px; border-radius: 6px; transition: background-color 0.2s; color: var(--text-main);">
+                        <i class="bx bx-menu"></i>
+                    </button>
+                    <div class="header-title" style="display: flex; align-items: center;">
+                        <h1 style="margin: 0;"><?php echo htmlspecialchars($pageTitle ?? 'Panel de Operaciones'); ?></h1>
+                        <span class="header-badge">Terminal Activo #01</span>
+                    </div>
                 </div>
 
                 <div class="header-meta">
@@ -122,6 +131,22 @@ $rolUsuario = $_SESSION['rol'] ?? 'operario';
 
     </div>
 
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('sidebarToggle');
+        const layoutContainer = document.querySelector('.layout-container');
+        
+        // Cargar estado de colapsado desde localStorage
+        if (localStorage.getItem('sidebar-collapsed') === 'true') {
+            layoutContainer.classList.add('sidebar-collapsed');
+        }
+        
+        toggleBtn.addEventListener('click', function() {
+            layoutContainer.classList.toggle('sidebar-collapsed');
+            localStorage.setItem('sidebar-collapsed', layoutContainer.classList.contains('sidebar-collapsed'));
+        });
+    });
+    </script>
 </body>
 
 </html>
