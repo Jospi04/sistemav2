@@ -72,6 +72,7 @@ class VentasController {
             $activePage = 'ventas';
             $pageTitle = 'Registro de Despacho';
             $extraCss = 'ventas.css';
+            $extraJs = 'ventas.js';
             $viewFile = 'ventas.php';
             require_once BASE_DIR . '/views/layout.php';
         }
@@ -97,6 +98,7 @@ class VentasController {
         $activePage = 'boleta';
         $pageTitle = 'Comprobante de Pago';
         $extraCss = 'boleta.css';
+        $extraJs = 'boleta.js';
         $viewFile = 'boleta.php';
         
         // Cargar vista en la plantilla maestra

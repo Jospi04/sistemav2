@@ -29,7 +29,8 @@ class UsuarioController {
         // Parámetros de renderizado
         $activePage = 'usuarios';
         $pageTitle = 'Gestionar Vendedores y Griferos';
-        $extraCss = 'dashboard.css'; 
+        $extraCss = 'usuarios.css';
+        $extraJs = 'usuarios.js';
         $viewFile = 'usuarios.php';
 
         require_once BASE_DIR . '/views/layout.php';

@@ -7,12 +7,16 @@ $surtidoresList = $surtidores ?? [];
     <!-- NOTIFICACIONES Y ALERTAS DE ÉXITO -->
     <?php if (isset($_SESSION['success'])): ?>
         <div class="alert-success" role="alert">
-            <div class="alert-icon-box" style="display: flex; align-items: center; justify-content: center;"><i class="bx bx-check-circle" style="font-size: 1.4rem;"></i></div>
+            <div class="alert-icon-box">
+                <i class="bx bx-check-circle"></i>
+            </div>
             <div class="alert-content">
                 <p class="alert-title">Despacho Registrado</p>
                 <p class="alert-message"><?php echo htmlspecialchars($_SESSION['success']); ?></p>
                 <?php if (isset($_SESSION['last_venta_id'])): ?>
-                    <a href="boleta" class="btn-receipt-shortcut" style="display: inline-flex; align-items: center; gap: 4px; text-decoration: none;">Ver Boleta Emitida <i class="bx bx-receipt"></i></a>
+                    <a href="boleta" class="btn-receipt-shortcut">
+                        Ver Boleta Emitida <i class="bx bx-receipt"></i>
+                    </a>
                 <?php endif; ?>
             </div>
             <?php unset($_SESSION['success']); ?>
@@ -22,7 +26,9 @@ $surtidoresList = $surtidores ?? [];
     <!-- NOTIFICACIONES Y ALERTAS DE ERROR -->
     <?php if (isset($_SESSION['error'])): ?>
         <div class="alert-error" role="alert">
-            <div class="alert-icon-box" style="display: flex; align-items: center; justify-content: center;"><i class="bx bx-error-circle" style="font-size: 1.4rem;"></i></div>
+            <div class="alert-icon-box">
+                <i class="bx bx-error-circle"></i>
+            </div>
             <div class="alert-content">
                 <p class="alert-title">Incidencia en Proceso</p>
                 <p class="alert-message"><?php echo htmlspecialchars($_SESSION['error']); ?></p>
@@ -115,60 +121,3 @@ $surtidoresList = $surtidores ?? [];
     </div>
 
 </div>
-
-<!-- Script en tiempo real para optimizar la interactividad del surtidor sin estilos insertados -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const surtidorSelect = document.getElementById('surtidor_id');
-    const litrosInput = document.getElementById('litros');
-    const importeInput = document.getElementById('importe');
-    const infoFuelName = document.getElementById('infoFuelName');
-    const infoFuelPrice = document.getElementById('infoFuelPrice');
-    const billboardAmount = document.getElementById('billboardAmount');
-
-    let precioPorGalon = 0;
-
-    surtidorSelect.addEventListener('change', function() {
-        const option = surtidorSelect.options[surtidorSelect.selectedIndex];
-        if (option.value !== "") {
-            precioPorGalon = parseFloat(option.getAttribute('data-precio')) || 0;
-            const nombreCombustible = option.getAttribute('data-combustible') || '-';
-            
-            infoFuelName.textContent = nombreCombustible;
-            infoFuelPrice.textContent = 'S/. ' + precioPorGalon.toFixed(2);
-        } else {
-            precioPorGalon = 0;
-            infoFuelName.textContent = '-';
-            infoFuelPrice.textContent = 'S/. 0.00';
-        }
-        recalcularDesdeGalones();
-    });
-
-    litrosInput.addEventListener('input', recalcularDesdeGalones);
-    importeInput.addEventListener('input', recalcularDesdeSoles);
-
-    function recalcularDesdeGalones() {
-        const galones = parseFloat(litrosInput.value) || 0;
-        if (precioPorGalon > 0 && galones > 0) {
-            const total = galones * precioPorGalon;
-            importeInput.value = total.toFixed(2);
-            billboardAmount.textContent = 'S/. ' + total.toFixed(2);
-        } else if (galones === 0) {
-            importeInput.value = '';
-            billboardAmount.textContent = 'S/. 0.00';
-        }
-    }
-
-    function recalcularDesdeSoles() {
-        const soles = parseFloat(importeInput.value) || 0;
-        if (precioPorGalon > 0 && soles > 0) {
-            const galones = soles / precioPorGalon;
-            litrosInput.value = galones.toFixed(4);
-            billboardAmount.textContent = 'S/. ' + soles.toFixed(2);
-        } else if (soles === 0) {
-            litrosInput.value = '';
-            billboardAmount.textContent = 'S/. 0.00';
-        }
-    }
-});
-</script>

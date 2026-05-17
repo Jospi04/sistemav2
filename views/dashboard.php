@@ -11,16 +11,16 @@ $refillsHistoryList = $refillsList ?? [];
 
     <!-- ALERTAS DE TRANSACCIÓN (SUCCESS & ERROR FLASHES) -->
     <?php if (isset($_SESSION['success'])): ?>
-        <div class="alert-success-dispatch" style="grid-column: 1 / -1; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; background-color: rgba(32, 59, 20, 0.06); border: 1px solid rgba(32, 59, 20, 0.12); padding: 14px 20px; border-radius: 8px; color: var(--success-color); font-weight: 600; font-size: 0.95rem;">
-            <i class='bx bx-check-circle' style='font-size: 1.25rem;'></i>
+        <div class="alert-success-dispatch">
+            <i class='bx bx-check-circle'></i>
             <span><?php echo $_SESSION['success']; ?></span>
         </div>
         <?php unset($_SESSION['success']); ?>
     <?php endif; ?>
 
     <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert-error-dispatch" style="grid-column: 1 / -1; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; background-color: rgba(184, 45, 29, 0.06); border: 1px solid rgba(184, 45, 29, 0.12); padding: 14px 20px; border-radius: 8px; color: #b82d1d; font-weight: 600; font-size: 0.95rem;">
-            <i class='bx bx-error-circle' style='font-size: 1.25rem;'></i>
+        <div class="alert-error-dispatch">
+            <i class='bx bx-error-circle'></i>
             <span><?php echo $_SESSION['error']; ?></span>
         </div>
         <?php unset($_SESSION['error']); ?>
@@ -63,14 +63,14 @@ $refillsHistoryList = $refillsList ?? [];
     <div class="dashboard-main-columns">
         
         <!-- COLUMNA 1: MONITOREO FÍSICO DE TANQUES Y HISTORIAL DE CISTERNAS -->
-        <div style="display: flex; flex-direction: column; gap: 24px;">
+        <div class="dashboard-left-column">
             
             <section class="tanks-section">
-                <div class="section-title-bar" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="section-title-bar">
                     <h2>Monitoreo de Tanques</h2>
                     <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin'): ?>
-                        <button type="button" class="btn-shortcut-new" onclick="openRefillModal()" style="background-color: var(--accent-color); color: var(--bg-primary); border: none; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-buttons); font-size: 0.82rem; font-weight: 700;">
-                            <i class='bx bx-truck' style="font-size: 1rem;"></i> Reabastecer
+                        <button type="button" class="btn-shortcut-new btn-refill-trigger" onclick="openRefillModal()">
+                            <i class='bx bx-truck'></i> Reabastecer
                         </button>
                     <?php endif; ?>
                 </div>
@@ -107,8 +107,10 @@ $refillsHistoryList = $refillsList ?? [];
                             </div>
 
                             <!-- Telemetría en vivo simulada Veeder-Root TLS-450 -->
-                            <div class="tank-sensor-meta" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); margin-top: 8px; border-top: 1px dashed var(--border-color); padding-top: 8px; display: flex; justify-content: space-between; align-items: center;">
-                                <span style="display: flex; align-items: center; gap: 4px;"><i class='bx bx-radio-circle-marked' style='color: var(--success-color); font-size: 12px;'></i> Sonda ATG</span>
+                            <div class="tank-sensor-meta">
+                                <span class="tank-sensor-title">
+                                    <i class='bx bx-radio-circle-marked tank-sensor-status-dot'></i> Sonda ATG
+                                </span>
                                 <span>Temp: <?php echo number_format(19.2 + (($tank['id'] * 7) % 15) / 10, 1); ?> °C</span>
                             </div>
                         </div>
@@ -117,10 +119,12 @@ $refillsHistoryList = $refillsList ?? [];
             </section>
 
             <!-- SECCIÓN: HISTORIAL DE INGRESOS DE CISTERNA -->
-            <section class="tanks-section" style="margin-top: 0;">
+            <section class="tanks-section section-history-cargas">
                 <div class="section-title-bar">
                     <h2>Historial de Cargas (Cisternas)</h2>
-                    <span class="badge-online" style="background-color: rgba(32, 59, 20, 0.06); color: var(--success-color); border: 1px solid rgba(32, 59, 20, 0.15); display: flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700;"><i class='bx bx-check-double'></i> Control Activo</span>
+                    <span class="badge-online">
+                        <i class='bx bx-check-double'></i> Control Activo
+                    </span>
                 </div>
                 
                 <div class="table-wrapper">
@@ -143,7 +147,7 @@ $refillsHistoryList = $refillsList ?? [];
                                     <tr>
                                         <td><?php echo date('d/m H:i', strtotime($refill['fecha'])); ?></td>
                                         <td class="font-bold"><?php echo htmlspecialchars($refill['combustible_nombre']); ?></td>
-                                        <td class="font-bold text-accent" style="color: var(--success-color);"><?php echo number_format($refill['cantidad'], 2); ?> Gal</td>
+                                        <td class="font-bold text-accent tank-refill-badge"><?php echo number_format($refill['cantidad'], 2); ?> Gal</td>
                                         <td><?php echo htmlspecialchars($refill['usuario_nombre']); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -201,17 +205,17 @@ $refillsHistoryList = $refillsList ?? [];
 </div>
 
 <!-- MODAL DE REABASTECIMIENTO DE TANQUES (LIGHTBOX ADALINE) -->
-<div id="refillModal" class="demo-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 29, 8, 0.4); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px);">
-    <div class="demo-modal-card" style="background: var(--bg-secondary); border-radius: var(--radius-cards); width: 100%; max-width: 450px; padding: 24px; box-shadow: rgba(32, 59, 20, 0.1) 0px 12px 36px; border: 1px solid var(--border-color);">
-        <header class="demo-modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
-            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; letter-spacing: -0.03em;"><i class='bx bx-truck' style="font-size: 1.3rem;"></i> Agregar Stock de Combustible</h3>
-            <button type="button" class="btn-close-modal" onclick="closeRefillModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+<div id="refillModal" class="demo-modal-overlay">
+    <div class="demo-modal-card">
+        <header class="demo-modal-header">
+            <h3><i class='bx bx-truck'></i> Agregar Stock de Combustible</h3>
+            <button type="button" class="btn-close-modal" onclick="closeRefillModal()">&times;</button>
         </header>
         <form action="reabastecer" method="POST">
-            <div class="sim-group" style="margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px;">
-                <label for="refill_inventario_id" class="font-mono" style="font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px;">¿QUÉ COMBUSTIBLE LLEGÓ? ⛽</label>
-                <div class="select-wrapper" style="position: relative;">
-                    <select name="inventario_id" id="refill_inventario_id" required style="width: 100%; padding: 10px 12px; border-radius: var(--radius-inputs); border: 1px solid var(--border-color); font-family: inherit; font-size: 0.9rem; background-color: var(--bg-primary); color: var(--text-main); cursor: pointer; outline: none;">
+            <div class="sim-group">
+                <label for="refill_inventario_id" class="font-mono">¿QUÉ COMBUSTIBLE LLEGÓ? ⛽</label>
+                <div class="select-wrapper">
+                    <select name="inventario_id" id="refill_inventario_id" required>
                         <?php foreach ($tankStocks as $tank): ?>
                             <option value="<?php echo $tank['id']; ?>" data-max="<?php echo $tank['capacidad_maxima']; ?>" data-actual="<?php echo $tank['stock_actual']; ?>">
                                 <?php echo htmlspecialchars($tank['combustible_nombre']); ?>
@@ -221,51 +225,16 @@ $refillsHistoryList = $refillsList ?? [];
                 </div>
             </div>
             
-            <div class="sim-group" style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 6px;">
-                <label for="refill_cantidad" class="font-mono" style="font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px;">¿CUÁNTOS GALONES VAS A AGREGAR? 💧</label>
-                <input type="number" step="0.01" min="0.10" name="cantidad" id="refill_cantidad" required placeholder="Ingresar cantidad (e.g. 500)" style="width: 100%; padding: 10px 12px; border-radius: var(--radius-inputs); border: 1px solid var(--border-color); font-family: inherit; font-size: 0.95rem; background-color: var(--bg-primary); color: var(--text-main); outline: none;">
-                <span id="refillCapacityLabel" class="font-mono" style="font-size: 11px; color: var(--success-color); margin-top: 4px; display: block; font-weight: 600;">Espacio libre en tanque: 0.00 Galones</span>
+            <div class="sim-group">
+                <label for="refill_cantidad" class="font-mono">¿CUÁNTOS GALONES VAS A AGREGAR? 💧</label>
+                <input type="number" step="0.01" min="0.10" name="cantidad" id="refill_cantidad" required placeholder="Ingresar cantidad (e.g. 500)">
+                <span id="refillCapacityLabel" class="font-mono refill-capacity-label">Espacio libre en tanque: 0.00 Galones</span>
             </div>
 
-            <div style="display: flex; gap: 12px; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 20px;">
-                <button type="button" class="btn-action-new" onclick="closeRefillModal()" style="border-radius: var(--radius-buttons); padding: 8px 16px; border: 1px solid var(--border-color); background: none; font-family: inherit; font-size: 0.85rem; font-weight: 700; cursor: pointer; color: var(--text-main); transition: all 0.2s;">Cancelar</button>
-                <button type="submit" class="btn-submit-dispatch" style="border-radius: var(--radius-buttons); padding: 8px 20px; background-color: var(--accent-color); color: var(--bg-primary); border: none; font-family: inherit; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">¡Recargar Tanque ahora! ⚡</button>
+            <div class="modal-actions-wrapper">
+                <button type="button" class="btn-action-new" onclick="closeRefillModal()">Cancelar</button>
+                <button type="submit" class="btn-submit-dispatch">¡Recargar Tanque ahora! ⚡</button>
             </div>
         </form>
     </div>
 </div>
-
-<script>
-function openRefillModal() {
-    const modal = document.getElementById('refillModal');
-    modal.style.display = 'flex';
-    updateRefillCapacity();
-}
-
-function closeRefillModal() {
-    const modal = document.getElementById('refillModal');
-    modal.style.display = 'none';
-}
-
-function updateRefillCapacity() {
-    const select = document.getElementById('refill_inventario_id');
-    const option = select.options[select.selectedIndex];
-    const max = parseFloat(option.getAttribute('data-max')) || 0;
-    const actual = parseFloat(option.getAttribute('data-actual')) || 0;
-    const available = max - actual;
-    
-    const label = document.getElementById('refillCapacityLabel');
-    label.textContent = `Espacio libre en tanque: ${available.toFixed(2)} Galones`;
-    document.getElementById('refill_cantidad').max = available.toFixed(2);
-}
-
-document.getElementById('refill_inventario_id').addEventListener('change', updateRefillCapacity);
-
-// Cerrar modal al hacer clic en el fondo grisáceo
-window.addEventListener('click', function(event) {
-    const modal = document.getElementById('refillModal');
-    if (event.target === modal) {
-        closeRefillModal();
-    }
-});
-</script>

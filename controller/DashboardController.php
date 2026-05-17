@@ -56,6 +56,7 @@ class DashboardController {
         $activePage = 'dashboard';
         $pageTitle = 'Panel de Estadísticas y Control';
         $extraCss = 'dashboard.css';
+        $extraJs = 'dashboard.js';
         $viewFile = 'dashboard.php';
 
         require_once BASE_DIR . '/views/layout.php';
@@ -227,7 +228,8 @@ class DashboardController {
         // 7. Parámetros de renderizado
         $activePage = 'reportes';
         $pageTitle = 'Reportes de Despacho y Ventas';
-        $extraCss = 'dashboard.css'; 
+        $extraCss = 'reportes.css';
+        $extraJs = 'reportes.js';
         $viewFile = 'reportes.php';
 
         require_once BASE_DIR . '/views/layout.php';

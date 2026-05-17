@@ -3,66 +3,21 @@
 $v = $ventaDetalle ?? null;
 ?>
 
-<!-- HOJA DE ESTILOS ADICIONAL DE IMPRESIÓN Y ACCIONES DE LUJO -->
-<style>
-    @media print {
-        /* Ocultar absolutamente toda la interfaz maestra y decoraciones */
-        body, html {
-            background: #ffffff !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            width: 100% !important;
-            height: auto !important;
-        }
-        
-        .sidebar, 
-        .top-header, 
-        .search-boleta-container, 
-        .ticket-actions-row, 
-        .no-print,
-        nav,
-        header {
-            display: none !important;
-        }
-        
-        /* Renderizar únicamente el ticket en formato POS de tiquetera real */
-        .receipt-container {
-            padding: 0 !important;
-            margin: 0 !important;
-            display: block !important;
-        }
-        
-        #ticketPrintArea {
-            border: none !important;
-            box-shadow: none !important;
-            padding: 0 !important;
-            margin: 0 auto !important;
-            width: 100% !important;
-            max-width: 80mm !important; /* Estándar tiquetera térmica industrial */
-            display: block !important;
-        }
-    }
-    
-    .btn-action-whatsapp:hover {
-        background-color: #1ebd5c !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
-    }
-</style>
-
 <div class="receipt-container">
 
     <!-- BUSCADOR DE BOLETAS EN CALIENTE (NO-PRINT) -->
-    <div class="search-boleta-container no-print" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px 20px; display: flex; gap: 12px; align-items: center; margin: 0 auto 24px auto; box-shadow: rgba(0, 0, 0, 0.02) 0px 4px 12px; box-sizing: border-box; width: 100%; max-width: 420px;">
-        <span style="font-size: 1.25rem; color: var(--accent-color); display: flex; align-items: center;"><i class='bx bx-search'></i></span>
-        <input type="number" id="searchBoletaId" placeholder="Buscar Boleta por ID... (Ej: 12)" class="input-style-premium" style="margin: 0; flex: 1; padding: 8px 12px; border-radius: 8px;" onkeypress="checkSearchSubmit(event)">
-        <button type="button" class="btn-submit-premium" style="height: 36px; padding: 0 16px; margin: 0; font-size: 0.8rem;" onclick="submitBoletaSearch()">Buscar</button>
+    <div class="search-boleta-container no-print">
+        <span class="search-boleta-icon"><i class='bx bx-search'></i></span>
+        <input type="number" id="searchBoletaId" placeholder="Buscar Boleta por ID... (Ej: 12)" class="input-style-premium search-boleta-input" onkeypress="checkSearchSubmit(event)">
+        <button type="button" class="btn-submit-premium search-boleta-btn" onclick="submitBoletaSearch()">Buscar</button>
     </div>
 
     <?php if (!$v): ?>
         <!-- Vista alternativa si no hay boletas seleccionadas o no encontradas -->
         <div class="no-receipt-box">
-            <div class="box-icon" style="display: flex; align-items: center; justify-content: center; margin-bottom: 16px;"><i class="bx bx-receipt" style="font-size: 3.5rem; color: var(--text-muted);"></i></div>
+            <div class="box-icon box-icon-centered">
+                <i class="bx bx-receipt"></i>
+            </div>
             <h2>Comprobantes de Despacho</h2>
             <p>No se ha cargado ninguna boleta en el visor, o la boleta consultada no existe. Realice un despacho o ingrese un ID válido en el buscador superior.</p>
             <div class="box-actions">
@@ -166,10 +121,10 @@ $v = $ventaDetalle ?? null;
         </div>
 
         <!-- Botones de Acción (Se ocultan automáticamente al imprimir físicamente) -->
-        <div class="ticket-actions-row no-print" style="margin-top: 24px; display: flex; gap: 12px; justify-content: center; width: 100%; max-width: 420px; margin-left: auto; margin-right: auto;">
+        <div class="ticket-actions-row no-print ticket-actions-centered">
             <!-- Imprimir físicamente -->
-            <button onclick="window.print();" class="btn-action-print" style="flex: 1; padding: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                <i class='bx bx-printer' style="font-size: 1.1rem;"></i> Imprimir POS
+            <button onclick="window.print();" class="btn-action-print btn-pos-print">
+                <i class='bx bx-printer'></i> Imprimir POS
             </button>
             
             <!-- Compartir WhatsApp -->
@@ -183,36 +138,16 @@ $v = $ventaDetalle ?? null;
                         . "¡Muchas gracias por tu preferencia!";
                 $wsUrl = "https://api.whatsapp.com/send?text=" . urlencode($wsText);
             ?>
-            <a href="<?php echo $wsUrl; ?>" target="_blank" class="btn-action-whatsapp" style="flex: 1; padding: 12px; background-color: #25d366; color: #ffffff; border: 1px solid #1ebd5c; border-radius: var(--radius-buttons); font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.85rem; transition: all 0.2s ease; box-sizing: border-box;">
-                <i class='bx bxl-whatsapp' style="font-size: 1.25rem;"></i> Compartir WS
+            <a href="<?php echo $wsUrl; ?>" target="_blank" class="btn-action-whatsapp">
+                <i class='bx bxl-whatsapp'></i> Compartir WS
             </a>
 
             <!-- Nuevo Despacho -->
-            <a href="ventas" class="btn-action-new" style="flex: 1; padding: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                <i class='bx bx-plus-circle' style="font-size: 1.1rem;"></i> Nuevo
+            <a href="ventas" class="btn-action-new btn-action-pos-new">
+                <i class='bx bx-plus-circle'></i> Nuevo
             </a>
         </div>
 
     <?php endif; ?>
 
 </div>
-
-<!-- CONTROLADORES DEL VISOR INTERACTIVO -->
-<script>
-function checkSearchSubmit(event) {
-    if (event.key === 'Enter') {
-        submitBoletaSearch();
-    }
-}
-
-function submitBoletaSearch() {
-    const idInput = document.getElementById('searchBoletaId');
-    const id = parseInt(idInput.value) || 0;
-    if (id <= 0) {
-        showPremiumToast("Por favor, ingrese un número de boleta válido.", "error");
-        return;
-    }
-    // Redireccionar al visor de forma absoluta
-    window.location.href = `/boleta?id=${id}`;
-}
-</script>

@@ -270,44 +270,161 @@
 }
 
 /* ==========================================
-   OPTIMIZACIONES PARA IMPRESIÓN FÍSICA
+   OPTIMIZACIONES PARA IMPRESIÓN FÍSICA E INTERFAZ LIMPIA
    ========================================== */
 @media print {
     /* Ocultar barra lateral, cabeceras del sistema y botones */
     .sidebar,
-    .header-top,
-    .ticket-actions-row {
+    .top-header,
+    .search-boleta-container,
+    .ticket-actions-row,
+    .no-print,
+    nav,
+    header {
         display: none !important;
     }
     
     /* Configurar el layout para usar solo la boleta */
-    .layout-container {
-        grid-template-columns: 1fr !important;
-        display: block !important;
-        height: auto !important;
-    }
-    
-    .content-wrapper {
-        height: auto !important;
-    }
-    
-    .main-body {
+    body, html {
+        background: #ffffff !important;
+        margin: 0 !important;
         padding: 0 !important;
-        overflow: visible !important;
-        background-color: #FFFFFF !important;
+        width: 100% !important;
+        height: auto !important;
     }
     
-    body {
-        background-color: #FFFFFF !important;
-        color: #000000 !important;
+    .receipt-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
     }
     
-    .ticket-thermal {
+    #ticketPrintArea {
         box-shadow: none !important;
         border: none !important;
         padding: 0 !important;
         margin: 0 auto !important;
         width: 100% !important;
         max-width: 80mm !important; /* Ancho estándar de impresora térmica */
+        display: block !important;
     }
+}
+
+/* Buscador de boletas en caliente */
+.search-boleta-container {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 14px 20px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 0 auto 24px auto;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 4px 12px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 420px;
+}
+
+.search-boleta-icon {
+    font-size: 1.25rem;
+    color: var(--accent-color);
+    display: flex;
+    align-items: center;
+}
+
+.search-boleta-input {
+    margin: 0;
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+.search-boleta-btn {
+    height: 36px;
+    padding: 0 16px;
+    margin: 0;
+    font-size: 0.8rem;
+}
+
+/* Caja de boleta no seleccionada */
+.box-icon-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.box-icon-centered i {
+    font-size: 3.5rem;
+    color: var(--text-muted);
+}
+
+/* Contenedor de acciones POS */
+.ticket-actions-centered {
+    margin-top: 24px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    width: 100%;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-pos-print {
+    flex: 1;
+    padding: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-pos-print i {
+    font-size: 1.1rem;
+}
+
+/* Botón de Compartir en WhatsApp */
+.btn-action-whatsapp {
+    flex: 1;
+    padding: 12px;
+    background-color: #25d366;
+    color: #ffffff;
+    border: 1px solid #1ebd5c;
+    border-radius: var(--radius-buttons);
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.btn-action-whatsapp i {
+    font-size: 1.25rem;
+}
+
+.btn-action-whatsapp:hover {
+    background-color: #1ebd5c !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+}
+
+.btn-action-pos-new {
+    flex: 1;
+    padding: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-action-pos-new i {
+    font-size: 1.1rem;
 }
