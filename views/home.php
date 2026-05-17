@@ -170,8 +170,38 @@
         </div>
     </section>
 
+    <!-- SECCIÓN DE SEGURIDAD Y COMPLIANCE (NUEVO PROTOCOLO JOSPERÚ) -->
+    <section id="seguridad" class="features-section" style="border-top: 1px solid var(--color-stone-moss); padding-top: var(--spacing-64); margin-top: var(--spacing-32);">
+        <div class="section-title">
+            <span class="technical-tag">PROTOCOLOS DE PREVENCIÓN DE RIESGOS</span>
+            <h2>Seguridad y Compliance Operativo</h2>
+        </div>
+
+        <div class="features-grid">
+
+            <article class="feature-card">
+                <span class="card-mono-badge font-mono">Prot-01</span>
+                <h3>Cifrado de Credenciales</h3>
+                <p>Las contraseñas de todos los griferos y del administrador están resguardadas de extremo a extremo en la base de datos mediante algoritmos criptográficos <strong>Bcrypt</strong> unidireccionales de alta seguridad.</p>
+            </article>
+
+            <article class="feature-card">
+                <span class="card-mono-badge font-mono">Prot-02</span>
+                <h3>Integridad Transaccional</h3>
+                <p>Monitoreo y consistencia SQL. Ninguna venta puede anularse o alterarse en reportes sin reajustar con precisión matemática el inventario de combustibles en tanques de almacenamiento y totalizadores de surtidor.</p>
+            </article>
+
+            <article class="feature-card">
+                <span class="card-mono-badge font-mono">Prot-03</span>
+                <h3>Aislamiento de Roles</h3>
+                <p>Segregación estricta de funciones. El personal de manguera tiene acceso exclusivo al panel físico de los surtidores, mientras que la auditoría financiera, boletas y creación de usuarios son exclusivas del administrador.</p>
+            </article>
+
+        </div>
+    </section>
+
     <!-- PIE DE PÁGINA -->
-    <footer id="seguridad" class="footer-adaline">
+    <footer class="footer-adaline">
         <div class="footer-container">
             <p class="brand-text">JOSPERÚ</p>
             <p class="copyright">&copy; 2026. Todos los derechos reservados. Estación de Control Central.</p>
@@ -278,37 +308,95 @@
             }
         }
 
-        // EFECTO DE ROTACIÓN 3D INTERACTIVA CON REFLEJO GLOSS EN EL HERO
+        // EFECTO DE ROTACIÓN 3D INTERACTIVA CON FÍSICA SUAVE (LERP) Y LINTERNA CINEMÁTICA
         document.addEventListener('DOMContentLoaded', function() {
             const card = document.querySelector('.full-bleed-landscape-wrapper');
             if (!card) return;
 
+            let rect = card.getBoundingClientRect();
+            
+            // Variables de física de suavizado (Lerp)
+            let currentX = rect.width / 2;
+            let currentY = rect.height / 2;
+            let targetX = currentX;
+            let targetY = currentY;
+            
+            let currentRotX = 0;
+            let currentRotY = 0;
+            let targetRotX = 0;
+            let targetRotY = 0;
+            
+            let isHovering = false;
+
+            // Recalcular dimensiones al redimensionar pantalla
+            window.addEventListener('resize', () => {
+                rect = card.getBoundingClientRect();
+            });
+
+            card.addEventListener('mouseenter', function() {
+                isHovering = true;
+                rect = card.getBoundingClientRect();
+            });
+
             card.addEventListener('mousemove', function(e) {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left; // Posición X dentro de la tarjeta
-                const y = e.clientY - rect.top;  // Posición Y dentro de la tarjeta
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                targetX = x;
+                targetY = y;
 
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
 
-                // Calcular ángulos de rotación en 3D (Máximo 10 grados para conservar elegancia)
-                const rotateX = ((centerY - y) / centerY) * 10;
-                const rotateY = ((x - centerX) / centerX) * 10;
-
-                // Aplicar transformación 3D interactiva en vivo
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.025)`;
-
-                // Actualizar la posición de la iluminación (brillo gloss)
-                const pctX = (x / rect.width) * 100;
-                const pctY = (y / rect.height) * 100;
-                card.style.setProperty('--shine-x', `${pctX}%`);
-                card.style.setProperty('--shine-y', `${pctY}%`);
+                // Inclinación máxima de 8 grados (muy elegante y fluida)
+                targetRotX = ((centerY - y) / centerY) * 8;
+                targetRotY = ((x - centerX) / centerX) * 8;
             });
 
             card.addEventListener('mouseleave', function() {
-                // Restablecer la rotación 3D original con transición suave de CSS
-                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+                isHovering = false;
+                targetRotX = 0;
+                targetRotY = 0;
+                // La linterna se desliza elegantemente al centro de la tarjeta al salir
+                targetX = rect.width / 2;
+                targetY = rect.height / 2;
             });
+
+            // Bucle de renderizado continuo (60 FPS)
+            function updateSmoothPhysics() {
+                // Factor de suavizado (0.075 = movimiento con inercia muy orgánica y premium)
+                const ease = 0.075;
+
+                // Interpolar posiciones de linterna
+                currentX += (targetX - currentX) * ease;
+                currentY += (targetY - currentY) * ease;
+
+                // Interpolar ángulos de rotación 3D
+                currentRotX += (targetRotX - currentRotX) * ease;
+                currentRotY += (targetRotY - currentRotY) * ease;
+
+                // Aplicar transformaciones 3D fluidas
+                if (isHovering) {
+                    card.style.transform = `perspective(1000px) rotateX(${currentRotX}deg) rotateY(${currentRotY}deg) scale(1.025)`;
+                } else {
+                    // Retorno suave a la posición neutra antes de ceder control a la flotación CSS
+                    const distRot = Math.abs(currentRotX) + Math.abs(currentRotY);
+                    if (distRot > 0.05) {
+                        card.style.transform = `perspective(1000px) rotateX(${currentRotX}deg) rotateY(${currentRotY}deg) scale(1)`;
+                    }
+                }
+
+                // Calcular porcentajes y actualizar variables CSS de la linterna
+                const pctX = (currentX / rect.width) * 100;
+                const pctY = (currentY / rect.height) * 100;
+                card.style.setProperty('--shine-x', `${pctX}%`);
+                card.style.setProperty('--shine-y', `${pctY}%`);
+
+                requestAnimationFrame(updateSmoothPhysics);
+            }
+
+            // Iniciar bucle físico
+            updateSmoothPhysics();
         });
     </script>
 

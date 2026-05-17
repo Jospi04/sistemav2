@@ -315,20 +315,22 @@ body {
         rgba(32, 59, 20, 0.18) 0px 0px 0px 1px; 
 }
 
-/* Destello Gloss 3D Interactivo */
+/* Destello Gloss 3D Interactivo + EFECTO LINTERNA NOCTURNA CREATIVA */
 .full-bleed-landscape-wrapper::after {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
+    /* Filtro de Noche Súper Difuminado: Halo de luz con desvanecimiento ultra suave y realista */
     background: radial-gradient(
-        circle at var(--shine-x, 50%) var(--shine-y, 50%), 
-        rgba(255, 255, 255, 0.2) 0%, 
-        rgba(255, 255, 255, 0) 60%
+        circle 220px at var(--shine-x, 50%) var(--shine-y, 50%), 
+        rgba(0, 0, 0, 0) 0%, 
+        rgba(2, 8, 2, 0.3) 30%,
+        rgba(2, 8, 2, 0.7) 65%,
+        rgba(2, 8, 2, 0.92) 100%
     );
     pointer-events: none;
     z-index: 5;
-    mix-blend-mode: overlay;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.9s cubic-bezier(0.25, 0.8, 0.25, 1);
     opacity: 0;
 }
 
