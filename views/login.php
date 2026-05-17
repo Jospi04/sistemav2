@@ -12,7 +12,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;700&display=swap"
         rel="stylesheet">
     <!-- CSS Modular exclusivo del Login -->
-    <link rel="stylesheet" href="assets/login.css">
+    <link rel="stylesheet" href="assets/css/login.css">
 </head>
 
 <body>

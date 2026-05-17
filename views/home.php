@@ -12,7 +12,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;700&display=swap"
         rel="stylesheet">
     <!-- CSS Modular Adaline -->
-    <link rel="stylesheet" href="assets/home.css">
+    <link rel="stylesheet" href="assets/css/home.css">
 </head>
 
 <body>
@@ -103,7 +103,7 @@
 
             <!-- Gran Paisaje Widescreen de Fondo de Adaline -->
             <div class="full-bleed-landscape-wrapper">
-                <div class="landscape-canvas" style="background-image: url('assets/adaline_landscape.png');"></div>
+                <div class="landscape-canvas" style="background-image: url('assets/images/carro.png');"></div>
             </div>
 
         </div>

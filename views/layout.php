@@ -20,11 +20,11 @@ $rolUsuario = $_SESSION['rol'] ?? 'operario';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Enlace al CSS Modular del Layout -->
-    <link rel="stylesheet" href="assets/layout.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
 
     <!-- Enlace dinámico al CSS modular de la vista hija si corresponde -->
     <?php if (isset($extraCss) && !empty($extraCss)): ?>
-        <link rel="stylesheet" href="assets/<?php echo $extraCss; ?>">
+        <link rel="stylesheet" href="assets/css/<?php echo $extraCss; ?>">
     <?php endif; ?>
 </head>
 

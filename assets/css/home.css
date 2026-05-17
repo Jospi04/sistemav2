@@ -1,0 +1,649 @@
+/* ==========================================================================
+   ADALINE DESIGN SYSTEM — ESTILOS DE LA PÁGINA PRINCIPAL (home.css)
+   ========================================================================== */
+
+:root {
+  /* Colors */
+  --color-canvas-ice: #fbfdf6;
+  --color-adaline-ink: #0a1d08;
+  --color-mist-gray: #c5ccb6;
+  --color-deep-earth: #31200b;
+  --color-valley-green: #203b14;
+  --color-stone-moss: #e0e5d5;
+  --color-amber-seed: #4a3212;
+  --color-forest-dew: #d7e8b5;
+  --color-blackest-night: #000000;
+
+  /* Typography — Font Families */
+  --font-akkurat: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-fragmentmono: 'JetBrains Mono', monospace;
+
+  /* Spacing Scale */
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-128: 128px;
+
+  /* Border Radii */
+  --radius-images: 8px;
+  --radius-cards: 8px;
+  --radius-inputs: 8px;
+  --radius-buttons: 20px;
+  --radius-navitems: 20px;
+
+  /* Shadows (Restrained flat layering) */
+  --shadow-subtle: rgba(99, 143, 61, 0.1) 0px 0px 0px 1px;
+}
+
+/* Reset Básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--color-canvas-ice);
+    color: var(--color-adaline-ink);
+    font-family: var(--font-akkurat);
+    letter-spacing: -0.04em;
+    line-height: 1.43;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+.font-mono {
+    font-family: var(--font-fragmentmono);
+    letter-spacing: 0.02em;
+}
+
+/* ==========================================================================
+   BARRA DE NAVEGACIÓN (3 COLUMNAS)
+   ========================================================================== */
+.navbar {
+    background-color: var(--color-canvas-ice);
+    border-bottom: 1px solid var(--color-stone-moss);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: var(--spacing-16) var(--spacing-24);
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-24);
+    justify-content: flex-start;
+}
+
+.nav-item {
+    color: var(--color-adaline-ink);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    transition: color 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nav-item:hover {
+    color: var(--color-valley-green);
+}
+
+.nav-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--color-blackest-night);
+}
+
+.logo-leaf-svg {
+    width: 20px;
+    height: 20px;
+    color: var(--color-adaline-ink);
+}
+
+.logo-text {
+    font-family: var(--font-akkurat);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-16);
+    justify-content: flex-end;
+}
+
+/* Botón WATCH DEMO (Ghost Pill) */
+.btn-watch-demo {
+    background-color: var(--color-canvas-ice);
+    color: var(--color-adaline-ink);
+    border: 1px solid var(--color-stone-moss);
+    border-radius: var(--radius-buttons);
+    padding: 6px var(--spacing-16);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    outline: none;
+}
+
+.btn-watch-demo:hover {
+    border-color: var(--color-adaline-ink);
+    background-color: #f5f5f0;
+}
+
+.play-circle-icon {
+    width: 18px;
+    height: 18px;
+    background-color: var(--color-adaline-ink);
+    color: var(--color-canvas-ice);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.play-arrow-svg {
+    width: 10px;
+    height: 10px;
+    margin-left: 1px;
+}
+
+/* Botón ACCESO PERSONAL (START FOR FREE) */
+.btn-start-free {
+    background-color: var(--color-valley-green);
+    color: var(--color-canvas-ice);
+    border: none;
+    border-radius: var(--radius-buttons);
+    padding: 8px var(--spacing-24);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.btn-start-free:hover {
+    background-color: #162a0e;
+}
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+.hero-section-replica {
+    padding: var(--spacing-64) var(--spacing-24) 0px var(--spacing-24);
+    background-color: var(--color-canvas-ice);
+    text-align: center;
+}
+
+.hero-content-replica {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-main-headline {
+    font-family: var(--font-akkurat);
+    font-size: 53px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.04em;
+    color: var(--color-adaline-ink);
+    margin-bottom: var(--spacing-40);
+    max-width: 900px;
+}
+
+/* TRUSTED BY / MARQUESINA INFINITA (GIRO CONTINUO) */
+.trusted-by-container {
+    margin-bottom: var(--spacing-48);
+    width: 100%;
+    overflow: hidden;
+}
+
+.trusted-by-text {
+    font-family: var(--font-akkurat);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--color-adaline-ink);
+    display: block;
+    margin-bottom: var(--spacing-24);
+    opacity: 0.9;
+}
+
+.marquee-wrapper {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    padding: var(--spacing-8) 0;
+}
+
+.marquee-content {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee-loop 25s linear infinite;
+    font-weight: 700;
+    color: var(--color-blackest-night);
+}
+
+.marquee-content span {
+    display: inline-block;
+    padding: 0 20px;
+    font-size: 16px;
+}
+
+.marquee-content .bullet {
+    color: var(--color-valley-green);
+    font-weight: 800;
+}
+
+@keyframes marquee-loop {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Duplicar contenido en scroll continuo nativo */
+.marquee-wrapper:hover .marquee-content {
+    animation-play-state: paused;
+}
+
+/* Widescreen Landscape Visual */
+.full-bleed-landscape-wrapper {
+    width: 100%;
+    margin-top: var(--spacing-16);
+    border-radius: var(--radius-images);
+    overflow: hidden;
+    box-shadow: var(--shadow-subtle);
+    border: 1px solid var(--color-stone-moss);
+}
+
+.landscape-canvas {
+    width: 100%;
+    height: 520px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* ==========================================================================
+   SECCIÓN CARACTERÍSTICAS
+   ========================================================================== */
+.features-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-64) var(--spacing-24);
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: var(--spacing-48);
+}
+
+.technical-tag {
+    font-family: var(--font-fragmentmono);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--color-valley-green);
+    display: block;
+    margin-bottom: var(--spacing-8);
+}
+
+.section-title h2 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-24);
+}
+
+.feature-card {
+    background-color: var(--color-canvas-ice);
+    border: 1px solid var(--color-mist-gray);
+    border-radius: var(--radius-cards);
+    padding: var(--spacing-24);
+    box-shadow: var(--shadow-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-16);
+    text-align: left;
+    transition: border-color 0.2s ease;
+}
+
+.feature-card:hover {
+    border-color: var(--color-valley-green);
+}
+
+.card-mono-badge {
+    align-self: flex-start;
+    background-color: var(--color-forest-dew);
+    color: var(--color-valley-green);
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: var(--radius-buttons);
+}
+
+.feature-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-adaline-ink);
+}
+
+.feature-card p {
+    color: var(--color-adaline-ink);
+    opacity: 0.8;
+    font-size: 14px;
+    line-height: 1.43;
+}
+
+/* ==========================================================================
+   SECCIÓN DE TARIFAS (NUEVAS TARJETAS ADALINE)
+   ========================================================================== */
+.prices-container {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-24);
+    flex-wrap: wrap;
+    margin-top: var(--spacing-24);
+}
+
+.price-box {
+    background-color: var(--color-canvas-ice);
+    border: 1px solid var(--color-mist-gray);
+    border-radius: var(--radius-cards);
+    padding: var(--spacing-32) var(--spacing-24);
+    box-shadow: var(--shadow-subtle);
+    text-align: center;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-12);
+    transition: border-color 0.2s ease;
+}
+
+.price-box:hover {
+    border-color: var(--color-valley-green);
+}
+
+.fuel-type {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-adaline-ink);
+}
+
+.fuel-price {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-valley-green);
+}
+
+.fuel-metric {
+    font-size: 12px;
+    color: var(--color-adaline-ink);
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+/* ==========================================================================
+   PIE DE PÁGINA (FOOTER)
+   ========================================================================== */
+.footer-adaline {
+    background-color: var(--color-canvas-ice);
+    border-top: 1px solid var(--color-stone-moss);
+    padding: var(--spacing-48) var(--spacing-24);
+    text-align: center;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-16);
+}
+
+.brand-text {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--color-blackest-night);
+}
+
+.copyright {
+    font-size: 14px;
+    color: var(--color-adaline-ink);
+    opacity: 0.7;
+}
+
+.compliance {
+    font-size: 12px;
+    color: var(--color-valley-green);
+}
+
+/* ==========================================================================
+   MODAL DE DEMO EN VIVO (LIGHTBOX INTERACTIVO ADALINE)
+   ========================================================================== */
+.demo-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 29, 8, 0.4); /* Fiel al Adaline Ink */
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.demo-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.demo-modal-card {
+    background-color: var(--color-canvas-ice);
+    border: 1px solid var(--color-mist-gray);
+    border-radius: var(--radius-cards);
+    padding: var(--spacing-32);
+    max-width: 500px;
+    width: 90%;
+    box-shadow: var(--shadow-subtle);
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.demo-modal-overlay.active .demo-modal-card {
+    transform: translateY(0);
+}
+
+.demo-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-stone-moss);
+    padding-bottom: var(--spacing-16);
+    margin-bottom: var(--spacing-24);
+}
+
+.demo-modal-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.btn-close-modal {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--color-adaline-ink);
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.btn-close-modal:hover {
+    color: var(--color-valley-green);
+}
+
+.demo-desc {
+    font-size: 14px;
+    color: var(--color-adaline-ink);
+    opacity: 0.8;
+    margin-bottom: var(--spacing-24);
+}
+
+.demo-simulator-box {
+    background-color: var(--color-forest-dew);
+    border: 1px solid var(--color-mist-gray);
+    border-radius: var(--radius-cards);
+    padding: var(--spacing-24);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-16);
+}
+
+.sim-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-8);
+}
+
+.sim-group label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-valley-green);
+}
+
+.sim-group input {
+    width: 100%;
+    background-color: var(--color-canvas-ice);
+    border: 1px solid var(--color-stone-moss);
+    border-radius: var(--radius-inputs);
+    padding: var(--spacing-12);
+    font-family: var(--font-fragmentmono);
+    font-size: 16px;
+    color: var(--color-adaline-ink);
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.sim-group input:focus {
+    border-color: var(--color-valley-green);
+}
+
+.sim-divider {
+    height: 1px;
+    background-color: var(--color-stone-moss);
+}
+
+.sim-result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sim-result .lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-valley-green);
+}
+
+.sim-result .val {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-adaline-ink);
+}
+
+.demo-modal-footer {
+    margin-top: var(--spacing-24);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-demo-primary {
+    background-color: var(--color-amber-seed);
+    color: var(--color-canvas-ice);
+    border: none;
+    border-radius: var(--radius-buttons);
+    padding: 12px var(--spacing-24);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-demo-primary:hover {
+    opacity: 0.9;
+}
+
+/* Responsividad */
+@media (max-width: 968px) {
+    .navbar-container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-16);
+    }
+
+    .nav-left, .nav-right {
+        justify-content: center;
+    }
+
+    .hero-main-headline {
+        font-size: 34px;
+    }
+
+    .landscape-canvas {
+        height: 320px;
+    }
+
+    .prices-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
