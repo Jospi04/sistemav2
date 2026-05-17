@@ -74,6 +74,16 @@ switch ($url) {
         $controller->eliminar();
         break;
 
+    case 'ventas/editar':
+        $controller = new Controller\VentasController();
+        $controller->editar();
+        break;
+
+    case 'ventas/eliminar':
+        $controller = new Controller\VentasController();
+        $controller->eliminar();
+        break;
+
     case 'reabastecer':
         $controller = new Controller\DashboardController();
         $controller->reabastecer();
