@@ -58,7 +58,7 @@ class VentasController {
             $venta_id = Venta::guardar($usuario_id, $surtidor_id, $combustible_id, $litros, $precio_litro, $total, $placa, $metodo_pago);
 
             if ($venta_id) {
-                $_SESSION['success'] = "¡Despacho registrado correctamente! Total: S/. " . number_format($total, 2) . " por " . number_format($litros, 2) . " L de " . $surtidorSeleccionado['combustible_nombre'];
+                $_SESSION['success'] = "¡Despacho registrado correctamente! Total: S/. " . number_format($total, 2) . " por " . floatval($litros) . " Gal de " . $surtidorSeleccionado['combustible_nombre'];
                 $_SESSION['last_venta_id'] = $venta_id; // Reservado para emitir boleta en la Fase 7
                 header('Location: ventas');
                 exit;

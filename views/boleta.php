@@ -72,7 +72,7 @@ $v = $ventaDetalle ?? null;
                 <tbody>
                     <tr>
                         <td class="align-left"><?php echo htmlspecialchars($v['combustible_nombre']); ?></td>
-                        <td class="align-right"><?php echo number_format($v['litros'], 2); ?></td>
+                        <td class="align-right"><?php echo floatval($v['litros']); ?></td>
                         <td class="align-right">S/. <?php echo number_format($v['precio_unitario'], 2); ?></td>
                         <td class="align-right">S/. <?php echo number_format($v['total'], 2); ?></td>
                     </tr>

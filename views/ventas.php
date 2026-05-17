@@ -67,29 +67,36 @@ $surtidoresList = $surtidores ?? [];
                 </div>
             </div>
 
-            <!-- Fila Doble: Galones y Placa -->
+            <!-- Fila Doble: Importe en Soles y Volumen en Galones -->
             <div class="form-double-row">
                 <div class="form-group">
-                    <label for="litros">Volumen Despachado (Galones) *</label>
-                    <input type="number" step="0.01" min="0.05" name="litros" id="litros" required placeholder="0.00">
+                    <label for="importe">Importe a Despachar (S/.)</label>
+                    <input type="number" step="0.01" min="0.50" id="importe" placeholder="S/. 0.00">
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="litros">Volumen Despachado (Galones) *</label>
+                    <input type="number" step="0.0001" min="0.01" name="litros" id="litros" required placeholder="0.0000">
+                </div>
+            </div>
+
+            <!-- Fila Doble: Placa del Vehículo y Método de Pago -->
+            <div class="form-double-row">
                 <div class="form-group">
                     <label for="placa_vehiculo">Placa del Vehículo</label>
                     <input type="text" name="placa_vehiculo" id="placa_vehiculo" placeholder="ABC-123" maxlength="10">
                 </div>
-            </div>
-
-            <!-- Campo: Método de Pago -->
-            <div class="form-group">
-                <label for="metodo_pago">Forma de Pago del Cliente *</label>
-                <div class="select-wrapper">
-                    <select name="metodo_pago" id="metodo_pago" required>
-                        <option value="" disabled selected>-- Seleccione Forma de Pago --</option>
-                        <option value="Efectivo">Efectivo</option>
-                        <option value="Tarjeta">Tarjeta de Crédito / Débito</option>
-                        <option value="Yape/Plin">Monedero Digital (Yape / Plin)</option>
-                    </select>
+                
+                <div class="form-group">
+                    <label for="metodo_pago">Forma de Pago del Cliente *</label>
+                    <div class="select-wrapper">
+                        <select name="metodo_pago" id="metodo_pago" required>
+                            <option value="" disabled selected>-- Seleccione Forma de Pago --</option>
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Tarjeta">Tarjeta de Crédito / Débito</option>
+                            <option value="Yape/Plin">Monedero Digital (Yape / Plin)</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -114,6 +121,7 @@ $surtidoresList = $surtidores ?? [];
 document.addEventListener('DOMContentLoaded', function() {
     const surtidorSelect = document.getElementById('surtidor_id');
     const litrosInput = document.getElementById('litros');
+    const importeInput = document.getElementById('importe');
     const infoFuelName = document.getElementById('infoFuelName');
     const infoFuelPrice = document.getElementById('infoFuelPrice');
     const billboardAmount = document.getElementById('billboardAmount');
@@ -133,15 +141,34 @@ document.addEventListener('DOMContentLoaded', function() {
             infoFuelName.textContent = '-';
             infoFuelPrice.textContent = 'S/. 0.00';
         }
-        recalcularVenta();
+        recalcularDesdeGalones();
     });
 
-    litrosInput.addEventListener('input', recalcularVenta);
+    litrosInput.addEventListener('input', recalcularDesdeGalones);
+    importeInput.addEventListener('input', recalcularDesdeSoles);
 
-    function recalcularVenta() {
+    function recalcularDesdeGalones() {
         const galones = parseFloat(litrosInput.value) || 0;
-        const total = galones * precioPorGalon;
-        billboardAmount.textContent = 'S/. ' + total.toFixed(2);
+        if (precioPorGalon > 0 && galones > 0) {
+            const total = galones * precioPorGalon;
+            importeInput.value = total.toFixed(2);
+            billboardAmount.textContent = 'S/. ' + total.toFixed(2);
+        } else if (galones === 0) {
+            importeInput.value = '';
+            billboardAmount.textContent = 'S/. 0.00';
+        }
+    }
+
+    function recalcularDesdeSoles() {
+        const soles = parseFloat(importeInput.value) || 0;
+        if (precioPorGalon > 0 && soles > 0) {
+            const galones = soles / precioPorGalon;
+            litrosInput.value = galones.toFixed(4);
+            billboardAmount.textContent = 'S/. ' + soles.toFixed(2);
+        } else if (soles === 0) {
+            litrosInput.value = '';
+            billboardAmount.textContent = 'S/. 0.00';
+        }
     }
 });
 </script>
