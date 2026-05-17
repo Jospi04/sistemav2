@@ -22,7 +22,7 @@ $v = $ventaDetalle ?? null;
             <!-- Encabezado de la Estación -->
             <header class="ticket-header">
                 <h3>ESTACIÓN DE SERVICIO CENTRAL</h3>
-                <p class="company-name">PETROADMI S.A.C.</p>
+                <p class="company-name">JOSPERÚ S.A.C.</p>
                 <p class="ruc">R.U.C. N° 20601234567</p>
                 <p class="address">Av. Javier Prado Este 1040, San Isidro, Lima</p>
                 <p class="phone">Telf: (01) 456-7890</p>

@@ -31,6 +31,7 @@
   /* Border Radii */
   --radius-images: 8px;
   --radius-cards: 8px;
+  --radius-inputs: 8px;
   --radius-buttons: 20px;
   --radius-navitems: 20px;
 
@@ -43,6 +44,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -61,7 +66,7 @@ body {
 }
 
 /* ==========================================================================
-   BARRA DE NAVEGACIÓN (3 COLUMNAS IDÉNTICA A LA CAPTURA DE PANTALLA)
+   BARRA DE NAVEGACIÓN (3 COLUMNAS)
    ========================================================================== */
 .navbar {
     background-color: var(--color-canvas-ice);
@@ -80,7 +85,6 @@ body {
     padding: var(--spacing-16) var(--spacing-24);
 }
 
-/* Columna Izquierda: Enlaces alineados a la izquierda */
 .nav-left {
     display: flex;
     align-items: center;
@@ -105,12 +109,6 @@ body {
     color: var(--color-valley-green);
 }
 
-.chevron {
-    font-size: 8px;
-    vertical-align: middle;
-}
-
-/* Columna Central: Logotipo Oficial Adaline */
 .nav-center {
     display: flex;
     justify-content: center;
@@ -138,7 +136,6 @@ body {
     letter-spacing: -0.04em;
 }
 
-/* Columna Derecha: Acciones alineadas a la derecha */
 .nav-right {
     display: flex;
     align-items: center;
@@ -161,6 +158,8 @@ body {
     align-items: center;
     gap: 8px;
     transition: all 0.2s ease;
+    cursor: pointer;
+    outline: none;
 }
 
 .btn-watch-demo:hover {
@@ -185,7 +184,7 @@ body {
     margin-left: 1px;
 }
 
-/* Botón START FOR FREE (Green Valley Filled Pill) */
+/* Botón ACCESO PERSONAL (START FOR FREE) */
 .btn-start-free {
     background-color: var(--color-valley-green);
     color: var(--color-canvas-ice);
@@ -204,7 +203,7 @@ body {
 }
 
 /* ==========================================================================
-   HERO REPLICA SECTION (CON PAISAJE INTEGRADO)
+   HERO SECTION
    ========================================================================== */
 .hero-section-replica {
     padding: var(--spacing-64) var(--spacing-24) 0px var(--spacing-24);
@@ -220,7 +219,6 @@ body {
     align-items: center;
 }
 
-/* Titular gigante centrado */
 .hero-main-headline {
     font-family: var(--font-akkurat);
     font-size: 53px;
@@ -232,10 +230,11 @@ body {
     max-width: 900px;
 }
 
-/* Sección "TRUSTED BY" */
+/* TRUSTED BY / MARQUESINA INFINITA (GIRO CONTINUO) */
 .trusted-by-container {
     margin-bottom: var(--spacing-48);
     width: 100%;
+    overflow: hidden;
 }
 
 .trusted-by-text {
@@ -248,27 +247,42 @@ body {
     margin-bottom: var(--spacing-24);
 }
 
-.trusted-logos-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--spacing-48);
-    flex-wrap: wrap;
+.marquee-wrapper {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    padding: var(--spacing-8) 0;
 }
 
-.brand-logo-item {
+.marquee-content {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee-loop 25s linear infinite;
+    font-weight: 500;
     color: var(--color-adaline-ink);
-    opacity: 0.4;
-    transition: opacity 0.25s ease;
+    opacity: 0.6;
 }
 
-.brand-logo-item:hover {
-    opacity: 0.85;
+.marquee-content span {
+    display: inline-block;
+    padding: 0 20px;
+    font-size: 14px;
 }
 
-.brand-logo-svg {
-    height: 24px;
-    width: 100px;
+.marquee-content .bullet {
+    color: var(--color-mist-gray);
+    font-weight: bold;
+}
+
+@keyframes marquee-loop {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Duplicar contenido en scroll continuo nativo */
+.marquee-wrapper:hover .marquee-content {
+    animation-play-state: paused;
 }
 
 /* Widescreen Landscape Visual */
@@ -324,7 +338,6 @@ body {
     gap: var(--spacing-24);
 }
 
-/* Feature Card (Client Logo Card Style) */
 .feature-card {
     background-color: var(--color-canvas-ice);
     border: 1px solid var(--color-mist-gray);
@@ -365,6 +378,54 @@ body {
 }
 
 /* ==========================================================================
+   SECCIÓN DE TARIFAS (NUEVAS TARJETAS ADALINE)
+   ========================================================================== */
+.prices-container {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-24);
+    flex-wrap: wrap;
+    margin-top: var(--spacing-24);
+}
+
+.price-box {
+    background-color: var(--color-canvas-ice);
+    border: 1px solid var(--color-mist-gray);
+    border-radius: var(--radius-cards);
+    padding: var(--spacing-32) var(--spacing-24);
+    box-shadow: var(--shadow-subtle);
+    text-align: center;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-12);
+    transition: border-color 0.2s ease;
+}
+
+.price-box:hover {
+    border-color: var(--color-valley-green);
+}
+
+.fuel-type {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-adaline-ink);
+}
+
+.fuel-price {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-valley-green);
+}
+
+.fuel-metric {
+    font-size: 12px;
+    color: var(--color-adaline-ink);
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+/* ==========================================================================
    PIE DE PÁGINA (FOOTER)
    ========================================================================== */
 .footer-adaline {
@@ -400,6 +461,168 @@ body {
     color: var(--color-valley-green);
 }
 
+/* ==========================================================================
+   MODAL DE DEMO EN VIVO (LIGHTBOX INTERACTIVO ADALINE)
+   ========================================================================== */
+.demo-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 29, 8, 0.4); /* Fiel al Adaline Ink */
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.demo-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.demo-modal-card {
+    background-color: var(--color-canvas-ice);
+    border: 1px solid var(--color-mist-gray);
+    border-radius: var(--radius-cards);
+    padding: var(--spacing-32);
+    max-width: 500px;
+    width: 90%;
+    box-shadow: var(--shadow-subtle);
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.demo-modal-overlay.active .demo-modal-card {
+    transform: translateY(0);
+}
+
+.demo-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-stone-moss);
+    padding-bottom: var(--spacing-16);
+    margin-bottom: var(--spacing-24);
+}
+
+.demo-modal-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.btn-close-modal {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--color-adaline-ink);
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.btn-close-modal:hover {
+    color: var(--color-valley-green);
+}
+
+.demo-desc {
+    font-size: 14px;
+    color: var(--color-adaline-ink);
+    opacity: 0.8;
+    margin-bottom: var(--spacing-24);
+}
+
+.demo-simulator-box {
+    background-color: var(--color-forest-dew);
+    border: 1px solid var(--color-mist-gray);
+    border-radius: var(--radius-cards);
+    padding: var(--spacing-24);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-16);
+}
+
+.sim-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-8);
+}
+
+.sim-group label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-valley-green);
+}
+
+.sim-group input {
+    width: 100%;
+    background-color: var(--color-canvas-ice);
+    border: 1px solid var(--color-stone-moss);
+    border-radius: var(--radius-inputs);
+    padding: var(--spacing-12);
+    font-family: var(--font-fragmentmono);
+    font-size: 16px;
+    color: var(--color-adaline-ink);
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.sim-group input:focus {
+    border-color: var(--color-valley-green);
+}
+
+.sim-divider {
+    height: 1px;
+    background-color: var(--color-stone-moss);
+}
+
+.sim-result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sim-result .lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-valley-green);
+}
+
+.sim-result .val {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-adaline-ink);
+}
+
+.demo-modal-footer {
+    margin-top: var(--spacing-24);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-demo-primary {
+    background-color: var(--color-amber-seed);
+    color: var(--color-canvas-ice);
+    border: none;
+    border-radius: var(--radius-buttons);
+    padding: 12px var(--spacing-24);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-demo-primary:hover {
+    opacity: 0.9;
+}
+
 /* Responsividad */
 @media (max-width: 968px) {
     .navbar-container {
@@ -417,5 +640,10 @@ body {
 
     .landscape-canvas {
         height: 320px;
+    }
+
+    .prices-container {
+        flex-direction: column;
+        align-items: center;
     }
 }
