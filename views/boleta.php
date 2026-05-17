@@ -7,7 +7,7 @@ $v = $ventaDetalle ?? null;
     <?php if (!$v): ?>
         <!-- Vista alternativa si no hay boletas seleccionadas -->
         <div class="no-receipt-box">
-            <div class="box-icon">🧾</div>
+            <div class="box-icon" style="display: flex; align-items: center; justify-content: center; margin-bottom: 16px;"><i class="bx bx-receipt" style="font-size: 3.5rem; color: var(--text-muted);"></i></div>
             <h2>Comprobantes de Despacho</h2>
             <p>No se ha cargado ninguna boleta en el visor. Realice un despacho desde el menú de ventas o consulte transacciones previas.</p>
             <div class="box-actions">
@@ -64,7 +64,7 @@ $v = $ventaDetalle ?? null;
                 <thead>
                     <tr>
                         <th class="align-left">Combustible</th>
-                        <th class="align-right">Lts.</th>
+                        <th class="align-right">Gal.</th>
                         <th class="align-right">P.U.</th>
                         <th class="align-right">Total</th>
                     </tr>

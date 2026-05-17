@@ -1,19 +1,28 @@
-/* ==========================================
-   ESTILOS DEL MAQUETADO BASE (layout.css)
-   ========================================== */
+/* ==========================================================================
+   ADALINE DESIGN SYSTEM — ESTILOS DEL MAQUETADO BASE (layout.css)
+   ========================================================================== */
 
-/* Variables CSS Globales de Diseño */
+/* Variables CSS Globales de Diseño — ADALINE Serene Light Theme */
 :root {
-    --bg-primary: #0F172A;       /* Fondo pizarra ultra oscuro */
-    --bg-secondary: #1E293B;     /* Fondo lateral y tarjetas */
-    --bg-main: #0B0F19;          /* Fondo del cuerpo del contenido */
-    --text-main: #F8FAFC;        /* Blanco grisáceo principal */
-    --text-muted: #94A3B8;       /* Gris azulado secundario */
-    --accent-color: #0EA5E9;     /* Celeste corporativo premium */
-    --accent-hover: #0284C7;     /* Celeste en estado hover */
-    --border-color: #334155;     /* Borde sutil */
-    --success-color: #10B981;    /* Verde esmeralda */
+    --bg-primary: #fbfdf6;       /* Fondo Canvas Ice principal */
+    --bg-secondary: #ffffff;     /* Tarjetas e inputs blancos puros */
+    --bg-main: #fbfdf6;          /* Fondo del cuerpo */
+    --text-main: #0a1d08;        /* Adaline Ink (Negro-verde profundo) */
+    --text-muted: #6e7a68;       /* Gris oliva intermedio */
+    --accent-color: #4a3212;     /* Amber Seed (Ámbar-café premium) */
+    --accent-hover: #31200b;     /* Deep Earth para hover */
+    --border-color: #c5ccb6;     /* Mist Gray para bordes sutiles */
+    --success-color: #203b14;    /* Valley Green para óptimo */
     --sidebar-width: 260px;
+    
+    --color-sidebar-bg: #0a1d08; /* Barra lateral en profundo Adaline Ink */
+    --color-sidebar-text: #fbfdf6; /* Texto lateral en Canvas Ice */
+    --color-sidebar-muted: #a4b39b; /* Muted lateral */
+    
+    --radius-cards: 8px;
+    --radius-inputs: 8px;
+    --radius-buttons: 20px;
+    --shadow-subtle: rgba(99, 143, 61, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.02) 0px 4px 12px;
 }
 
 /* Reset y Base */
@@ -29,6 +38,7 @@ body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     line-height: 1.5;
     overflow: hidden; /* Evita scroll en el body principal */
+    letter-spacing: -0.02em;
 }
 
 /* Contenedor Grid Principal */
@@ -40,11 +50,11 @@ body {
 }
 
 /* ==========================================
-   BARRA LATERAL (SIDEBAR)
+   BARRA LATERAL (SIDEBAR) — HIGH LUXURY DARK CONTRAST
    ========================================== */
 .sidebar {
-    background-color: var(--bg-secondary);
-    border-right: 1px solid var(--border-color);
+    background-color: var(--color-sidebar-bg);
+    border-right: 1px solid rgba(251, 253, 246, 0.08);
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -53,19 +63,15 @@ body {
 
 .sidebar-brand {
     padding: 24px;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid rgba(251, 253, 246, 0.08);
 }
 
 .brand-link {
     font-size: 1.3rem;
     font-weight: 800;
-    letter-spacing: 1px;
-    color: var(--text-main);
+    letter-spacing: -0.04em;
+    color: var(--color-sidebar-text);
     text-decoration: none;
-}
-
-.brand-accent {
-    color: var(--accent-color);
 }
 
 .sidebar-nav {
@@ -80,7 +86,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: var(--text-muted);
+    color: var(--color-sidebar-muted);
     text-decoration: none;
     padding: 12px 16px;
     border-radius: 6px;
@@ -90,13 +96,13 @@ body {
 }
 
 .nav-item:hover {
-    color: var(--text-main);
-    background-color: rgba(255, 255, 255, 0.03);
+    color: var(--color-sidebar-text);
+    background-color: rgba(251, 253, 246, 0.06);
 }
 
 .nav-item.active {
-    color: #FFFFFF;
-    background-color: var(--accent-color);
+    color: var(--color-sidebar-text);
+    background-color: var(--accent-color); /* Amber Seed */
 }
 
 .nav-icon {
@@ -106,7 +112,7 @@ body {
 /* Footer del Sidebar (Usuario y Logout) */
 .sidebar-footer {
     padding: 20px 16px;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid rgba(251, 253, 246, 0.08);
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -116,17 +122,17 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(251, 253, 246, 0.04);
     padding: 12px;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(251, 253, 246, 0.08);
 }
 
 .avatar {
     width: 36px;
     height: 36px;
     background-color: var(--accent-color);
-    color: #FFFFFF;
+    color: var(--color-sidebar-text);
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -143,7 +149,7 @@ body {
 .username {
     font-weight: 600;
     font-size: 0.88rem;
-    color: var(--text-main);
+    color: var(--color-sidebar-text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -152,7 +158,7 @@ body {
 
 .user-role {
     font-size: 0.75rem;
-    color: var(--text-muted);
+    color: var(--color-sidebar-muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -163,8 +169,8 @@ body {
     justify-content: center;
     gap: 8px;
     background-color: transparent;
-    color: #F87171;
-    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ff8888;
+    border: 1px solid rgba(255, 136, 136, 0.2);
     padding: 10px;
     border-radius: 6px;
     text-decoration: none;
@@ -174,8 +180,8 @@ body {
 }
 
 .btn-logout:hover {
-    background-color: rgba(239, 68, 68, 0.08);
-    border-color: #EF4444;
+    background-color: rgba(255, 136, 136, 0.08);
+    border-color: #ff6666;
 }
 
 /* ==========================================
@@ -185,11 +191,12 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background-color: var(--bg-main);
 }
 
 /* Cabecera superior */
 .header-top {
-    background-color: var(--bg-secondary);
+    background-color: #ffffff;
     border-bottom: 1px solid var(--border-color);
     padding: 20px 32px;
     display: flex;
@@ -200,20 +207,20 @@ body {
 .header-title h1 {
     font-size: 1.35rem;
     font-weight: 700;
-    letter-spacing: -0.3px;
+    letter-spacing: -0.04em;
     color: var(--text-main);
 }
 
 .header-badge {
     font-size: 0.75rem;
-    background-color: rgba(14, 165, 233, 0.1);
+    background-color: var(--bg-primary);
     color: var(--accent-color);
     padding: 3px 8px;
     border-radius: 4px;
     font-weight: 600;
     margin-left: 10px;
-    border: 1px solid rgba(14, 165, 233, 0.15);
-    display: none; /* Reservado para pantallas chicas */
+    border: 1px solid var(--border-color);
+    display: none;
 }
 
 .header-meta {
@@ -226,8 +233,8 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: rgba(16, 185, 129, 0.08);
-    border: 1px solid rgba(16, 185, 129, 0.15);
+    background-color: rgba(32, 59, 20, 0.06);
+    border: 1px solid rgba(32, 59, 20, 0.12);
     padding: 6px 12px;
     border-radius: 20px;
 }
@@ -235,14 +242,14 @@ body {
 .status-dot {
     width: 8px;
     height: 8px;
-    background-color: var(--success-color);
+    background-color: var(--success-color); /* Valley Green */
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 8px rgba(32, 59, 20, 0.3);
 }
 
 .status-text {
     font-size: 0.8rem;
-    color: #A7F3D0;
+    color: var(--success-color);
     font-weight: 600;
 }
 
@@ -261,18 +268,20 @@ body {
 
 /* Estilo por defecto si no hay vista hija (Welcome Box) */
 .welcome-box {
-    background-color: var(--bg-secondary);
+    background-color: #ffffff;
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: var(--radius-cards);
     padding: 40px;
     max-width: 600px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-subtle);
 }
 
 .welcome-box h2 {
     font-size: 1.5rem;
     margin-bottom: 12px;
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--text-main);
 }
 
 .divider-small {
@@ -296,6 +305,6 @@ body {
     }
     
     .sidebar {
-        display: none; /* Ocultar sidebar en móviles (se implementaría toggle en producción) */
+        display: none;
     }
 }

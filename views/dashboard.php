@@ -12,7 +12,7 @@ $recentSalesList = $recentSales ?? [];
     <section class="kpi-row">
         <!-- KPI 1: Ingresos del Día -->
         <article class="kpi-card">
-            <div class="kpi-icon-box blue">💰</div>
+            <div class="kpi-icon-box blue"><i class="bx bx-money"></i></div>
             <div class="kpi-details">
                 <span class="kpi-label">Ingresos de Hoy</span>
                 <h3 class="kpi-value">S/. <?php echo number_format($kpiTotalDinero, 2); ?></h3>
@@ -20,19 +20,19 @@ $recentSalesList = $recentSales ?? [];
             </div>
         </article>
 
-        <!-- KPI 2: Litros Despachados -->
+        <!-- KPI 2: Volumen Despachados -->
         <article class="kpi-card">
-            <div class="kpi-icon-box green">⛽</div>
+            <div class="kpi-icon-box green"><i class="bx bx-gas-pump"></i></div>
             <div class="kpi-details">
                 <span class="kpi-label">Volumen Vendido</span>
-                <h3 class="kpi-value"><?php echo number_format($kpiTotalLitros, 2); ?> L</h3>
-                <p class="kpi-subtext">Litros despachados hoy</p>
+                <h3 class="kpi-value"><?php echo number_format($kpiTotalLitros, 2); ?> Gal</h3>
+                <p class="kpi-subtext">Galones despachados hoy</p>
             </div>
         </article>
 
         <!-- KPI 3: Cantidad de Despachos -->
         <article class="kpi-card">
-            <div class="kpi-icon-box teal">⚡</div>
+            <div class="kpi-icon-box teal"><i class="bx bx-transfer-alt"></i></div>
             <div class="kpi-details">
                 <span class="kpi-label">Transacciones</span>
                 <h3 class="kpi-value"><?php echo number_format($kpiTransacciones); ?></h3>
@@ -79,8 +79,8 @@ $recentSalesList = $recentSales ?? [];
                         </div>
 
                         <div class="tank-footer">
-                            <span>Stock: <strong><?php echo number_format($actual, 2); ?> L</strong></span>
-                            <span class="muted">/ <?php echo number_format($max, 0); ?> L</span>
+                            <span>Stock: <strong><?php echo number_format($actual, 2); ?> Gal</strong></span>
+                            <span class="muted">/ <?php echo number_format($max, 0); ?> Gal</span>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -100,7 +100,7 @@ $recentSalesList = $recentSales ?? [];
                         <tr>
                             <th>Hora</th>
                             <th>Combustible</th>
-                            <th>Litros</th>
+                            <th>Galones</th>
                             <th>Importe</th>
                             <th>Placa</th>
                             <th>Operador</th>
@@ -116,7 +116,7 @@ $recentSalesList = $recentSales ?? [];
                                 <tr>
                                     <td><?php echo date('H:i:s', strtotime($sale['fecha'])); ?></td>
                                     <td class="font-bold"><?php echo htmlspecialchars($sale['combustible_nombre']); ?></td>
-                                    <td><?php echo number_format($sale['litros'], 2); ?> L</td>
+                                    <td><?php echo number_format($sale['litros'], 2); ?> Gal</td>
                                     <td class="font-bold text-accent">S/. <?php echo number_format($sale['total'], 2); ?></td>
                                     <td><span class="plate-chip"><?php echo !empty($sale['placa_vehiculo']) ? htmlspecialchars($sale['placa_vehiculo']) : 'S/P'; ?></span></td>
                                     <td><?php echo htmlspecialchars($sale['usuario_nombre']); ?></td>

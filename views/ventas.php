@@ -7,12 +7,12 @@ $surtidoresList = $surtidores ?? [];
     <!-- NOTIFICACIONES Y ALERTAS DE ÉXITO -->
     <?php if (isset($_SESSION['success'])): ?>
         <div class="alert-success" role="alert">
-            <div class="alert-icon-box">✓</div>
+            <div class="alert-icon-box" style="display: flex; align-items: center; justify-content: center;"><i class="bx bx-check-circle" style="font-size: 1.4rem;"></i></div>
             <div class="alert-content">
                 <p class="alert-title">Despacho Registrado</p>
                 <p class="alert-message"><?php echo htmlspecialchars($_SESSION['success']); ?></p>
                 <?php if (isset($_SESSION['last_venta_id'])): ?>
-                    <a href="boleta" class="btn-receipt-shortcut">Ver Boleta Emitida 🧾</a>
+                    <a href="boleta" class="btn-receipt-shortcut" style="display: inline-flex; align-items: center; gap: 4px; text-decoration: none;">Ver Boleta Emitida <i class="bx bx-receipt"></i></a>
                 <?php endif; ?>
             </div>
             <?php unset($_SESSION['success']); ?>
@@ -22,7 +22,7 @@ $surtidoresList = $surtidores ?? [];
     <!-- NOTIFICACIONES Y ALERTAS DE ERROR -->
     <?php if (isset($_SESSION['error'])): ?>
         <div class="alert-error" role="alert">
-            <div class="alert-icon-box">⚠️</div>
+            <div class="alert-icon-box" style="display: flex; align-items: center; justify-content: center;"><i class="bx bx-error-circle" style="font-size: 1.4rem;"></i></div>
             <div class="alert-content">
                 <p class="alert-title">Incidencia en Proceso</p>
                 <p class="alert-message"><?php echo htmlspecialchars($_SESSION['error']); ?></p>
@@ -48,7 +48,7 @@ $surtidoresList = $surtidores ?? [];
                         <option value="" disabled selected>-- Seleccione Manguera Activa --</option>
                         <?php foreach ($surtidoresList as $s): ?>
                             <option value="<?php echo $s['id']; ?>" data-precio="<?php echo $s['precio_litro']; ?>" data-combustible="<?php echo htmlspecialchars($s['combustible_nombre']); ?>">
-                                <?php echo htmlspecialchars($s['nombre']); ?> (S/. <?php echo number_format($s['precio_litro'], 2); ?> / Litro)
+                                <?php echo htmlspecialchars($s['nombre']); ?> (S/. <?php echo number_format($s['precio_litro'], 2); ?> / Galón)
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -62,15 +62,15 @@ $surtidoresList = $surtidores ?? [];
                     <span class="info-block-val" id="infoFuelName">-</span>
                 </div>
                 <div class="info-block">
-                    <span class="info-block-label">Tarifa por Litro</span>
+                    <span class="info-block-label">Tarifa por Galón</span>
                     <span class="info-block-val" id="infoFuelPrice">S/. 0.00</span>
                 </div>
             </div>
 
-            <!-- Fila Doble: Litros y Placa -->
+            <!-- Fila Doble: Galones y Placa -->
             <div class="form-double-row">
                 <div class="form-group">
-                    <label for="litros">Volumen Despachado (Litros) *</label>
+                    <label for="litros">Volumen Despachado (Galones) *</label>
                     <input type="number" step="0.01" min="0.05" name="litros" id="litros" required placeholder="0.00">
                 </div>
                 
@@ -118,18 +118,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const infoFuelPrice = document.getElementById('infoFuelPrice');
     const billboardAmount = document.getElementById('billboardAmount');
 
-    let precioPorLitro = 0;
+    let precioPorGalon = 0;
 
     surtidorSelect.addEventListener('change', function() {
         const option = surtidorSelect.options[surtidorSelect.selectedIndex];
         if (option.value !== "") {
-            precioPorLitro = parseFloat(option.getAttribute('data-precio')) || 0;
+            precioPorGalon = parseFloat(option.getAttribute('data-precio')) || 0;
             const nombreCombustible = option.getAttribute('data-combustible') || '-';
             
             infoFuelName.textContent = nombreCombustible;
-            infoFuelPrice.textContent = 'S/. ' + precioPorLitro.toFixed(2);
+            infoFuelPrice.textContent = 'S/. ' + precioPorGalon.toFixed(2);
         } else {
-            precioPorLitro = 0;
+            precioPorGalon = 0;
             infoFuelName.textContent = '-';
             infoFuelPrice.textContent = 'S/. 0.00';
         }
@@ -139,8 +139,8 @@ document.addEventListener('DOMContentLoaded', function() {
     litrosInput.addEventListener('input', recalcularVenta);
 
     function recalcularVenta() {
-        const litros = parseFloat(litrosInput.value) || 0;
-        const total = litros * precioPorLitro;
+        const galones = parseFloat(litrosInput.value) || 0;
+        const total = galones * precioPorGalon;
         billboardAmount.textContent = 'S/. ' + total.toFixed(2);
     }
 });
