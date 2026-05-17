@@ -310,6 +310,11 @@
 
         // EFECTO DE ROTACIÓN 3D INTERACTIVA CON FÍSICA SUAVE (LERP) Y LINTERNA CINEMÁTICA
         document.addEventListener('DOMContentLoaded', function() {
+            // DETECTAR PANTALLA TÁCTIL (MÓVIL): Si el dispositivo no tiene mouse, salir de inmediato
+            if (window.matchMedia('(hover: none)').matches) {
+                return;
+            }
+
             const card = document.querySelector('.full-bleed-landscape-wrapper');
             if (!card) return;
 
