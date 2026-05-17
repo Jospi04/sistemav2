@@ -1,0 +1,215 @@
+/* ==========================================
+   ESTILOS DEL INICIO DE SESIÓN (login.css)
+   ========================================== */
+
+/* Variables CSS Globales de Diseño */
+:root {
+    --bg-primary: #0F172A;       /* Fondo pizarra ultra oscuro */
+    --bg-secondary: #1E293B;     /* Fondo tarjetas y componentes */
+    --text-main: #F8FAFC;        /* Blanco grisáceo principal */
+    --text-muted: #94A3B8;       /* Gris azulado de bajo contraste */
+    --accent-color: #0EA5E9;     /* Celeste corporativo premium */
+    --accent-hover: #0284C7;     /* Celeste en estado hover */
+    --border-color: #334155;     /* Borde discreto slate */
+    --danger-color: #EF4444;     /* Rojo para errores/alertas */
+    --danger-bg: rgba(239, 68, 68, 0.1); /* Fondo para alertas */
+}
+
+/* Reset Básico de Elementos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Envoltorio principal para centrado vertical y horizontal */
+.login-wrapper {
+    width: 100%;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tarjeta Principal */
+.login-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 440px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* Encabezado del login */
+.login-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.logo-back {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--text-main);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.logo-accent {
+    color: var(--accent-color);
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Alertas de error */
+.alert-error {
+    background-color: var(--danger-bg);
+    border: 1px solid var(--danger-color);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.alert-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.alert-message {
+    color: #FCA5A5;
+    font-size: 0.88rem;
+    font-weight: 500;
+}
+
+/* Formulario */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    color: var(--text-muted);
+    font-size: 1rem;
+    pointer-events: none;
+}
+
+.input-wrapper input {
+    width: 100%;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px 14px 12px 42px;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-wrapper input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+.input-wrapper input::placeholder {
+    color: #475569;
+}
+
+/* Acciones del formulario (Botones) */
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.btn-submit {
+    background-color: var(--accent-color);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    padding: 14px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: var(--accent-hover);
+}
+
+.btn-cancel {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+}
+
+/* Pie del login */
+.login-footer {
+    text-align: center;
+    margin-top: 32px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+}
+
+.login-footer p {
+    color: #475569;
+    font-size: 0.8rem;
+}
