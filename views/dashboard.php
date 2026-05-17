@@ -68,9 +68,11 @@ $refillsHistoryList = $refillsList ?? [];
             <section class="tanks-section">
                 <div class="section-title-bar" style="display: flex; justify-content: space-between; align-items: center;">
                     <h2>Monitoreo de Tanques</h2>
-                    <button type="button" class="btn-shortcut-new" onclick="openRefillModal()" style="background-color: var(--accent-color); color: var(--bg-primary); border: none; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-buttons); font-size: 0.82rem; font-weight: 700;">
-                        <i class='bx bx-truck' style="font-size: 1rem;"></i> Reabastecer
-                    </button>
+                    <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin'): ?>
+                        <button type="button" class="btn-shortcut-new" onclick="openRefillModal()" style="background-color: var(--accent-color); color: var(--bg-primary); border: none; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-buttons); font-size: 0.82rem; font-weight: 700;">
+                            <i class='bx bx-truck' style="font-size: 1rem;"></i> Reabastecer
+                        </button>
+                    <?php endif; ?>
                 </div>
 
                 <div class="tanks-grid">

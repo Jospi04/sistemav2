@@ -15,12 +15,6 @@ class DashboardController {
             exit;
         }
 
-        // Restricción estricta de seguridad: Solo administradores entran al panel financiero
-        if ($_SESSION['rol'] !== 'admin') {
-            header('Location: ventas');
-            exit;
-        }
-
         $db = Database::getConnection();
 
         // 1. Obtener KPIs principales del día de hoy
@@ -137,7 +131,7 @@ class DashboardController {
     }
 
     /**
-     * Genera la vista de reportes de ventas con filtros de fecha.
+     * Genera la vista de reportes de ventas con filtros avanzados de fecha, turnos y griferos.
      */
     public function reportes() {
         // Validar sesión activa
@@ -154,55 +148,70 @@ class DashboardController {
 
         $db = Database::getConnection();
 
-        // 1. Obtener período seleccionado y calcular rango de fechas
-        $periodo = $_GET['periodo'] ?? 'semana';
-        $desdeInput = $_GET['desde'] ?? '';
-        $hastaInput = $_GET['hasta'] ?? '';
+        // 1. Obtener filtros avanzados
+        $desdeInput = $_GET['desde'] ?? date('Y-m-d');
+        $hastaInput = $_GET['hasta'] ?? date('Y-m-d');
+        $turno = $_GET['turno'] ?? 'todos';
+        $griferoId = $_GET['grifero_id'] ?? 'todos';
 
-        switch ($periodo) {
-            case 'hoy':
-                $desde = date('Y-m-d 00:00:00');
-                $hasta = date('Y-m-d 23:59:59');
-                break;
-            case 'mes':
-                $desde = date('Y-m-01 00:00:00');
-                $hasta = date('Y-m-d 23:59:59');
-                break;
-            case 'personalizado':
-                $desde = !empty($desdeInput) ? $desdeInput . ' 00:00:00' : date('Y-m-d 00:00:00', strtotime('-7 days'));
-                $hasta = !empty($hastaInput) ? $hastaInput . ' 23:59:59' : date('Y-m-d 23:59:59');
-                break;
-            case 'semana':
-            default:
-                $desde = date('Y-m-d 00:00:00', strtotime('-7 days'));
-                $hasta = date('Y-m-d 23:59:59');
-                break;
+        // Setear horas según rango
+        $desde = $desdeInput . ' 00:00:00';
+        $hasta = $hastaInput . ' 23:59:59';
+
+        // 2. Construir la consulta SQL dinámica con parámetros seguros
+        $whereClauses = ["v.fecha >= :desde AND v.fecha <= :hasta"];
+        $params = [
+            ':desde' => $desde,
+            ':hasta' => $hasta
+        ];
+
+        // Filtro por Grifero / Despachador
+        if ($griferoId !== 'todos') {
+            $whereClauses[] = "v.usuario_id = :grifero_id";
+            $params[':grifero_id'] = intval($griferoId);
         }
 
-        // 2. Obtener KPIs globales del período
+        // Filtro por Turno (Analizando la hora de creación en MySQL)
+        if ($turno !== 'todos') {
+            if ($turno === 'manana') {
+                $whereClauses[] = "HOUR(v.fecha) >= 6 AND HOUR(v.fecha) < 14";
+            } elseif ($turno === 'tarde') {
+                $whereClauses[] = "HOUR(v.fecha) >= 14 AND HOUR(v.fecha) < 22";
+            } elseif ($turno === 'noche') {
+                $whereClauses[] = "(HOUR(v.fecha) >= 22 OR HOUR(v.fecha) < 6)";
+            }
+        }
+
+        $whereSql = implode(" AND ", $whereClauses);
+
+        // 3. Obtener listado de Griferos/Usuarios para el selector
+        $stmtGriferos = $db->query("SELECT id, nombre, rol FROM usuarios ORDER BY nombre ASC");
+        $griferosList = $stmtGriferos->fetchAll();
+
+        // 4. Obtener KPIs globales filtrados
         $stmtKpi = $db->prepare("SELECT 
-                                    COALESCE(SUM(total), 0) as total_dinero, 
-                                    COALESCE(SUM(litros), 0) as total_litros, 
-                                    COUNT(id) as transacciones 
-                                 FROM ventas 
-                                 WHERE fecha >= ? AND fecha <= ?");
-        $stmtKpi->execute([$desde, $hasta]);
+                                    COALESCE(SUM(v.total), 0) as total_dinero, 
+                                    COALESCE(SUM(v.litros), 0) as total_litros, 
+                                    COUNT(v.id) as transacciones 
+                                 FROM ventas v 
+                                 WHERE {$whereSql}");
+        $stmtKpi->execute($params);
         $kpis = $stmtKpi->fetch();
 
-        // 3. Obtener ventas desglosadas por tipo de combustible en el período
+        // 5. Obtener ventas desglosadas por tipo de combustible filtrados
         $stmtCombustibles = $db->prepare("SELECT 
                                             c.nombre as combustible_nombre, 
                                             COALESCE(SUM(v.total), 0) as total_combustible, 
                                             COALESCE(SUM(v.litros), 0) as litros_combustible, 
                                             COUNT(v.id) as transacciones_combustible 
                                           FROM combustibles c 
-                                          LEFT JOIN ventas v ON v.combustible_id = c.id AND v.fecha >= ? AND v.fecha <= ? 
+                                          LEFT JOIN ventas v ON v.combustible_id = c.id AND {$whereSql}
                                           GROUP BY c.id 
                                           ORDER BY total_combustible DESC");
-        $stmtCombustibles->execute([$desde, $hasta]);
+        $stmtCombustibles->execute($params);
         $combustiblesReport = $stmtCombustibles->fetchAll();
 
-        // 4. Obtener listado detallado de todas las ventas del período
+        // 6. Obtener listado detallado de todas las ventas filtradas
         $stmtVentas = $db->prepare("SELECT 
                                         v.*, 
                                         c.nombre as combustible_nombre, 
@@ -210,15 +219,15 @@ class DashboardController {
                                     FROM ventas v 
                                     JOIN combustibles c ON v.combustible_id = c.id 
                                     JOIN usuarios u ON v.usuario_id = u.id 
-                                    WHERE v.fecha >= ? AND v.fecha <= ? 
+                                    WHERE {$whereSql} 
                                     ORDER BY v.id DESC");
-        $stmtVentas->execute([$desde, $hasta]);
+        $stmtVentas->execute($params);
         $ventasReport = $stmtVentas->fetchAll();
 
-        // 5. Parámetros de renderizado
+        // 7. Parámetros de renderizado
         $activePage = 'reportes';
         $pageTitle = 'Reportes de Despacho y Ventas';
-        $extraCss = 'dashboard.css'; // Reutilizamos estilos del dashboard (tablas, kpis, tarjetas)
+        $extraCss = 'dashboard.css'; 
         $viewFile = 'reportes.php';
 
         require_once BASE_DIR . '/views/layout.php';

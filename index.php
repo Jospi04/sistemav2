@@ -59,6 +59,21 @@ switch ($url) {
         $controller->reportes();
         break;
 
+    case 'usuarios':
+        $controller = new Controller\UsuarioController();
+        $controller->index();
+        break;
+
+    case 'usuarios/crear':
+        $controller = new Controller\UsuarioController();
+        $controller->crear();
+        break;
+
+    case 'usuarios/eliminar':
+        $controller = new Controller\UsuarioController();
+        $controller->eliminar();
+        break;
+
     case 'reabastecer':
         $controller = new Controller\DashboardController();
         $controller->reabastecer();
@@ -75,18 +90,27 @@ switch ($url) {
         break;
 
     default:
-        // Página de error 404 corporativa sutil
+        // Página de error 404 corporativa de lujo (Adaline Canvas Ice)
         http_response_code(404);
         echo "<!DOCTYPE html>
         <html lang='es'>
         <head>
             <meta charset='UTF-8'>
             <title>404 - No Encontrado</title>
+            <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap' rel='stylesheet'>
             <style>
+                :root {
+                    --bg-page: #fbfdf6;
+                    --text-title: #2c3e29;
+                    --text-body: #606d5c;
+                    --accent-color: #556c4d;
+                    --border-color: #e5eadf;
+                    --bg-card: #ffffff;
+                }
                 body {
-                    background-color: #0F172A;
-                    color: #F8FAFC;
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    background-color: var(--bg-page);
+                    color: var(--text-body);
+                    font-family: 'Inter', sans-serif;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -95,31 +119,49 @@ switch ($url) {
                 }
                 .container {
                     text-align: center;
-                    border: 1px solid #334155;
-                    padding: 40px;
-                    border-radius: 8px;
-                    background-color: #1E293B;
-                    max-width: 500px;
+                    border: 1px solid var(--border-color);
+                    padding: 48px 40px;
+                    border-radius: 24px;
+                    background-color: var(--bg-card);
+                    max-width: 440px;
+                    box-shadow: rgba(0, 0, 0, 0.03) 0px 10px 30px;
+                    box-sizing: border-box;
                 }
-                h1 { color: #EF4444; font-size: 2.5rem; margin-top: 0; }
-                p { color: #94A3B8; margin-bottom: 20px; }
+                h1 { 
+                    color: #ef4444; 
+                    font-size: 3.5rem; 
+                    margin: 0 0 10px 0; 
+                    font-weight: 800;
+                    letter-spacing: -0.04em;
+                }
+                p { 
+                    color: var(--text-body); 
+                    margin: 0 0 28px 0; 
+                    font-size: 0.95rem;
+                    line-height: 1.6;
+                }
                 a {
-                    color: #0EA5E9;
+                    color: var(--bg-card);
+                    background-color: var(--accent-color);
                     text-decoration: none;
                     font-weight: bold;
-                    border: 1px solid #0EA5E9;
-                    padding: 10px 20px;
-                    border-radius: 4px;
-                    transition: all 0.3s ease;
+                    font-size: 0.88rem;
+                    padding: 12px 28px;
+                    border-radius: 10px;
+                    display: inline-block;
+                    transition: all 0.25s ease;
                 }
-                a:hover { background-color: #0EA5E9; color: #FFFFFF; }
+                a:hover { 
+                    opacity: 0.92;
+                    transform: translateY(-1px);
+                }
             </style>
         </head>
         <body>
             <div class='container'>
                 <h1>404</h1>
                 <p>La página que estás buscando no existe o ha sido movida.</p>
-                <a href='./home'>Volver al Inicio</a>
+                <a href='/home'>Volver al Inicio</a>
             </div>
         </body>
         </html>";

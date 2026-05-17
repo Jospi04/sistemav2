@@ -48,26 +48,35 @@ $rolUsuario = $_SESSION['rol'] ?? 'operario';
 
             <!-- Menú de Opciones -->
             <nav class="sidebar-nav">
-                <?php if ($rolUsuario === 'admin'): ?>
-                    <a href="dashboard" class="nav-item <?php echo ($activePage ?? '') === 'dashboard' ? 'active' : ''; ?>">
-                        <span class="nav-icon"><i class="bx bx-bar-chart-alt-2"></i></span>
-                        <span class="nav-text">Panel de Control</span>
-                    </a>
-                    <a href="reportes" class="nav-item <?php echo ($activePage ?? '') === 'reportes' ? 'active' : ''; ?>">
-                        <span class="nav-icon"><i class="bx bx-line-chart"></i></span>
-                        <span class="nav-text">Reportes Financieros</span>
-                    </a>
-                <?php endif; ?>
+                <!-- Panel de Control (Dashboard) - Accesible a todos (Admin y Griferos) -->
+                <a href="dashboard" class="nav-item <?php echo ($activePage ?? '') === 'dashboard' ? 'active' : ''; ?>">
+                    <span class="nav-icon"><i class="bx bx-bar-chart-alt-2"></i></span>
+                    <span class="nav-text">Panel de Control</span>
+                </a>
 
+                <!-- Despacho de Ventas - Accesible a todos -->
                 <a href="ventas" class="nav-item <?php echo ($activePage ?? '') === 'ventas' ? 'active' : ''; ?>">
                     <span class="nav-icon"><i class="bx bx-gas-pump"></i></span>
                     <span class="nav-text">Despacho de Ventas</span>
                 </a>
 
+                <!-- Comprobante Boleta - Accesible a todos -->
                 <a href="boleta" class="nav-item <?php echo ($activePage ?? '') === 'boleta' ? 'active' : ''; ?>">
                     <span class="nav-icon"><i class="bx bx-receipt"></i></span>
                     <span class="nav-text">Comprobante Boleta</span>
                 </a>
+
+                <!-- Accesos Exclusivos del Administrador -->
+                <?php if ($rolUsuario === 'admin'): ?>
+                    <a href="reportes" class="nav-item <?php echo ($activePage ?? '') === 'reportes' ? 'active' : ''; ?>">
+                        <span class="nav-icon"><i class="bx bx-line-chart"></i></span>
+                        <span class="nav-text">Reportes Financieros</span>
+                    </a>
+                    <a href="usuarios" class="nav-item <?php echo ($activePage ?? '') === 'usuarios' ? 'active' : ''; ?>">
+                        <span class="nav-icon"><i class="bx bx-user-plus"></i></span>
+                        <span class="nav-text">Crear Vendedores</span>
+                    </a>
+                <?php endif; ?>
             </nav>
 
             <!-- Sección Inferior (Perfil y Logout) -->
