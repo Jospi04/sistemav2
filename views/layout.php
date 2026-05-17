@@ -28,9 +28,133 @@ $rolUsuario = $_SESSION['rol'] ?? 'operario';
     <?php if (isset($extraCss) && !empty($extraCss)): ?>
         <link rel="stylesheet" href="assets/css/<?php echo $extraCss; ?>">
     <?php endif; ?>
+
+    <!-- Identidad de Marca: Favicon para Pestañas del Navegador -->
+    <link rel="icon" type="image/png" href="assets/images/icon.png">
+
+    <!-- HOJA DE ESTILOS PREMIUM PARA ALERTAS FLOTANTES GLOBAL (REEMPLAZO DE ALERT) -->
+    <style>
+        .premium-toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 999999;
+            pointer-events: none;
+        }
+
+        .premium-toast-item {
+            pointer-events: auto;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 14px;
+            padding: 14px 20px;
+            min-width: 300px;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: rgba(0, 0, 0, 0.08) 0px 10px 30px -10px, rgba(0, 0, 0, 0.02) 0px 1px 3px;
+            animation: slideInToast 0.4s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
+            position: relative;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+
+        @keyframes slideInToast {
+            from {
+                opacity: 0;
+                transform: translateX(60px) translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) translateY(0);
+            }
+        }
+
+        @keyframes fadeOutToast {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+        }
+
+        .toast-success {
+            border-left: 4px solid var(--success-color);
+            background: rgba(246, 253, 240, 0.85); /* Verde translúcido */
+        }
+        .toast-success .toast-icon-box {
+            color: var(--success-color);
+        }
+        .toast-success .toast-message {
+            color: #1b4311;
+        }
+
+        .toast-error {
+            border-left: 4px solid #ef4444;
+            background: rgba(254, 242, 242, 0.85); /* Crimson translúcido */
+        }
+        .toast-error .toast-icon-box {
+            color: #ef4444;
+        }
+        .toast-error .toast-message {
+            color: #7f1d1d;
+        }
+
+        .toast-warning {
+            border-left: 4px solid #f59e0b;
+            background: rgba(255, 251, 235, 0.85); /* Ámbar translúcido */
+        }
+        .toast-warning .toast-icon-box {
+            color: #f59e0b;
+        }
+        .toast-warning .toast-message {
+            color: #78350f;
+        }
+
+        .toast-icon-box {
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-message {
+            font-size: 0.85rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+            margin-left: 4px;
+        }
+
+        .toast-close:hover {
+            color: var(--text-main);
+        }
+    </style>
 </head>
 
 <body>
+    <!-- CONTENEDOR DE ALERTAS DE LUJO -->
+    <div id="premiumToastContainer" class="premium-toast-container no-print"></div>
 
     <div class="layout-container">
 
@@ -159,6 +283,46 @@ $rolUsuario = $_SESSION['rol'] ?? 'operario';
             localStorage.setItem('sidebar-collapsed', layoutContainer.classList.contains('sidebar-collapsed'));
         });
     });
+
+    // FUNCIÓN DE ALERTA/NOTIFICACIÓN PREMIUM TOAST (REEMPLAZO UNIVERSAL DE ALERT)
+    window.showPremiumToast = function(message, type = 'success') {
+        const container = document.getElementById('premiumToastContainer');
+        if (!container) return;
+
+        // Crear la notificación
+        const toast = document.createElement('div');
+        toast.className = `premium-toast-item toast-${type}`;
+        
+        // Asignar icono según tipo
+        let icon = "<i class='bx bx-check-circle'></i>";
+        if (type === 'error') {
+            icon = "<i class='bx bx-error-circle'></i>";
+        } else if (type === 'warning') {
+            icon = "<i class='bx bx-alarm-exclamation'></i>";
+        }
+
+        toast.innerHTML = `
+            <div class="toast-icon-box">${icon}</div>
+            <div class="toast-content" style="flex: 1;">
+                <span class="toast-message" style="display: block;">${message}</span>
+            </div>
+            <span class="toast-close" onclick="this.parentElement.remove()" style="cursor: pointer;"><i class='bx bx-x'></i></span>
+        `;
+
+        container.appendChild(toast);
+
+        // Auto remover después de 4 segundos con animación suave
+        setTimeout(() => {
+            if (toast && toast.parentElement) {
+                toast.style.animation = 'fadeOutToast 0.4s ease forwards';
+                setTimeout(() => {
+                    if (toast && toast.parentElement) {
+                        toast.remove();
+                    }
+                }, 400);
+            }
+        }, 4000);
+    };
     </script>
 </body>
 

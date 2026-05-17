@@ -13,6 +13,8 @@
         rel="stylesheet">
     <!-- CSS Modular Adaline -->
     <link rel="stylesheet" href="assets/css/home.css">
+    <!-- Identidad de Marca: Favicon para Pestañas del Navegador -->
+    <link rel="icon" type="image/png" href="assets/images/icon.png">
 </head>
 
 <body>
@@ -275,6 +277,39 @@
                 closeDemoModal();
             }
         }
+
+        // EFECTO DE ROTACIÓN 3D INTERACTIVA CON REFLEJO GLOSS EN EL HERO
+        document.addEventListener('DOMContentLoaded', function() {
+            const card = document.querySelector('.full-bleed-landscape-wrapper');
+            if (!card) return;
+
+            card.addEventListener('mousemove', function(e) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left; // Posición X dentro de la tarjeta
+                const y = e.clientY - rect.top;  // Posición Y dentro de la tarjeta
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                // Calcular ángulos de rotación en 3D (Máximo 10 grados para conservar elegancia)
+                const rotateX = ((centerY - y) / centerY) * 10;
+                const rotateY = ((x - centerX) / centerX) * 10;
+
+                // Aplicar transformación 3D interactiva en vivo
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.025)`;
+
+                // Actualizar la posición de la iluminación (brillo gloss)
+                const pctX = (x / rect.width) * 100;
+                const pctY = (y / rect.height) * 100;
+                card.style.setProperty('--shine-x', `${pctX}%`);
+                card.style.setProperty('--shine-y', `${pctY}%`);
+            });
+
+            card.addEventListener('mouseleave', function() {
+                // Restablecer la rotación 3D original con transición suave de CSS
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+            });
+        });
     </script>
 
 </body>

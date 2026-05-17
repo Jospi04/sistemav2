@@ -285,14 +285,55 @@ body {
     animation-play-state: paused;
 }
 
-/* Widescreen Landscape Visual */
+/* Widescreen Landscape Visual - PREMIUM REDESIGN WITH INTERACTIVE 3D TILT & GLOSSY SHINE */
 .full-bleed-landscape-wrapper {
     width: 100%;
     margin-top: var(--spacing-16);
-    border-radius: var(--radius-images);
+    border-radius: 20px; /* Bordes más curvos y sofisticados */
     overflow: hidden;
-    box-shadow: var(--shadow-subtle);
-    border: 1px solid var(--color-stone-moss);
+    border: 1px solid rgba(255, 255, 255, 0.45); /* Borde de vidrio translúcido */
+    box-shadow: 
+        rgba(32, 59, 20, 0.15) 0px 30px 60px -15px, 
+        rgba(0, 0, 0, 0.08) 0px 18px 36px -18px, 
+        rgba(32, 59, 20, 0.08) 0px 0px 0px 1px; /* Sombra tridimensional cinemática oliva */
+    transform-style: preserve-3d;
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1);
+    transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.5s ease, border-color 0.5s ease;
+    position: relative;
+    cursor: pointer;
+    /* Mantenemos el balanceo continuo suave mientras está inactivo */
+    animation: floating-cisterna 6s ease-in-out infinite; 
+}
+
+/* Pausar el balanceo de flotación automática al interactuar para no perturbar el control del mouse */
+.full-bleed-landscape-wrapper:hover {
+    animation-play-state: paused;
+    border-color: rgba(32, 59, 20, 0.25);
+    box-shadow: 
+        rgba(32, 59, 20, 0.25) 0px 45px 80px -20px, 
+        rgba(0, 0, 0, 0.15) 0px 25px 50px -22px, 
+        rgba(32, 59, 20, 0.18) 0px 0px 0px 1px; 
+}
+
+/* Destello Gloss 3D Interactivo */
+.full-bleed-landscape-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(
+        circle at var(--shine-x, 50%) var(--shine-y, 50%), 
+        rgba(255, 255, 255, 0.2) 0%, 
+        rgba(255, 255, 255, 0) 60%
+    );
+    pointer-events: none;
+    z-index: 5;
+    mix-blend-mode: overlay;
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
+
+.full-bleed-landscape-wrapper:hover::after {
+    opacity: 1;
 }
 
 .landscape-canvas {
@@ -301,6 +342,25 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transform: scale(1);
+}
+
+.full-bleed-landscape-wrapper:hover .landscape-canvas {
+    transform: scale(1.03) translateZ(20px); /* Paralaje real en el eje Z */
+}
+
+/* Animación de suspensión flotante fluida inactiva */
+@keyframes floating-cisterna {
+    0% {
+        transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px);
+    }
+    50% {
+        transform: perspective(1000px) rotateX(0.5deg) rotateY(-0.5deg) translateY(-8px);
+    }
+    100% {
+        transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px);
+    }
 }
 
 /* ==========================================================================
