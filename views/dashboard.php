@@ -5,6 +5,7 @@ $kpiTotalLitros = $kpis['total_litros'] ?? 0;
 $kpiTransacciones = $kpis['transacciones'] ?? 0;
 $tankStocks = $tanks ?? [];
 $recentSalesList = $recentSales ?? [];
+$refillsHistoryList = $refillsList ?? [];
 ?>
 <div class="dashboard-grid">
 
@@ -61,50 +62,96 @@ $recentSalesList = $recentSales ?? [];
     <!-- CUADRICULA CENTRAL: MONITOREO DE TANQUES Y TABLA RECIENTES -->
     <div class="dashboard-main-columns">
         
-        <!-- COLUMNA 1: MONITOREO FÍSICO DE TANQUES (INVENTARIO) -->
-        <section class="tanks-section">
-            <div class="section-title-bar" style="display: flex; justify-content: space-between; align-items: center;">
-                <h2>Monitoreo de Tanques</h2>
-                <button type="button" class="btn-shortcut-new" onclick="openRefillModal()" style="background-color: var(--accent-color); color: var(--bg-primary); border: none; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-buttons); font-size: 0.82rem; font-weight: 700;">
-                    <i class='bx bx-truck' style="font-size: 1rem;"></i> Reabastecer
-                </button>
-            </div>
+        <!-- COLUMNA 1: MONITOREO FÍSICO DE TANQUES Y HISTORIAL DE CISTERNAS -->
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+            
+            <section class="tanks-section">
+                <div class="section-title-bar" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>Monitoreo de Tanques</h2>
+                    <button type="button" class="btn-shortcut-new" onclick="openRefillModal()" style="background-color: var(--accent-color); color: var(--bg-primary); border: none; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-buttons); font-size: 0.82rem; font-weight: 700;">
+                        <i class='bx bx-truck' style="font-size: 1rem;"></i> Reabastecer
+                    </button>
+                </div>
 
-            <div class="tanks-grid">
-                <?php foreach ($tankStocks as $tank): ?>
-                    <?php 
-                    $max = floatval($tank['capacidad_maxima']);
-                    $actual = floatval($tank['stock_actual']);
-                    $percent = $max > 0 ? round(($actual / $max) * 100, 1) : 0;
-                    
-                    // Determinar clase de estado según stock
-                    $statusClass = 'optimal';
-                    if ($percent <= 15) {
-                        $statusClass = 'critical';
-                    } elseif ($percent <= 40) {
-                        $statusClass = 'warning';
-                    }
-                    ?>
-                    <div class="tank-card">
-                        <div class="tank-header">
-                            <span class="tank-name"><?php echo htmlspecialchars($tank['combustible_nombre']); ?></span>
-                            <span class="tank-percent <?php echo $statusClass; ?>"><?php echo $percent; ?>%</span>
-                        </div>
+                <div class="tanks-grid">
+                    <?php foreach ($tankStocks as $tank): ?>
+                        <?php 
+                        $max = floatval($tank['capacidad_maxima']);
+                        $actual = floatval($tank['stock_actual']);
+                        $percent = $max > 0 ? round(($actual / $max) * 100, 1) : 0;
                         
-                        <!-- Barra de nivel física -->
-                        <!-- Regla ESTRICTA CSS: Se usa variable CSS inline (--progress), interpretada en assets/dashboard.css -->
-                        <div class="tank-progress-track">
-                            <div class="tank-progress-fill <?php echo $statusClass; ?>" style="--progress: <?php echo $percent; ?>%;"></div>
-                        </div>
+                        // Determinar clase de estado según stock
+                        $statusClass = 'optimal';
+                        if ($percent <= 15) {
+                            $statusClass = 'critical';
+                        } elseif ($percent <= 40) {
+                            $statusClass = 'warning';
+                        }
+                        ?>
+                        <div class="tank-card">
+                            <div class="tank-header">
+                                <span class="tank-name"><?php echo htmlspecialchars($tank['combustible_nombre']); ?></span>
+                                <span class="tank-percent <?php echo $statusClass; ?>"><?php echo $percent; ?>%</span>
+                            </div>
+                            
+                            <!-- Barra de nivel física -->
+                            <div class="tank-progress-track">
+                                <div class="tank-progress-fill <?php echo $statusClass; ?>" style="--progress: <?php echo $percent; ?>%;"></div>
+                            </div>
 
-                        <div class="tank-footer">
-                            <span>Stock: <strong><?php echo number_format($actual, 2); ?> Gal</strong></span>
-                            <span class="muted">/ <?php echo number_format($max, 0); ?> Gal</span>
+                            <div class="tank-footer">
+                                <span>Stock: <strong><?php echo number_format($actual, 2); ?> Gal</strong></span>
+                                <span class="muted">/ <?php echo number_format($max, 0); ?> Gal</span>
+                            </div>
+
+                            <!-- Telemetría en vivo simulada Veeder-Root TLS-450 -->
+                            <div class="tank-sensor-meta" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); margin-top: 8px; border-top: 1px dashed var(--border-color); padding-top: 8px; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="display: flex; align-items: center; gap: 4px;"><i class='bx bx-radio-circle-marked' style='color: var(--success-color); font-size: 12px;'></i> Sonda ATG</span>
+                                <span>Temp: <?php echo number_format(19.2 + (($tank['id'] * 7) % 15) / 10, 1); ?> °C</span>
+                            </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </section>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: HISTORIAL DE INGRESOS DE CISTERNA -->
+            <section class="tanks-section" style="margin-top: 0;">
+                <div class="section-title-bar">
+                    <h2>Historial de Cargas (Cisternas)</h2>
+                    <span class="badge-online" style="background-color: rgba(32, 59, 20, 0.06); color: var(--success-color); border: 1px solid rgba(32, 59, 20, 0.15); display: flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700;"><i class='bx bx-check-double'></i> Control Activo</span>
+                </div>
+                
+                <div class="table-wrapper">
+                    <table class="recent-sales-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha y Hora</th>
+                                <th>Combustible</th>
+                                <th>Cantidad Agregada</th>
+                                <th>Encargado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($refillsHistoryList)): ?>
+                                <tr>
+                                    <td colspan="4" class="table-empty">No se han registrado llegadas de cisternas en este turno.</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($refillsHistoryList as $refill): ?>
+                                    <tr>
+                                        <td><?php echo date('d/m H:i', strtotime($refill['fecha'])); ?></td>
+                                        <td class="font-bold"><?php echo htmlspecialchars($refill['combustible_nombre']); ?></td>
+                                        <td class="font-bold text-accent" style="color: var(--success-color);"><?php echo number_format($refill['cantidad'], 2); ?> Gal</td>
+                                        <td><?php echo htmlspecialchars($refill['usuario_nombre']); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
 
         <!-- COLUMNA 2: REGISTRO DE ÚLTIMAS TRANSACCIONES -->
         <section class="transactions-section">
@@ -155,12 +202,12 @@ $recentSalesList = $recentSales ?? [];
 <div id="refillModal" class="demo-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 29, 8, 0.4); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px);">
     <div class="demo-modal-card" style="background: var(--bg-secondary); border-radius: var(--radius-cards); width: 100%; max-width: 450px; padding: 24px; box-shadow: rgba(32, 59, 20, 0.1) 0px 12px 36px; border: 1px solid var(--border-color);">
         <header class="demo-modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
-            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; letter-spacing: -0.03em;"><i class='bx bx-truck' style="font-size: 1.3rem;"></i> Descarga de Cisterna</h3>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; letter-spacing: -0.03em;"><i class='bx bx-truck' style="font-size: 1.3rem;"></i> Agregar Stock de Combustible</h3>
             <button type="button" class="btn-close-modal" onclick="closeRefillModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
         </header>
         <form action="reabastecer" method="POST">
             <div class="sim-group" style="margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px;">
-                <label for="refill_inventario_id" class="font-mono" style="font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px;">SELECCIONAR TANQUE DE ALMACENAMIENTO</label>
+                <label for="refill_inventario_id" class="font-mono" style="font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px;">¿QUÉ COMBUSTIBLE LLEGÓ? ⛽</label>
                 <div class="select-wrapper" style="position: relative;">
                     <select name="inventario_id" id="refill_inventario_id" required style="width: 100%; padding: 10px 12px; border-radius: var(--radius-inputs); border: 1px solid var(--border-color); font-family: inherit; font-size: 0.9rem; background-color: var(--bg-primary); color: var(--text-main); cursor: pointer; outline: none;">
                         <?php foreach ($tankStocks as $tank): ?>
@@ -173,14 +220,14 @@ $recentSalesList = $recentSales ?? [];
             </div>
             
             <div class="sim-group" style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 6px;">
-                <label for="refill_cantidad" class="font-mono" style="font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px;">CANTIDAD A DESCARGAR (GALONES)</label>
-                <input type="number" step="0.01" min="0.10" name="cantidad" id="refill_cantidad" required placeholder="0.00" style="width: 100%; padding: 10px 12px; border-radius: var(--radius-inputs); border: 1px solid var(--border-color); font-family: inherit; font-size: 0.95rem; background-color: var(--bg-primary); color: var(--text-main); outline: none;">
+                <label for="refill_cantidad" class="font-mono" style="font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px;">¿CUÁNTOS GALONES VAS A AGREGAR? 💧</label>
+                <input type="number" step="0.01" min="0.10" name="cantidad" id="refill_cantidad" required placeholder="Ingresar cantidad (e.g. 500)" style="width: 100%; padding: 10px 12px; border-radius: var(--radius-inputs); border: 1px solid var(--border-color); font-family: inherit; font-size: 0.95rem; background-color: var(--bg-primary); color: var(--text-main); outline: none;">
                 <span id="refillCapacityLabel" class="font-mono" style="font-size: 11px; color: var(--success-color); margin-top: 4px; display: block; font-weight: 600;">Espacio libre en tanque: 0.00 Galones</span>
             </div>
 
             <div style="display: flex; gap: 12px; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 20px;">
                 <button type="button" class="btn-action-new" onclick="closeRefillModal()" style="border-radius: var(--radius-buttons); padding: 8px 16px; border: 1px solid var(--border-color); background: none; font-family: inherit; font-size: 0.85rem; font-weight: 700; cursor: pointer; color: var(--text-main); transition: all 0.2s;">Cancelar</button>
-                <button type="submit" class="btn-submit-dispatch" style="border-radius: var(--radius-buttons); padding: 8px 20px; background-color: var(--accent-color); color: var(--bg-primary); border: none; font-family: inherit; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">Registrar Descarga</button>
+                <button type="submit" class="btn-submit-dispatch" style="border-radius: var(--radius-buttons); padding: 8px 20px; background-color: var(--accent-color); color: var(--bg-primary); border: none; font-family: inherit; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">¡Recargar Tanque ahora! ⚡</button>
             </div>
         </form>
     </div>

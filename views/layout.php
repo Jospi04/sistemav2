@@ -53,6 +53,10 @@ $rolUsuario = $_SESSION['rol'] ?? 'operario';
                         <span class="nav-icon"><i class="bx bx-bar-chart-alt-2"></i></span>
                         <span class="nav-text">Panel de Control</span>
                     </a>
+                    <a href="reportes" class="nav-item <?php echo ($activePage ?? '') === 'reportes' ? 'active' : ''; ?>">
+                        <span class="nav-icon"><i class="bx bx-line-chart"></i></span>
+                        <span class="nav-text">Reportes Financieros</span>
+                    </a>
                 <?php endif; ?>
 
                 <a href="ventas" class="nav-item <?php echo ($activePage ?? '') === 'ventas' ? 'active' : ''; ?>">

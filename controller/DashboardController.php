@@ -48,7 +48,17 @@ class DashboardController {
                         LIMIT 5";
         $recentSales = $db->query($queryRecent)->fetchAll();
 
-        // 4. Parámetros de renderizado en la plantilla
+        // 4. Obtener historial de los últimos 5 reabastecimientos de cisternas
+        $queryRefills = "SELECT r.*, c.nombre as combustible_nombre, u.nombre as usuario_nombre
+                         FROM reabastecimientos r
+                         JOIN inventario i ON r.inventario_id = i.id
+                         JOIN combustibles c ON i.combustible_id = c.id
+                         JOIN usuarios u ON r.usuario_id = u.id
+                         ORDER BY r.id DESC
+                         LIMIT 5";
+        $refillsList = $db->query($queryRefills)->fetchAll();
+
+        // 5. Parámetros de renderizado en la plantilla
         $activePage = 'dashboard';
         $pageTitle = 'Panel de Estadísticas y Control';
         $extraCss = 'dashboard.css';
@@ -112,7 +122,11 @@ class DashboardController {
             // Actualizar stock del inventario
             $stmtUpdate = $db->prepare("UPDATE inventario SET stock_actual = ? WHERE id = ?");
             if ($stmtUpdate->execute([$nuevo_stock, $inventario_id])) {
-                $_SESSION['success'] = "¡Reabastecimiento registrado! Se sumaron " . floatval($cantidad) . " Gal al tanque de " . $tank['combustible_nombre'] . ".";
+                // Registrar el evento de reabastecimiento en el historial
+                $stmtLog = $db->prepare("INSERT INTO reabastecimientos (inventario_id, cantidad, usuario_id) VALUES (?, ?, ?)");
+                $stmtLog->execute([$inventario_id, $cantidad, $_SESSION['usuario_id']]);
+                
+                $_SESSION['success'] = "¡Tanque recargado con éxito! Se agregaron " . floatval($cantidad) . " Galones de " . $tank['combustible_nombre'] . " al stock.";
             } else {
                 $_SESSION['error'] = 'Error al registrar el reabastecimiento en la base de datos.';
             }
@@ -120,5 +134,93 @@ class DashboardController {
             header('Location: dashboard');
             exit;
         }
+    }
+
+    /**
+     * Genera la vista de reportes de ventas con filtros de fecha.
+     */
+    public function reportes() {
+        // Validar sesión activa
+        if (!isset($_SESSION['usuario_id'])) {
+            header('Location: login');
+            exit;
+        }
+
+        // Restricción de seguridad: Solo administradores pueden ver reportes financieros
+        if ($_SESSION['rol'] !== 'admin') {
+            header('Location: ventas');
+            exit;
+        }
+
+        $db = Database::getConnection();
+
+        // 1. Obtener período seleccionado y calcular rango de fechas
+        $periodo = $_GET['periodo'] ?? 'semana';
+        $desdeInput = $_GET['desde'] ?? '';
+        $hastaInput = $_GET['hasta'] ?? '';
+
+        switch ($periodo) {
+            case 'hoy':
+                $desde = date('Y-m-d 00:00:00');
+                $hasta = date('Y-m-d 23:59:59');
+                break;
+            case 'mes':
+                $desde = date('Y-m-01 00:00:00');
+                $hasta = date('Y-m-d 23:59:59');
+                break;
+            case 'personalizado':
+                $desde = !empty($desdeInput) ? $desdeInput . ' 00:00:00' : date('Y-m-d 00:00:00', strtotime('-7 days'));
+                $hasta = !empty($hastaInput) ? $hastaInput . ' 23:59:59' : date('Y-m-d 23:59:59');
+                break;
+            case 'semana':
+            default:
+                $desde = date('Y-m-d 00:00:00', strtotime('-7 days'));
+                $hasta = date('Y-m-d 23:59:59');
+                break;
+        }
+
+        // 2. Obtener KPIs globales del período
+        $stmtKpi = $db->prepare("SELECT 
+                                    COALESCE(SUM(total), 0) as total_dinero, 
+                                    COALESCE(SUM(litros), 0) as total_litros, 
+                                    COUNT(id) as transacciones 
+                                 FROM ventas 
+                                 WHERE fecha >= ? AND fecha <= ?");
+        $stmtKpi->execute([$desde, $hasta]);
+        $kpis = $stmtKpi->fetch();
+
+        // 3. Obtener ventas desglosadas por tipo de combustible en el período
+        $stmtCombustibles = $db->prepare("SELECT 
+                                            c.nombre as combustible_nombre, 
+                                            COALESCE(SUM(v.total), 0) as total_combustible, 
+                                            COALESCE(SUM(v.litros), 0) as litros_combustible, 
+                                            COUNT(v.id) as transacciones_combustible 
+                                          FROM combustibles c 
+                                          LEFT JOIN ventas v ON v.combustible_id = c.id AND v.fecha >= ? AND v.fecha <= ? 
+                                          GROUP BY c.id 
+                                          ORDER BY total_combustible DESC");
+        $stmtCombustibles->execute([$desde, $hasta]);
+        $combustiblesReport = $stmtCombustibles->fetchAll();
+
+        // 4. Obtener listado detallado de todas las ventas del período
+        $stmtVentas = $db->prepare("SELECT 
+                                        v.*, 
+                                        c.nombre as combustible_nombre, 
+                                        u.nombre as usuario_nombre 
+                                    FROM ventas v 
+                                    JOIN combustibles c ON v.combustible_id = c.id 
+                                    JOIN usuarios u ON v.usuario_id = u.id 
+                                    WHERE v.fecha >= ? AND v.fecha <= ? 
+                                    ORDER BY v.id DESC");
+        $stmtVentas->execute([$desde, $hasta]);
+        $ventasReport = $stmtVentas->fetchAll();
+
+        // 5. Parámetros de renderizado
+        $activePage = 'reportes';
+        $pageTitle = 'Reportes de Despacho y Ventas';
+        $extraCss = 'dashboard.css'; // Reutilizamos estilos del dashboard (tablas, kpis, tarjetas)
+        $viewFile = 'reportes.php';
+
+        require_once BASE_DIR . '/views/layout.php';
     }
 }
