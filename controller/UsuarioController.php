@@ -53,7 +53,7 @@ class UsuarioController {
 
             if (empty($nombre) || empty($usuario) || empty($password)) {
                 $_SESSION['error'] = 'Por favor, complete todos los campos obligatorios.';
-                header('Location: /usuarios');
+                header('Location: usuarios');
                 exit;
             }
 
@@ -64,7 +64,7 @@ class UsuarioController {
             $stmtCheck->execute([$usuario]);
             if ($stmtCheck->fetch()) {
                 $_SESSION['error'] = 'El nombre de usuario "' . htmlspecialchars($usuario) . '" ya está registrado.';
-                header('Location: /usuarios');
+                header('Location: usuarios');
                 exit;
             }
 
@@ -79,7 +79,7 @@ class UsuarioController {
                 $_SESSION['error'] = 'Error al registrar el usuario en la base de datos.';
             }
 
-            header('Location: /usuarios');
+            header('Location: usuarios');
             exit;
         }
     }
@@ -97,14 +97,14 @@ class UsuarioController {
 
         if ($id <= 0) {
             $_SESSION['error'] = 'ID de usuario no válido.';
-            header('Location: /usuarios');
+            header('Location: usuarios');
             exit;
         }
 
         // Impedir que un administrador se elimine a sí mismo
         if ($id === intval($_SESSION['usuario_id'])) {
             $_SESSION['error'] = 'No puedes eliminar tu propia cuenta de administrador.';
-            header('Location: /usuarios');
+            header('Location: usuarios');
             exit;
         }
 
@@ -118,7 +118,7 @@ class UsuarioController {
             $_SESSION['error'] = 'Error al eliminar el usuario.';
         }
 
-        header('Location: /usuarios');
+        header('Location: usuarios');
         exit;
     }
 }

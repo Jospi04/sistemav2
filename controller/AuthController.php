@@ -8,6 +8,16 @@ class AuthController {
      * Procesa el inicio de sesión o muestra la vista correspondiente.
      */
     public function login() {
+        // Redirección inteligente automática si el usuario ya tiene sesión activa
+        if (isset($_SESSION['usuario_id'])) {
+            if (($_SESSION['rol'] ?? 'operario') === 'admin') {
+                header('Location: dashboard');
+            } else {
+                header('Location: ventas');
+            }
+            exit;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuario = trim($_POST['usuario'] ?? '');
             $password = trim($_POST['password'] ?? '');
@@ -51,7 +61,7 @@ class AuthController {
      */
     public function logout() {
         session_destroy();
-        header('Location: login');
+        header('Location: home');
         exit;
     }
 }

@@ -126,7 +126,7 @@ class VentasController {
 
             if ($id <= 0 || $litros <= 0 || $total <= 0 || empty($metodo_pago)) {
                 $_SESSION['error'] = 'Por favor, complete todos los campos con valores válidos.';
-                header('Location: /reportes');
+                header('Location: reportes');
                 exit;
             }
 
@@ -181,7 +181,7 @@ class VentasController {
                 $_SESSION['error'] = 'Error al editar la venta: ' . $e->getMessage();
             }
 
-            header('Location: /reportes');
+            header('Location: reportes');
             exit;
         } else {
             // Cargar datos vía GET en formato JSON para el modal interactivo
@@ -209,7 +209,7 @@ class VentasController {
     public function eliminar() {
         if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'admin') {
             $_SESSION['error'] = 'Operación no permitida.';
-            header('Location: /reportes');
+            header('Location: reportes');
             exit;
         }
 
@@ -217,7 +217,7 @@ class VentasController {
 
         if ($id <= 0) {
             $_SESSION['error'] = 'ID de venta no válido.';
-            header('Location: /reportes');
+            header('Location: reportes');
             exit;
         }
 
@@ -267,7 +267,7 @@ class VentasController {
             $_SESSION['error'] = 'Error al anular la boleta: ' . $e->getMessage();
         }
 
-        header('Location: /reportes');
+        header('Location: reportes');
         exit;
     }
 }

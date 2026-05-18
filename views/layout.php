@@ -22,11 +22,11 @@ $rolUsuario = $_SESSION['rol'] ?? 'operario';
     <!-- Boxicons CDN para Iconos Vectoriales Profesionales -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <!-- Enlace al CSS Modular del Layout -->
-    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/layout.css?v=<?php echo time(); ?>">
 
     <!-- Enlace dinámico al CSS modular de la vista hija si corresponde -->
     <?php if (isset($extraCss) && !empty($extraCss)): ?>
-        <link rel="stylesheet" href="assets/css/<?php echo $extraCss; ?>">
+        <link rel="stylesheet" href="assets/css/<?php echo $extraCss; ?>?v=<?php echo time(); ?>">
     <?php endif; ?>
 
     <!-- Identidad de Marca: Favicon para Pestañas del Navegador -->
@@ -150,11 +150,11 @@ $rolUsuario = $_SESSION['rol'] ?? 'operario';
     </div>
 
     <!-- Enlace al JS Modular del Layout Maestro -->
-    <script src="assets/js/layout.js"></script>
+    <script src="assets/js/layout.js?v=<?php echo time(); ?>"></script>
 
     <!-- Enlace dinámico a scripts específicos de la vista hija si corresponde -->
     <?php if (isset($extraJs) && !empty($extraJs)): ?>
-        <script src="assets/js/<?php echo $extraJs; ?>"></script>
+        <script src="assets/js/<?php echo $extraJs; ?>?v=<?php echo time(); ?>"></script>
     <?php endif; ?>
 </body>
 
