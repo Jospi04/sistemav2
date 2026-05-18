@@ -1,0 +1,16 @@
+# Evitar subir credenciales y variables de entorno privadas
+.env
+
+# Archivos del sistema operativo y temporales
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Carpetas de editores e IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
