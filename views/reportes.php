@@ -41,19 +41,19 @@ $griferoActivo = $_GET['grifero_id'] ?? 'todos';
 
                 <!-- Grifero / Despachador -->
                 <div class="form-group-premium">
-                    <label for="rep_grifero">Grifero Despachador</label>
+                    <label for="rep_grifero">Cajero Encargado</label>
                     <select name="grifero_id" id="rep_grifero" class="input-premium">
-                        <option value="todos" <?php echo $griferoActivo === 'todos' ? 'selected' : ''; ?>>Todos los Griferos</option>
+                        <option value="todos" <?php echo $griferoActivo === 'todos' ? 'selected' : ''; ?>>Todos los Cajeros</option>
                         <?php foreach ($griferosList as $grifero): ?>
                             <option value="<?php echo $grifero['id']; ?>" <?php echo intval($griferoActivo) === intval($grifero['id']) ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($grifero['nombre']); ?> (<?php echo $grifero['rol'] === 'admin' ? 'Admin' : 'Grifero'; ?>)
+                                <?php echo htmlspecialchars($grifero['nombre']); ?> (<?php echo $grifero['rol'] === 'admin' ? 'Admin' : 'Cajero'; ?>)
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
 
                 <!-- Botón Generar -->
-                <button type="submit" class="btn-submit-premium">
+                <button type="submit" class="btn-submit-premium" style="background-color: #e11d48;">
                     <i class='bx bx-filter-alt'></i> Generar Reporte
                 </button>
             </div>
@@ -65,30 +65,30 @@ $griferoActivo = $_GET['grifero_id'] ?? 'todos';
         <!-- KPI 1 -->
         <div class="report-kpi-card">
             <div class="report-kpi-header">
-                <span class="report-kpi-title">Recaudación de Turno</span>
+                <span class="report-kpi-title">Recaudación de Caja</span>
                 <span class="report-kpi-icon"><i class='bx bx-money-withdraw'></i></span>
             </div>
-            <div class="report-kpi-value">S/ <?php echo number_format($kpiTotalDinero, 2); ?></div>
+            <div class="report-kpi-value" style="font-family: 'Outfit', sans-serif;">S/ <?php echo number_format($kpiTotalDinero, 2); ?></div>
             <div class="report-kpi-footer">Caja total facturada en rango</div>
         </div>
 
         <!-- KPI 2 -->
         <div class="report-kpi-card">
             <div class="report-kpi-header">
-                <span class="report-kpi-title">Volumen Despachado</span>
-                <span class="report-kpi-icon"><i class='bx bx-droplet'></i></span>
+                <span class="report-kpi-title">Porciones Vendidas</span>
+                <span class="report-kpi-icon"><i class='bx bx-dish'></i></span>
             </div>
-            <div class="report-kpi-value"><?php echo number_format($kpiTotalLitros, 4); ?> <span class="reportes-time-sub">Gal</span></div>
-            <div class="report-kpi-footer">Combustible retirado de surtidores</div>
+            <div class="report-kpi-value" style="font-family: 'Outfit', sans-serif;"><?php echo number_format($kpiTotalLitros, 0); ?> <span class="reportes-time-sub">Und</span></div>
+            <div class="report-kpi-footer">Comida despachada de cocina</div>
         </div>
 
         <!-- KPI 3 -->
         <div class="report-kpi-card">
             <div class="report-kpi-header">
-                <span class="report-kpi-title">Despachos Totales</span>
+                <span class="report-kpi-title">Pedidos Totales</span>
                 <span class="report-kpi-icon"><i class='bx bx-receipt'></i></span>
             </div>
-            <div class="report-kpi-value"><?php echo number_format($kpiTransacciones); ?> <span class="reportes-time-sub">Boletas</span></div>
+            <div class="report-kpi-value" style="font-family: 'Outfit', sans-serif;"><?php echo number_format($kpiTransacciones); ?> <span class="reportes-time-sub">Boletas</span></div>
             <div class="report-kpi-footer">Boletas de venta emitidas</div>
         </div>
     </div>
@@ -100,8 +100,8 @@ $griferoActivo = $_GET['grifero_id'] ?? 'todos';
         <div class="fuel-column">
             <div class="fuel-breakdown-card">
                 <div class="section-title-bar fuel-title-bar">
-                    <h3 class="fuel-title">
-                        <i class='bx bx-pie-chart-alt-2' style="color: var(--accent-color);"></i> Aportación por Combustible
+                    <h3 class="fuel-title" style="font-family: 'Outfit', sans-serif; font-weight: 700;">
+                        <i class='bx bx-pie-chart-alt-2' style="color: #e11d48;"></i> Ventas por Producto
                     </h3>
                 </div>
 
@@ -118,19 +118,19 @@ $griferoActivo = $_GET['grifero_id'] ?? 'todos';
                         // Asignar color según combustible
                         $colorClass = 'color-g90';
                         $nombreComb = strtolower($fuel['combustible_nombre']);
-                        if (strpos($nombreComb, '95') !== false) {
+                        if (strpos($nombreComb, 'broster') !== false) {
                             $colorClass = 'color-g95';
-                        } elseif (strpos($nombreComb, '97') !== false || strpos($nombreComb, 'premium') !== false) {
+                        } elseif (strpos($nombreComb, 'salchipapa') !== false) {
                             $colorClass = 'color-g97';
-                        } elseif (strpos($nombreComb, 'diesel') !== false || strpos($nombreComb, 'petroleo') !== false) {
+                        } elseif (strpos($nombreComb, 'alitas') !== false) {
                             $colorClass = 'color-db5';
-                        } elseif (strpos($nombreComb, 'glp') !== false) {
+                        } elseif (strpos($nombreComb, 'gaseosa') !== false) {
                             $colorClass = 'color-glp';
                         }
                         ?>
                         <div class="fuel-row-item">
                             <div class="fuel-row-header">
-                                <span class="font-bold fuel-name"><?php echo htmlspecialchars($fuel['combustible_nombre']); ?></span>
+                                <span class="font-bold fuel-name" style="font-family: 'Outfit', sans-serif; font-weight: 600;"><?php echo htmlspecialchars($fuel['combustible_nombre']); ?></span>
                                 <span class="font-mono font-bold fuel-percentage-text"><?php echo $percent; ?>% <span class="reportes-time-sub">(S/ <?php echo number_format($totalF, 2); ?>)</span></span>
                             </div>
                             
@@ -140,7 +140,7 @@ $griferoActivo = $_GET['grifero_id'] ?? 'todos';
                             </div>
                             
                             <div class="fuel-row-footer">
-                                <span>Volumen: <?php echo number_format($litrosF, 4); ?> Gal</span>
+                                <span>Volumen: <?php echo number_format($litrosF, 0); ?> Und</span>
                                 <span><?php echo $fuel['transacciones_combustible']; ?> ventas</span>
                             </div>
                         </div>
@@ -152,8 +152,8 @@ $griferoActivo = $_GET['grifero_id'] ?? 'todos';
         <!-- COLUMNA 2: REGISTRO DE BOLETAS EMITIDAS EN EL TURNO -->
         <section class="transactions-section reset-margin-top">
             <div class="section-title-bar">
-                <h2>Ventas Auditadas en el Turno</h2>
-                <span class="badge-online badge-online-surtidor">Control de Surtidor</span>
+                <h2 style="font-family: 'Outfit', sans-serif; font-weight: 700;">Pedidos Auditados en el Turno</h2>
+                <span class="badge-online badge-online-surtidor" style="background-color: rgba(225,29,72,0.1); color: #e11d48; border: 1px solid rgba(225,29,72,0.2);">Control de Cocina</span>
             </div>
 
             <div class="table-wrapper scroll-table-premium reportes-table-scroll">
@@ -161,11 +161,11 @@ $griferoActivo = $_GET['grifero_id'] ?? 'todos';
                     <thead>
                         <tr>
                             <th>Hora / Fecha</th>
-                            <th>Combustible</th>
-                            <th>Despachado</th>
+                            <th>Plato / Combo</th>
+                            <th>Cantidad</th>
                             <th>Importe</th>
                             <th>Pago</th>
-                            <th>Grifero</th>
+                            <th>Cajero</th>
                             <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin'): ?>
                                 <th style="width: 80px; text-align: center;">Acciones</th>
                             <?php endif; ?>
@@ -184,7 +184,7 @@ $griferoActivo = $_GET['grifero_id'] ?? 'todos';
                                         <div class="reportes-time-sub"><?php echo date('d/m/Y', strtotime($venta['fecha'])); ?></div>
                                     </td>
                                     <td class="font-bold"><?php echo htmlspecialchars($venta['combustible_nombre']); ?></td>
-                                    <td class="font-mono text-accent reportes-gal-text"><?php echo number_format(floatval($venta['litros']), 4); ?> Gal</td>
+                                    <td class="font-mono text-accent reportes-gal-text"><?php echo number_format(floatval($venta['litros']), 0); ?> Und</td>
                                     <td class="font-mono font-bold">S/ <?php echo number_format($venta['total'], 2); ?></td>
                                     <td>
                                         <span class="badge-method badge-<?php echo strtolower($venta['metodo_pago']); ?>">
@@ -218,13 +218,13 @@ $griferoActivo = $_GET['grifero_id'] ?? 'todos';
 
 </div>
 
-<!-- MODAL DE EDICIÓN DE VENTA PREMIUM (GLASSMORPHIC) -->
+<!-- MODAL DE EDICIÓN DE VENTA PREMIUM -->
 <div id="editVentaModal" class="delete-modal-overlay">
     <div class="delete-modal-box edit-modal-box">
         <div class="edit-modal-header">
-            <h4 class="delete-modal-title edit-modal-title">
-                <i class='bx bx-edit-alt edit-modal-icon-inline'></i>
-                Editar Boleta #<span id="editVentaIdLabel">0</span>
+            <h4 class="delete-modal-title edit-modal-title" style="font-family: 'Outfit', sans-serif; font-weight: 700;">
+                <i class='bx bx-edit-alt edit-modal-icon-inline' style="color: #e11d48;"></i>
+                Editar Pedido #<span id="editVentaIdLabel">0</span>
             </h4>
             <span onclick="closeEditVentaModal()" class="btn-close-edit-modal"><i class='bx bx-x'></i></span>
         </div>
@@ -233,20 +233,20 @@ $griferoActivo = $_GET['grifero_id'] ?? 'todos';
             <input type="hidden" name="id" id="editVentaIdInput">
             <input type="hidden" id="editPrecioLitroInput">
 
-            <!-- Combustible (Lectura) -->
+            <!-- Combustible -->
             <div class="input-field-group input-field-group-spacing">
-                <label>Combustible Despachado</label>
+                <label>Plato / Combo Pedido</label>
                 <input type="text" id="editCombustibleName" class="input-style-premium readonly-input" readonly>
             </div>
 
             <div class="grid-two-columns">
-                <!-- Volumen en Galones -->
+                <!-- Volumen -->
                 <div class="input-field-group">
-                    <label for="editLitrosInput">Cantidad (Galones)</label>
-                    <input type="number" step="0.0001" name="litros" id="editLitrosInput" class="input-style-premium" oninput="recalculateEditTotal()" required>
+                    <label for="editLitrosInput">Cantidad (Porciones)</label>
+                    <input type="number" step="1" name="litros" id="editLitrosInput" class="input-style-premium" oninput="recalculateEditTotal()" required>
                 </div>
 
-                <!-- Importe en Soles -->
+                <!-- Importe -->
                 <div class="input-field-group">
                     <label for="editTotalInput">Total (S/.)</label>
                     <input type="number" step="0.01" name="total" id="editTotalInput" class="input-style-premium" oninput="recalculateEditLitros()" required>
@@ -255,8 +255,8 @@ $griferoActivo = $_GET['grifero_id'] ?? 'todos';
 
             <!-- Placa de Vehículo -->
             <div class="input-field-group input-field-group-spacing">
-                <label for="editPlacaInput">Placa de Vehículo</label>
-                <input type="text" name="placa_vehiculo" id="editPlacaInput" class="input-style-premium" placeholder="Ej: ABC-123">
+                <label for="editPlacaInput">Mesa / Nombre Cliente</label>
+                <input type="text" name="placa_vehiculo" id="editPlacaInput" class="input-style-premium" placeholder="Ej: Mesa 5 o Para Llevar">
             </div>
 
             <!-- Método de Pago -->
@@ -265,12 +265,13 @@ $griferoActivo = $_GET['grifero_id'] ?? 'todos';
                 <select name="metodo_pago" id="editMetodoInput" class="input-style-premium">
                     <option value="Efectivo">Efectivo</option>
                     <option value="Tarjeta">Tarjeta</option>
+                    <option value="Yape/Plin">Yape/Plin</option>
                 </select>
             </div>
 
             <div class="delete-modal-actions">
                 <button type="button" class="btn-delete-cancel" onclick="closeEditVentaModal()">Cancelar</button>
-                <button type="submit" class="btn-create-user btn-save-edit-submit">Guardar Cambios</button>
+                <button type="submit" class="btn-create-user btn-save-edit-submit" style="background-color: #e11d48; border-radius: 10px;">Guardar Cambios</button>
             </div>
         </form>
     </div>
@@ -279,14 +280,14 @@ $griferoActivo = $_GET['grifero_id'] ?? 'todos';
 <!-- MODAL DE ANULACIÓN DE VENTA PREMIUM -->
 <div id="deleteVentaConfirmModal" class="delete-modal-overlay">
     <div class="delete-modal-box">
-        <div class="delete-modal-icon">
+        <div class="delete-modal-icon" style="color: #e11d48; background-color: rgba(225,29,72,0.1);">
             <i class='bx bx-error-circle'></i>
         </div>
-        <h4 class="delete-modal-title" id="deleteVentaModalTitle">¿Anular Boleta?</h4>
-        <p class="delete-modal-text">Esta acción es permanente. El importe será borrado de caja y los galones de combustible se **devolverán de forma automática al stock** del tanque subterráneo.</p>
+        <h4 class="delete-modal-title" id="deleteVentaModalTitle" style="font-family: 'Outfit', sans-serif; font-weight: 700;">¿Anular Pedido?</h4>
+        <p class="delete-modal-text">Esta acción es permanente. El importe será borrado de caja y las porciones de comida se **devolverán de forma automática al stock** de la cocina.</p>
         <div class="delete-modal-actions">
             <button type="button" class="btn-delete-cancel" onclick="closeDeleteVentaModal()">Cancelar</button>
-            <a href="#" id="confirmDeleteVentaBtn" class="btn-delete-confirm">Sí, Anular</a>
+            <a href="#" id="confirmDeleteVentaBtn" class="btn-delete-confirm" style="background-color: #e11d48; border-radius: 10px;">Sí, Anular</a>
         </div>
     </div>
 </div>

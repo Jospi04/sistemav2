@@ -4,37 +4,37 @@
 
 /* Variables CSS Globales de Diseño — ADALINE Serene Light Theme */
 :root {
-    --bg-primary: #fbfdf6;
-    /* Fondo Canvas Ice principal */
+    --bg-primary: #fffbf4;
+    /* Fondo cálido crema principal */
     --bg-secondary: #ffffff;
     /* Tarjetas e inputs blancos puros */
-    --bg-main: #fbfdf6;
+    --bg-main: #fffcf7;
     /* Fondo del cuerpo */
-    --text-main: #0a1d08;
-    /* Adaline Ink (Negro-verde profundo) */
-    --text-muted: #6e7a68;
-    /* Gris oliva intermedio */
-    --accent-color: #4a3212;
-    /* Amber Seed (Ámbar-café premium) */
-    --accent-hover: #31200b;
-    /* Deep Earth para hover */
-    --border-color: #c5ccb6;
-    /* Mist Gray para bordes sutiles */
-    --success-color: #203b14;
-    /* Valley Green para óptimo */
+    --text-main: #1c1917;
+    /* Carbón cálido */
+    --text-muted: #78716c;
+    /* Gris cálido intermedio */
+    --accent-color: #e11d48;
+    /* Carmesí Broster principal */
+    --accent-hover: #be123c;
+    /* Carmesí oscuro para hover */
+    --border-color: #e7e5e4;
+    /* Gris piedra claro para bordes */
+    --success-color: #d97706;
+    /* Amarillo Oro / Ámbar */
     --sidebar-width: 260px;
 
-    --color-sidebar-bg: #0a1d08;
-    /* Barra lateral en profundo Adaline Ink */
-    --color-sidebar-text: #fbfdf6;
-    /* Texto lateral en Canvas Ice */
-    --color-sidebar-muted: #a4b39b;
+    --color-sidebar-bg: #1c1917;
+    /* Barra lateral en profundo Carbón */
+    --color-sidebar-text: #fffbeb;
+    /* Texto lateral en crema claro */
+    --color-sidebar-muted: #a8a29e;
     /* Muted lateral */
 
-    --radius-cards: 8px;
+    --radius-cards: 12px;
     --radius-inputs: 8px;
-    --radius-buttons: 20px;
-    --shadow-subtle: rgba(99, 143, 61, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.02) 0px 4px 12px;
+    --radius-buttons: 10px;
+    --shadow-subtle: rgba(225, 29, 72, 0.02) 0px 0px 0px 1px, rgba(0, 0, 0, 0.03) 0px 4px 12px;
 }
 
 /* Reset y Base */
@@ -47,11 +47,11 @@
 body {
     background-color: var(--bg-main);
     color: var(--text-main);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
     line-height: 1.5;
     overflow: hidden;
     /* Evita scroll en el body principal */
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
 }
 
 /* Contenedor Grid Principal */

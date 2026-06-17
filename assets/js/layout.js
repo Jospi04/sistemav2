@@ -1,6 +1,6 @@
 /**
  * ==========================================================================
- * JOSPERÚ OPERACIONES — LÓGICA DEL LAYOUT MAESTRO GLOBAL (layout.js)
+ * BROSTERIA 24/7 OPERACIONES — LÓGICA DEL LAYOUT MAESTRO GLOBAL (layout.js)
  * ==========================================================================
  */
 

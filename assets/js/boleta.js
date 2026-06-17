@@ -1,6 +1,6 @@
 /**
  * ==========================================================================
- * JOSPERÚ OPERACIONES — VISOR E INTERACTIVIDAD DE TICKETS (boleta.js)
+ * BROSTERIA 24/7 OPERACIONES — VISOR E INTERACTIVIDAD DE TICKETS (boleta.js)
  * ==========================================================================
  */
 

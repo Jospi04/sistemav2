@@ -4,18 +4,18 @@
 
 :root {
   /* Colors */
-  --color-canvas-ice: #fbfdf6;
-  --color-adaline-ink: #0a1d08;
-  --color-mist-gray: #c5ccb6;
-  --color-deep-earth: #31200b;
-  --color-valley-green: #203b14;
-  --color-stone-moss: #e0e5d5;
-  --color-amber-seed: #4a3212;
-  --color-forest-dew: #d7e8b5;
-  --color-blackest-night: #000000;
+  --color-canvas-ice: #fffcf7;
+  --color-adaline-ink: #1c1917;
+  --color-mist-gray: #e7e5e4;
+  --color-deep-earth: #78716c;
+  --color-valley-green: #e11d48; /* Red crimson */
+  --color-stone-moss: #e7e5e4;
+  --color-amber-seed: #d97706; /* Golden amber */
+  --color-forest-dew: #ffedd5; /* Warm highlights */
+  --color-blackest-night: #18181b;
 
   /* Typography — Font Families */
-  --font-akkurat: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-akkurat: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
   --font-fragmentmono: 'JetBrains Mono', monospace;
 
   /* Spacing Scale */
@@ -29,14 +29,14 @@
   --spacing-128: 128px;
 
   /* Border Radii */
-  --radius-images: 8px;
-  --radius-cards: 8px;
+  --radius-images: 12px;
+  --radius-cards: 12px;
   --radius-inputs: 8px;
-  --radius-buttons: 20px;
-  --radius-navitems: 20px;
+  --radius-buttons: 10px;
+  --radius-navitems: 10px;
 
-  /* Shadows (Restrained flat layering) */
-  --shadow-subtle: rgba(99, 143, 61, 0.1) 0px 0px 0px 1px;
+  /* Shadows */
+  --shadow-subtle: rgba(225, 29, 72, 0.05) 0px 0px 0px 1px;
 }
 
 /* Reset Básico */
@@ -199,7 +199,7 @@ body {
 }
 
 .btn-start-free:hover {
-    background-color: #162a0e;
+    background-color: #be123c;
 }
 
 /* ==========================================================================

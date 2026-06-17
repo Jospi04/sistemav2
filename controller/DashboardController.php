@@ -6,7 +6,7 @@ use PDO;
 
 class DashboardController {
     /**
-     * Carga las estadísticas y el estado de la estación de servicio.
+     * Carga las estadísticas y el estado de la brostería.
      */
     public function index() {
         // Validar sesión activa
@@ -17,36 +17,37 @@ class DashboardController {
 
         $db = Database::getConnection();
 
-        // 1. Obtener KPIs principales del día de hoy
+        // 1. Obtener KPIs principales del día de hoy (cantidad de porciones vendidas)
         $queryKPI = "SELECT 
                         COALESCE(SUM(total), 0) as total_dinero,
-                        COALESCE(SUM(litros), 0) as total_litros,
+                        COALESCE(SUM(cantidad), 0) as total_litros,
                         COUNT(id) as transacciones
                      FROM ventas 
                      WHERE DATE(fecha) = CURDATE()";
         $kpis = $db->query($queryKPI)->fetch();
 
-        // 2. Obtener niveles de stock de tanques físicos
+        // 2. Obtener niveles de stock de porciones/insumos en almacén
         $queryTanks = "SELECT i.*, c.nombre as combustible_nombre 
                        FROM inventario i
-                       JOIN combustibles c ON i.combustible_id = c.id
+                       JOIN productos c ON i.producto_id = c.id
                        ORDER BY i.id ASC";
         $tanks = $db->query($queryTanks)->fetchAll();
 
-        // 3. Obtener historial de los últimos 5 despachos para auditoría
-        $queryRecent = "SELECT v.*, c.nombre as combustible_nombre, u.nombre as usuario_nombre
+        // 3. Obtener historial de los últimos 5 despachos de comida para auditoría
+        $queryRecent = "SELECT v.*, c.nombre as combustible_nombre, u.nombre as usuario_nombre,
+                               v.mesa_cliente as placa_vehiculo, v.cantidad as litros
                         FROM ventas v
-                        JOIN combustibles c ON v.combustible_id = c.id
+                        JOIN productos c ON v.producto_id = c.id
                         JOIN usuarios u ON v.usuario_id = u.id
                         ORDER BY v.id DESC
                         LIMIT 5";
         $recentSales = $db->query($queryRecent)->fetchAll();
 
-        // 4. Obtener historial de los últimos 5 reabastecimientos de cisternas
+        // 4. Obtener historial de los últimos 5 reabastecimientos de insumos
         $queryRefills = "SELECT r.*, c.nombre as combustible_nombre, u.nombre as usuario_nombre
                          FROM reabastecimientos r
                          JOIN inventario i ON r.inventario_id = i.id
-                         JOIN combustibles c ON i.combustible_id = c.id
+                         JOIN productos c ON i.producto_id = c.id
                          JOIN usuarios u ON r.usuario_id = u.id
                          ORDER BY r.id DESC
                          LIMIT 5";
@@ -54,7 +55,7 @@ class DashboardController {
 
         // 5. Parámetros de renderizado en la plantilla
         $activePage = 'dashboard';
-        $pageTitle = 'Panel de Estadísticas y Control';
+        $pageTitle = 'Panel de Ventas y Cocina';
         $extraCss = 'dashboard.css';
         $extraJs = 'dashboard.js';
         $viewFile = 'dashboard.php';
@@ -63,7 +64,7 @@ class DashboardController {
     }
 
     /**
-     * Procesa el reabastecimiento de combustible en un tanque.
+     * Procesa el reabastecimiento de insumos en el almacén.
      */
     public function reabastecer() {
         // Validar sesión activa
@@ -83,23 +84,23 @@ class DashboardController {
             $cantidad = floatval($_POST['cantidad'] ?? 0);
 
             if ($inventario_id <= 0 || $cantidad <= 0) {
-                $_SESSION['error'] = 'Por favor, ingrese un tanque válido y una cantidad mayor a cero.';
+                $_SESSION['error'] = 'Por favor, ingrese un insumo válido y una cantidad mayor a cero.';
                 header('Location: dashboard');
                 exit;
             }
 
             $db = Database::getConnection();
 
-            // Buscar el tanque
+            // Buscar el insumo en inventario
             $stmt = $db->prepare("SELECT i.*, c.nombre as combustible_nombre 
                                   FROM inventario i
-                                  JOIN combustibles c ON i.combustible_id = c.id
+                                  JOIN productos c ON i.producto_id = c.id
                                   WHERE i.id = ?");
             $stmt->execute([$inventario_id]);
             $tank = $stmt->fetch();
 
             if (!$tank) {
-                $_SESSION['error'] = 'El tanque seleccionado no existe.';
+                $_SESSION['error'] = 'El insumo seleccionado no existe en almacén.';
                 header('Location: dashboard');
                 exit;
             }
@@ -107,9 +108,9 @@ class DashboardController {
             $nuevo_stock = floatval($tank['stock_actual']) + $cantidad;
             $capacidad_maxima = floatval($tank['capacidad_maxima']);
 
-            // Validar que no exceda la capacidad física del tanque
+            // Validar que no exceda la capacidad física del almacén
             if ($nuevo_stock > $capacidad_maxima) {
-                $_SESSION['error'] = 'La recarga excede la capacidad del tanque de ' . $tank['combustible_nombre'] . ' (' . number_format($capacidad_maxima, 2) . ' Gal).';
+                $_SESSION['error'] = 'La recarga excede la capacidad de stock para ' . $tank['combustible_nombre'] . ' (' . number_format($capacidad_maxima, 2) . ' Unidades).';
                 header('Location: dashboard');
                 exit;
             }
@@ -121,7 +122,7 @@ class DashboardController {
                 $stmtLog = $db->prepare("INSERT INTO reabastecimientos (inventario_id, cantidad, usuario_id) VALUES (?, ?, ?)");
                 $stmtLog->execute([$inventario_id, $cantidad, $_SESSION['usuario_id']]);
                 
-                $_SESSION['success'] = "¡Tanque recargado con éxito! Se agregaron " . floatval($cantidad) . " Galones de " . $tank['combustible_nombre'] . " al stock.";
+                $_SESSION['success'] = "¡Insumos agregados con éxito! Se añadieron " . floatval($cantidad) . " unidades de " . $tank['combustible_nombre'] . " al stock.";
             } else {
                 $_SESSION['error'] = 'Error al registrar el reabastecimiento en la base de datos.';
             }
@@ -132,7 +133,7 @@ class DashboardController {
     }
 
     /**
-     * Genera la vista de reportes de ventas con filtros avanzados de fecha, turnos y griferos.
+     * Genera la vista de reportes de ventas con filtros de fecha, turnos y cajeros.
      */
     public function reportes() {
         // Validar sesión activa
@@ -166,13 +167,13 @@ class DashboardController {
             ':hasta' => $hasta
         ];
 
-        // Filtro por Grifero / Despachador
+        // Filtro por Cajero / Despachador
         if ($griferoId !== 'todos') {
             $whereClauses[] = "v.usuario_id = :grifero_id";
             $params[':grifero_id'] = intval($griferoId);
         }
 
-        // Filtro por Turno (Analizando la hora de creación en MySQL)
+        // Filtro por Turno
         if ($turno !== 'todos') {
             if ($turno === 'manana') {
                 $whereClauses[] = "HOUR(v.fecha) >= 6 AND HOUR(v.fecha) < 14";
@@ -185,28 +186,28 @@ class DashboardController {
 
         $whereSql = implode(" AND ", $whereClauses);
 
-        // 3. Obtener listado de Griferos/Usuarios para el selector
+        // 3. Obtener listado de Cajeros/Usuarios para el selector
         $stmtGriferos = $db->query("SELECT id, nombre, rol FROM usuarios ORDER BY nombre ASC");
         $griferosList = $stmtGriferos->fetchAll();
 
         // 4. Obtener KPIs globales filtrados
         $stmtKpi = $db->prepare("SELECT 
                                     COALESCE(SUM(v.total), 0) as total_dinero, 
-                                    COALESCE(SUM(v.litros), 0) as total_litros, 
+                                    COALESCE(SUM(v.cantidad), 0) as total_litros, 
                                     COUNT(v.id) as transacciones 
                                  FROM ventas v 
                                  WHERE {$whereSql}");
         $stmtKpi->execute($params);
         $kpis = $stmtKpi->fetch();
 
-        // 5. Obtener ventas desglosadas por tipo de combustible filtrados
+        // 5. Obtener ventas desglosadas por tipo de plato/producto filtrados
         $stmtCombustibles = $db->prepare("SELECT 
                                             c.nombre as combustible_nombre, 
                                             COALESCE(SUM(v.total), 0) as total_combustible, 
-                                            COALESCE(SUM(v.litros), 0) as litros_combustible, 
+                                            COALESCE(SUM(v.cantidad), 0) as litros_combustible, 
                                             COUNT(v.id) as transacciones_combustible 
-                                          FROM combustibles c 
-                                          LEFT JOIN ventas v ON v.combustible_id = c.id AND {$whereSql}
+                                          FROM productos c 
+                                          LEFT JOIN ventas v ON v.producto_id = c.id AND {$whereSql}
                                           GROUP BY c.id 
                                           ORDER BY total_combustible DESC");
         $stmtCombustibles->execute($params);
@@ -216,9 +217,11 @@ class DashboardController {
         $stmtVentas = $db->prepare("SELECT 
                                         v.*, 
                                         c.nombre as combustible_nombre, 
-                                        u.nombre as usuario_nombre 
+                                        u.nombre as usuario_nombre,
+                                        v.mesa_cliente as placa_vehiculo,
+                                        v.cantidad as litros
                                     FROM ventas v 
-                                    JOIN combustibles c ON v.combustible_id = c.id 
+                                    JOIN productos c ON v.producto_id = c.id 
                                     JOIN usuarios u ON v.usuario_id = u.id 
                                     WHERE {$whereSql} 
                                     ORDER BY v.id DESC");
@@ -227,7 +230,7 @@ class DashboardController {
 
         // 7. Parámetros de renderizado
         $activePage = 'reportes';
-        $pageTitle = 'Reportes de Despacho y Ventas';
+        $pageTitle = 'Reportes de Pedidos y Caja';
         $extraCss = 'reportes.css';
         $extraJs = 'reportes.js';
         $viewFile = 'reportes.php';

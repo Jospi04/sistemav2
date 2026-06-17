@@ -188,12 +188,12 @@
     border: 1px solid rgba(14, 165, 233, 0.15);
 }
 
-/* Colores personalizados para cada combustible */
-.color-g90 { background-color: #f59e0b; }
-.color-g95 { background-color: #0f766e; }
-.color-g97 { background-color: #7c3aed; }
-.color-db5 { background-color: #475569; }
-.color-glp { background-color: #10b981; }
+/* Colores personalizados para cada producto de brostería */
+.color-g90 { background-color: #e11d48; } /* Carmesí - Mostrito */
+.color-g95 { background-color: #f59e0b; } /* Ámbar - Broster */
+.color-g97 { background-color: #ea580c; } /* Naranja - Salchipapa */
+.color-db5 { background-color: #b91c1c; } /* Rojo oscuro - Alitas */
+.color-glp { background-color: #64748b; } /* Pizarra - Bebidas/Otros */
 
 /* Estilo de la tabla de auditoría con scrollbar fino */
 .scroll-table-premium::-webkit-scrollbar {

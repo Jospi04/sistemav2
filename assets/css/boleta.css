@@ -6,8 +6,8 @@
 :root {
     /* Variables de papel térmico */
     --paper-bg: #FFFFFF;
-    --paper-text: #0a1d08; /* Adaline Ink para la tinta del ticket */
-    --paper-muted: #5c6b55; /* Tono oliva oscuro secundario del ticket */
+    --paper-text: #1c1917; /* Adaline Ink para la tinta del ticket - Carbón */
+    --paper-muted: #78716c; /* Tono gris cálido secundario del ticket */
 }
 
 .receipt-container {
@@ -266,7 +266,7 @@
 }
 
 .btn-action-new:hover {
-    background-color: #f6f8f2;
+    background-color: #faf7f2;
 }
 
 /* ==========================================

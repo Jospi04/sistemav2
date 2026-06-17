@@ -1,6 +1,6 @@
 /**
  * ==========================================================================
- * JOSPERÚ OPERACIONES — LÓGICA DE LA LANDING PAGE PÚBLICA (home.js)
+ * BROSTERIA 24/7 OPERACIONES — LÓGICA DE LA LANDING PAGE PÚBLICA (home.js)
  * ==========================================================================
  */
 
@@ -33,7 +33,7 @@ function actualizarPrecioCombustible() {
     const stockLabel = document.getElementById('demoStockLabel');
 
     if (stockLabel) {
-        stockLabel.textContent = `Stock Disponible: ${stock} Galones`;
+        stockLabel.textContent = `Stock Disponible: ${stock} Unidades`;
         stockLabel.style.color = "var(--color-valley-green)";
     }
 
@@ -52,26 +52,26 @@ function calcularDemoTotal() {
     if (!selectedOption) return;
 
     const stock = parseFloat(selectedOption.getAttribute('data-stock')) || 0;
-    const precioPorGalon = parseFloat(combustibleSelect.value) || 0;
-    const galones = parseFloat(litrosInput.value);
+    const precioPorUnidad = parseFloat(combustibleSelect.value) || 0;
+    const cantidad = parseFloat(litrosInput.value);
 
-    if (isNaN(galones) || galones <= 0) {
+    if (isNaN(cantidad) || cantidad <= 0) {
         totalSpan.textContent = 'S/ 0.00';
         if (stockLabel) {
-            stockLabel.textContent = `Stock Disponible: ${stock} Galones`;
+            stockLabel.textContent = `Stock Disponible: ${stock} Unidades`;
             stockLabel.style.color = "var(--color-valley-green)";
         }
     } else {
         if (stockLabel) {
-            if (galones > stock) {
-                stockLabel.textContent = `⚠️ Excede el Stock disponible (${stock} G)`;
+            if (cantidad > stock) {
+                stockLabel.textContent = `⚠️ Excede el Stock disponible (${stock} Und)`;
                 stockLabel.style.color = "#d9534f"; // Rojo de alerta
             } else {
-                stockLabel.textContent = `Stock Disponible: ${stock} Galones`;
+                stockLabel.textContent = `Stock Disponible: ${stock} Unidades`;
                 stockLabel.style.color = "var(--color-valley-green)";
             }
         }
-        const total = galones * precioPorGalon;
+        const total = cantidad * precioPorUnidad;
         totalSpan.textContent = 'S/ ' + total.toFixed(2);
     }
 }

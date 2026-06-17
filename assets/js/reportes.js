@@ -1,6 +1,6 @@
 /**
  * ==========================================================================
- * JOSPERÚ OPERACIONES — LÓGICA DE REPORTES Y AUDITORÍA DE VENTAS (reportes.js)
+ * BROSTERIA 24/7 OPERACIONES — LÓGICA DE REPORTES Y AUDITORÍA DE PEDIDOS (reportes.js)
  * ==========================================================================
  */
 
@@ -36,7 +36,8 @@ function openEditVentaModal(event, id) {
                 document.getElementById('editVentaIdInput').value = data.id;
                 document.getElementById('editPrecioLitroInput').value = data.precio_litro;
                 document.getElementById('editCombustibleName').value = data.combustible_nombre;
-                document.getElementById('editLitrosInput').value = parseFloat(data.litros).toFixed(4);
+                // Redondear a cantidad entera para combos/platos
+                document.getElementById('editLitrosInput').value = Math.round(parseFloat(data.litros));
                 document.getElementById('editTotalInput').value = parseFloat(data.total).toFixed(2);
                 document.getElementById('editPlacaInput').value = data.placa_vehiculo || '';
                 document.getElementById('editMetodoInput').value = data.metodo_pago;
@@ -63,14 +64,14 @@ function closeEditVentaModal() {
 }
 
 function recalculateEditTotal() {
-    const litrosInput = document.getElementById('editLitrosInput');
+    const cantidadInput = document.getElementById('editLitrosInput');
     const precioInput = document.getElementById('editPrecioLitroInput');
     const totalInput = document.getElementById('editTotalInput');
 
-    if (litrosInput && precioInput && totalInput) {
-        const litros = parseFloat(litrosInput.value) || 0;
+    if (cantidadInput && precioInput && totalInput) {
+        const cantidad = parseFloat(cantidadInput.value) || 0;
         const precio = parseFloat(precioInput.value) || 0;
-        const total = litros * precio;
+        const total = cantidad * precio;
         totalInput.value = total.toFixed(2);
     }
 }
@@ -78,14 +79,14 @@ function recalculateEditTotal() {
 function recalculateEditLitros() {
     const totalInput = document.getElementById('editTotalInput');
     const precioInput = document.getElementById('editPrecioLitroInput');
-    const litrosInput = document.getElementById('editLitrosInput');
+    const cantidadInput = document.getElementById('editLitrosInput');
 
-    if (totalInput && precioInput && litrosInput) {
+    if (totalInput && precioInput && cantidadInput) {
         const total = parseFloat(totalInput.value) || 0;
         const precio = parseFloat(precioInput.value) || 0;
         if (precio > 0) {
-            const litros = total / precio;
-            litrosInput.value = litros.toFixed(4);
+            const cantidad = total / precio;
+            cantidadInput.value = Math.round(cantidad);
         }
     }
 }

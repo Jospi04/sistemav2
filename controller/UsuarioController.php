@@ -28,7 +28,7 @@ class UsuarioController {
 
         // Parámetros de renderizado
         $activePage = 'usuarios';
-        $pageTitle = 'Gestionar Vendedores y Griferos';
+        $pageTitle = 'Gestionar Personal y Cajeros';
         $extraCss = 'usuarios.css';
         $extraJs = 'usuarios.js';
         $viewFile = 'usuarios.php';

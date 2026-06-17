@@ -20,7 +20,7 @@
    ALERTAS Y NOTIFICACIONES (HIGH CONTRAST & SERENE)
    ========================================== */
 .alert-success {
-    background-color: rgba(32, 59, 20, 0.05);
+    background-color: rgba(217, 119, 6, 0.05);
     border: 1px solid var(--success-color);
     border-radius: var(--radius-cards);
     padding: 16px 20px;
@@ -109,7 +109,7 @@
 .card-title-bar {
     padding: 28px 32px;
     border-bottom: 1px solid var(--border-color);
-    background-color: #fbfdf6; /* Canvas Ice de cabecera */
+    background-color: var(--bg-primary); /* Canvas Ice de cabecera */
 }
 
 .card-title-bar h2 {
@@ -170,11 +170,11 @@
 .dispatch-form select:focus,
 .dispatch-form input:focus {
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(74, 50, 18, 0.08);
+    box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.08);
 }
 
 .dispatch-form input::placeholder {
-    color: #a4b39b;
+    color: #a8a29e;
 }
 
 /* Filas dobles */
@@ -189,7 +189,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
-    background-color: #fbfdf6;
+    background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 16px;
@@ -239,8 +239,8 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 2.2rem;
     font-weight: 800;
-    color: #d7e8b5; /* Forest Dew luminoso digital */
-    text-shadow: 0 0 10px rgba(215, 232, 181, 0.4);
+    color: #ffc107; /* Amarillo oro luminoso digital */
+    text-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
     letter-spacing: -1px;
 }
 

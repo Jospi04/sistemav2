@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOSPERÚ — Autenticación</title>
+    <title>Brosteria 24/7 — Autenticación</title>
     <!-- Importación de Outfit e Inter para Akkurat, y JetBrains Mono para fragmentMono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Boxicons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <!-- CSS Modular exclusivo del Login -->
     <link rel="stylesheet" href="assets/css/login.css">
     <!-- Identidad de Marca: Favicon para Pestañas del Navegador -->
@@ -27,11 +27,9 @@
 
             <!-- Encabezado de Acceso -->
             <header class="login-header">
-                <a href="home" class="logo-title">
-                    <svg class="logo-leaf-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12c0 3.65 1.95 6.84 4.88 8.61l.03-.03c.59-.59.95-1.4.95-2.3 0-1.79-1.46-3.25-3.25-3.25h-.06C4.2 13.9 4 12.97 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 .97-.2 1.9-.55 2.75l-.01.03c-.22.53-.55.99-.95 1.35l-.03.03c-.59.59-.95 1.4-.95 2.3 0 1.79 1.46 3.25 3.25 3.25.04 0 .07 0 .11-.01C19.78 18.06 21.6 15.22 21.6 12c0-5.52-4.48-10-10-10zm-1.25 15.5c0-.69.56-1.25 1.25-1.25s1.25.56 1.25 1.25-.56 1.25-1.25 1.25-1.25-.56-1.25-1.25z" />
-                    </svg>
-                    <span class="logo-text">JOSPERÚ</span>
+                <a href="home" class="logo-title" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i class='bx bx-restaurant' style="font-size: 32px; color: #ffc107;"></i>
+                    <span class="logo-text" style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 26px; color: #fff;">Brosteria 24/7</span>
                 </a>
                 <p class="subtitle font-mono">Control de Acceso Operativo</p>
             </header>
@@ -40,7 +38,7 @@
             <?php if (isset($_SESSION['error'])): ?>
                 <div class="alert-forest-box" role="alert">
                     <div class="alert-icon-svg">
-                        <!-- Icono SVG de Advertencia en Verde Valle -->
+                        <!-- Icono SVG de Advertencia -->
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="alert-svg">
                             <circle cx="12" cy="12" r="10" />
@@ -106,7 +104,7 @@
 
             <!-- Pie de la Tarjeta -->
             <footer class="login-footer">
-                <p class="font-mono">&copy; 2026 JOSPERÚ. Securizado.</p>
+                <p class="font-mono">&copy; 2026 Brosteria 24/7. Securizado.</p>
             </footer>
 
         </main>

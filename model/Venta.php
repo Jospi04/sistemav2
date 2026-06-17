@@ -6,14 +6,14 @@ use PDO;
 
 class Venta {
     /**
-     * Obtiene la lista de mangueras/surtidores activos con sus combustibles y precios asociados.
+     * Obtiene la lista de combos activos con sus productos y precios asociados.
      */
     public static function getSurtidoresActivos() {
         $db = Database::getConnection();
         
-        $query = "SELECT s.*, c.nombre as combustible_nombre, c.precio_litro 
-                  FROM surtidores s 
-                  JOIN combustibles c ON s.combustible_id = c.id
+        $query = "SELECT s.*, c.nombre as combustible_nombre, c.precio_venta as precio_litro 
+                  FROM combos s 
+                  JOIN productos c ON s.producto_id = c.id
                   ORDER BY s.id ASC";
                   
         $stmt = $db->query($query);
@@ -24,51 +24,51 @@ class Venta {
      * Registra una venta en la base de datos y descuenta automáticamente del inventario.
      * Utiliza una transacción MySQL para asegurar integridad de stock y lecturas.
      */
-    public static function guardar($usuario_id, $surtidor_id, $combustible_id, $litros, $precio_unitario, $total, $placa_vehiculo, $metodo_pago) {
+    public static function guardar($usuario_id, $combo_id, $producto_id, $cantidad, $precio_unitario, $total, $mesa_cliente, $metodo_pago) {
         $db = Database::getConnection();
 
         try {
             // 1. Iniciar Transacción SQL
             $db->beginTransaction();
 
-            // 2. Obtener el inventario_id (tanque físico) asociado a este surtidor y bloquear la fila para evitar colisiones
-            $stmtSurtidor = $db->prepare("SELECT inventario_id FROM surtidores WHERE id = :surtidor_id FOR UPDATE");
-            $stmtSurtidor->execute([':surtidor_id' => $surtidor_id]);
-            $surtidor = $stmtSurtidor->fetch();
+            // 2. Obtener el inventario_id (insumo físico) asociado a este combo y bloquear la fila para evitar colisiones
+            $stmtCombo = $db->prepare("SELECT inventario_id FROM combos WHERE id = :combo_id FOR UPDATE");
+            $stmtCombo->execute([':combo_id' => $combo_id]);
+            $combo = $stmtCombo->fetch();
 
-            if (!$surtidor) {
-                throw new \Exception("Surtidor no encontrado.");
+            if (!$combo) {
+                throw new \Exception("Combo no encontrado.");
             }
 
-            $inventario_id = $surtidor['inventario_id'];
+            $inventario_id = $combo['inventario_id'];
 
-            // 3. Descontar litros del inventario (tanque de almacenamiento)
-            $stmtStock = $db->prepare("UPDATE inventario SET stock_actual = stock_actual - :litros WHERE id = :inventario_id");
+            // 3. Descontar cantidad del inventario (almacén de insumos)
+            $stmtStock = $db->prepare("UPDATE inventario SET stock_actual = stock_actual - :cantidad WHERE id = :inventario_id");
             $stmtStock->execute([
-                ':litros' => $litros,
+                ':cantidad' => $cantidad,
                 ':inventario_id' => $inventario_id
             ]);
 
-            // 4. Actualizar la lectura mecánica acumulada de la manguera
-            $stmtLectura = $db->prepare("UPDATE surtidores SET lectura_acumulada_litros = lectura_acumulada_litros + :litros WHERE id = :surtidor_id");
+            // 4. Actualizar las ventas acumuladas de la opción de menú/combo
+            $stmtLectura = $db->prepare("UPDATE combos SET ventas_acumuladas = ventas_acumuladas + :cantidad WHERE id = :combo_id");
             $stmtLectura->execute([
-                ':litros' => $litros,
-                ':surtidor_id' => $surtidor_id
+                ':cantidad' => $cantidad,
+                ':combo_id' => $combo_id
             ]);
 
             // 5. Registrar la transacción de venta
-            $queryVenta = "INSERT INTO ventas (usuario_id, surtidor_id, combustible_id, litros, precio_unitario, total, placa_vehiculo, metodo_pago, fecha) 
-                           VALUES (:usuario_id, :surtidor_id, :combustible_id, :litros, :precio_unitario, :total, :placa_vehiculo, :metodo_pago, CURRENT_TIMESTAMP)";
+            $queryVenta = "INSERT INTO ventas (usuario_id, combo_id, producto_id, cantidad, precio_unitario, total, mesa_cliente, metodo_pago, fecha) 
+                           VALUES (:usuario_id, :combo_id, :producto_id, :cantidad, :precio_unitario, :total, :mesa_cliente, :metodo_pago, CURRENT_TIMESTAMP)";
             
             $stmtVenta = $db->prepare($queryVenta);
             $stmtVenta->execute([
                 ':usuario_id' => $usuario_id,
-                ':surtidor_id' => $surtidor_id,
-                ':combustible_id' => $combustible_id,
-                ':litros' => $litros,
+                ':combo_id' => $combo_id,
+                ':producto_id' => $producto_id,
+                ':cantidad' => $cantidad,
                 ':precio_unitario' => $precio_unitario,
                 ':total' => $total,
-                ':placa_vehiculo' => !empty($placa_vehiculo) ? strtoupper(trim($placa_vehiculo)) : null,
+                ':mesa_cliente' => !empty($mesa_cliente) ? trim($mesa_cliente) : null,
                 ':metodo_pago' => $metodo_pago
             ]);
 
@@ -83,7 +83,7 @@ class Venta {
             if ($db->inTransaction()) {
                 $db->rollBack();
             }
-            error_log("Error en transacción de venta (Fase 6): " . $e->getMessage());
+            error_log("Error en transacción de venta (Brosteria): " . $e->getMessage());
             return false;
         }
     }
@@ -94,10 +94,11 @@ class Venta {
     public static function getVentaDetalle($venta_id) {
         $db = Database::getConnection();
         
-        $query = "SELECT v.*, c.nombre as combustible_nombre, s.nombre as surtidor_nombre, u.nombre as usuario_nombre
+        $query = "SELECT v.*, c.nombre as combustible_nombre, s.nombre as surtidor_nombre, u.nombre as usuario_nombre,
+                         v.mesa_cliente as placa_vehiculo, v.cantidad as litros
                   FROM ventas v
-                  JOIN combustibles c ON v.combustible_id = c.id
-                  JOIN surtidores s ON v.surtidor_id = s.id
+                  JOIN productos c ON v.producto_id = c.id
+                  JOIN combos s ON v.combo_id = s.id
                   JOIN usuarios u ON v.usuario_id = u.id
                   WHERE v.id = :venta_id LIMIT 1";
                   

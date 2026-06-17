@@ -1,6 +1,6 @@
 /**
  * ==========================================================================
- * JOSPERÚ OPERACIONES — LÓGICA DEL PANEL DE CONTROL (dashboard.js)
+ * BROSTERIA 24/7 OPERACIONES — LÓGICA DEL PANEL DE CONTROL (dashboard.js)
  * ==========================================================================
  */
 
@@ -30,12 +30,12 @@ function updateRefillCapacity() {
     
     const label = document.getElementById('refillCapacityLabel');
     if (label) {
-        label.textContent = `Espacio libre en tanque: ${available.toFixed(2)} Galones`;
+        label.textContent = `Espacio libre en almacén: ${available.toFixed(0)} Unidades`;
     }
 
     const cantidadInput = document.getElementById('refill_cantidad');
     if (cantidadInput) {
-        cantidadInput.max = available.toFixed(2);
+        cantidadInput.max = available.toFixed(0);
     }
 }
 

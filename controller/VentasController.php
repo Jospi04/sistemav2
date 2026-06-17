@@ -5,7 +5,7 @@ use Model\Venta;
 
 class VentasController {
     /**
-     * Muestra la interfaz de despacho o procesa el registro de la venta.
+     * Muestra la interfaz de pedido o procesa el registro de la venta.
      */
     public function registrar() {
         // Asegurar que el usuario está logueado
@@ -14,63 +14,61 @@ class VentasController {
             exit;
         }
 
-        // Obtener surtidores para rellenar el formulario dinámicamente
+        // Obtener combos para rellenar el formulario dinámicamente
         $surtidores = Venta::getSurtidoresActivos();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $surtidor_id = intval($_POST['surtidor_id'] ?? 0);
-            $litros = floatval($_POST['litros'] ?? 0);
-            $placa = trim($_POST['placa_vehiculo'] ?? '');
+            $combo_id = intval($_POST['surtidor_id'] ?? 0);
+            $cantidad = floatval($_POST['litros'] ?? 0);
+            $mesa_cliente = trim($_POST['placa_vehiculo'] ?? '');
             $metodo_pago = trim($_POST['metodo_pago'] ?? '');
 
             // Validación básica
-            if ($surtidor_id <= 0 || $litros <= 0 || empty($metodo_pago)) {
-                $_SESSION['error'] = 'Por favor, complete todos los campos obligatorios del despacho.';
+            if ($combo_id <= 0 || $cantidad <= 0 || empty($metodo_pago)) {
+                $_SESSION['error'] = 'Por favor, complete todos los campos obligatorios del pedido.';
                 header('Location: ventas');
                 exit;
             }
 
-            // Buscar el surtidor en la lista para obtener el combustible y precio unitario reales
+            // Buscar el combo en la lista para obtener el producto y precio unitario reales
             $surtidorSeleccionado = null;
             foreach ($surtidores as $s) {
-                if (intval($s['id']) === $surtidor_id) {
+                if (intval($s['id']) === $combo_id) {
                     $surtidorSeleccionado = $s;
                     break;
                 }
             }
 
             if (!$surtidorSeleccionado) {
-                $_SESSION['error'] = 'El surtidor seleccionado no se encuentra activo o no existe.';
+                $_SESSION['error'] = 'El combo seleccionado no se encuentra activo o no existe.';
                 header('Location: ventas');
                 exit;
             }
 
-            $combustible_id = $surtidorSeleccionado['combustible_id'];
-            $precio_litro = floatval($surtidorSeleccionado['precio_litro']);
+            $producto_id = $surtidorSeleccionado['producto_id'];
+            $precio_venta = floatval($surtidorSeleccionado['precio_litro']);
 
-            // ==========================================
-            // LÓGICA CORE: Cálculo del total en el Controller
-            // ==========================================
-            $total = round($litros * $precio_litro, 2);
+            // Cálculo del total
+            $total = round($cantidad * $precio_venta, 2);
 
             // Guardar en base de datos llamando al modelo
             $usuario_id = $_SESSION['usuario_id'];
-            $venta_id = Venta::guardar($usuario_id, $surtidor_id, $combustible_id, $litros, $precio_litro, $total, $placa, $metodo_pago);
+            $venta_id = Venta::guardar($usuario_id, $combo_id, $producto_id, $cantidad, $precio_venta, $total, $mesa_cliente, $metodo_pago);
 
             if ($venta_id) {
-                $_SESSION['success'] = "¡Despacho registrado correctamente! Total: S/. " . number_format($total, 2) . " por " . floatval($litros) . " Gal de " . $surtidorSeleccionado['combustible_nombre'];
-                $_SESSION['last_venta_id'] = $venta_id; // Reservado para emitir boleta en la Fase 7
+                $_SESSION['success'] = "¡Pedido registrado correctamente! Total: S/. " . number_format($total, 2) . " por " . floatval($cantidad) . " Porción(es) de " . $surtidorSeleccionado['combustible_nombre'];
+                $_SESSION['last_venta_id'] = $venta_id;
                 header('Location: ventas');
                 exit;
             } else {
-                $_SESSION['error'] = 'Error al registrar la transacción en la base de datos.';
+                $_SESSION['error'] = 'Error al registrar el pedido en la base de datos (Stock insuficiente o error de conexión).';
                 header('Location: ventas');
                 exit;
             }
         } else {
             // Cargar la vista encapsulada en el layout maestro
             $activePage = 'ventas';
-            $pageTitle = 'Registro de Despacho';
+            $pageTitle = 'Tomar Pedido';
             $extraCss = 'ventas.css';
             $extraJs = 'ventas.js';
             $viewFile = 'ventas.php';
@@ -79,7 +77,7 @@ class VentasController {
     }
 
     /**
-     * Muestra el comprobante de boleta de la última venta o de una específica.
+     * Muestra el comprobante de boleta del último pedido.
      */
     public function verBoleta() {
         if (!isset($_SESSION['usuario_id'])) {
@@ -87,7 +85,7 @@ class VentasController {
             exit;
         }
 
-        // Buscar ID de venta (desde parámetro GET o desde la última registrada en la sesión)
+        // Buscar ID de venta
         $venta_id = isset($_GET['id']) ? intval($_GET['id']) : (isset($_SESSION['last_venta_id']) ? intval($_SESSION['last_venta_id']) : 0);
 
         $ventaDetalle = null;
@@ -106,7 +104,7 @@ class VentasController {
     }
 
     /**
-     * Permite al administrador editar una boleta/venta.
+     * Permite al administrador editar un pedido/boleta.
      */
     public function editar() {
         if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'admin') {
@@ -119,12 +117,12 @@ class VentasController {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = intval($_POST['id'] ?? 0);
-            $placa = trim($_POST['placa_vehiculo'] ?? '');
+            $mesa_cliente = trim($_POST['placa_vehiculo'] ?? '');
             $metodo_pago = trim($_POST['metodo_pago'] ?? '');
-            $litros = floatval($_POST['litros'] ?? 0);
+            $cantidad = floatval($_POST['litros'] ?? 0);
             $total = floatval($_POST['total'] ?? 0);
 
-            if ($id <= 0 || $litros <= 0 || $total <= 0 || empty($metodo_pago)) {
+            if ($id <= 0 || $cantidad <= 0 || $total <= 0 || empty($metodo_pago)) {
                 $_SESSION['error'] = 'Por favor, complete todos los campos con valores válidos.';
                 header('Location: reportes');
                 exit;
@@ -133,52 +131,52 @@ class VentasController {
             try {
                 $db->beginTransaction();
 
-                // 1. Obtener la venta actual para calcular la diferencia de litros
-                $stmtVenta = $db->prepare("SELECT surtidor_id, litros FROM ventas WHERE id = ? FOR UPDATE");
+                // 1. Obtener la venta actual para calcular la diferencia de porciones
+                $stmtVenta = $db->prepare("SELECT combo_id, cantidad FROM ventas WHERE id = ? FOR UPDATE");
                 $stmtVenta->execute([$id]);
                 $venta = $stmtVenta->fetch();
 
                 if (!$venta) {
-                    throw new \Exception("Venta no encontrada.");
+                    throw new \Exception("Pedido no encontrado.");
                 }
 
-                $surtidor_id = $venta['surtidor_id'];
-                $litros_viejos = floatval($venta['litros']);
-                $diferencia_litros = $litros - $litros_viejos;
+                $combo_id = $venta['combo_id'];
+                $cantidad_vieja = floatval($venta['cantidad']);
+                $diferencia_cantidad = $cantidad - $cantidad_vieja;
 
-                // 2. Obtener el tanque asociado al surtidor
-                $stmtSurtidor = $db->prepare("SELECT inventario_id FROM surtidores WHERE id = ?");
-                $stmtSurtidor->execute([$surtidor_id]);
-                $surtidor = $stmtSurtidor->fetch();
+                // 2. Obtener el insumo asociado al combo
+                $stmtCombo = $db->prepare("SELECT inventario_id FROM combos WHERE id = ?");
+                $stmtCombo->execute([$combo_id]);
+                $combo = $stmtCombo->fetch();
 
-                if ($surtidor) {
-                    $inventario_id = $surtidor['inventario_id'];
-                    // Actualizar inventario (tanque subterráneo) restando la diferencia de litros
+                if ($combo) {
+                    $inventario_id = $combo['inventario_id'];
+                    // Actualizar inventario restando la diferencia de porciones
                     $stmtStock = $db->prepare("UPDATE inventario SET stock_actual = stock_actual - ? WHERE id = ?");
-                    $stmtStock->execute([$diferencia_litros, $inventario_id]);
+                    $stmtStock->execute([$diferencia_cantidad, $inventario_id]);
 
-                    // Actualizar lectura acumulada de la manguera
-                    $stmtLectura = $db->prepare("UPDATE surtidores SET lectura_acumulada_litros = lectura_acumulada_litros + ? WHERE id = ?");
-                    $stmtLectura->execute([$diferencia_litros, $surtidor_id]);
+                    // Actualizar ventas acumuladas del combo
+                    $stmtLectura = $db->prepare("UPDATE combos SET ventas_acumuladas = ventas_acumuladas + ? WHERE id = ?");
+                    $stmtLectura->execute([$diferencia_cantidad, $combo_id]);
                 }
 
                 // 3. Actualizar los datos de la venta
-                $stmtUpdate = $db->prepare("UPDATE ventas SET placa_vehiculo = ?, metodo_pago = ?, litros = ?, total = ? WHERE id = ?");
+                $stmtUpdate = $db->prepare("UPDATE ventas SET mesa_cliente = ?, metodo_pago = ?, cantidad = ?, total = ? WHERE id = ?");
                 $stmtUpdate->execute([
-                    !empty($placa) ? strtoupper($placa) : null,
+                    !empty($mesa_cliente) ? $mesa_cliente : null,
                     $metodo_pago,
-                    $litros,
+                    $cantidad,
                     $total,
                     $id
                 ]);
 
                 $db->commit();
-                $_SESSION['success'] = "¡Boleta #$id editada y cuadrada con éxito! El inventario fue actualizado.";
+                $_SESSION['success'] = "¡Boleta #$id editada con éxito! El stock de insumos fue actualizado.";
             } catch (\Exception $e) {
                 if ($db->inTransaction()) {
                     $db->rollBack();
                 }
-                $_SESSION['error'] = 'Error al editar la venta: ' . $e->getMessage();
+                $_SESSION['error'] = 'Error al editar el pedido: ' . $e->getMessage();
             }
 
             header('Location: reportes');
@@ -188,9 +186,10 @@ class VentasController {
             $id = intval($_GET['id'] ?? 0);
             $venta = null;
             if ($id > 0) {
-                $query = "SELECT v.*, c.nombre as combustible_nombre, c.precio_litro 
+                $query = "SELECT v.*, c.nombre as combustible_nombre, c.precio_venta as precio_litro,
+                                 v.mesa_cliente as placa_vehiculo, v.cantidad as litros
                           FROM ventas v 
-                          JOIN combustibles c ON v.combustible_id = c.id 
+                          JOIN productos c ON v.producto_id = c.id 
                           WHERE v.id = ? LIMIT 1";
                 $stmt = $db->prepare($query);
                 $stmt->execute([$id]);
@@ -204,7 +203,7 @@ class VentasController {
     }
 
     /**
-     * Permite al administrador eliminar/anular una boleta/venta.
+     * Permite al administrador anular un pedido/boleta.
      */
     public function eliminar() {
         if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'admin') {
@@ -216,7 +215,7 @@ class VentasController {
         $id = intval($_GET['id'] ?? 0);
 
         if ($id <= 0) {
-            $_SESSION['error'] = 'ID de venta no válido.';
+            $_SESSION['error'] = 'ID de pedido no válido.';
             header('Location: reportes');
             exit;
         }
@@ -227,31 +226,31 @@ class VentasController {
             $db->beginTransaction();
 
             // 1. Obtener datos de la venta para restaurar el stock
-            $stmtVenta = $db->prepare("SELECT surtidor_id, litros FROM ventas WHERE id = ? FOR UPDATE");
+            $stmtVenta = $db->prepare("SELECT combo_id, cantidad FROM ventas WHERE id = ? FOR UPDATE");
             $stmtVenta->execute([$id]);
             $venta = $stmtVenta->fetch();
 
             if (!$venta) {
-                throw new \Exception("Venta no encontrada.");
+                throw new \Exception("Pedido no encontrado.");
             }
 
-            $surtidor_id = $venta['surtidor_id'];
-            $litros = floatval($venta['litros']);
+            $combo_id = $venta['combo_id'];
+            $cantidad = floatval($venta['cantidad']);
 
-            // 2. Obtener el tanque asociado al surtidor
-            $stmtSurtidor = $db->prepare("SELECT inventario_id FROM surtidores WHERE id = ?");
-            $stmtSurtidor->execute([$surtidor_id]);
-            $surtidor = $stmtSurtidor->fetch();
+            // 2. Obtener el insumo asociado al combo
+            $stmtCombo = $db->prepare("SELECT inventario_id FROM combos WHERE id = ?");
+            $stmtCombo->execute([$combo_id]);
+            $combo = $stmtCombo->fetch();
 
-            if ($surtidor) {
-                $inventario_id = $surtidor['inventario_id'];
-                // Devolver los litros al tanque de almacenamiento subterráneo
+            if ($combo) {
+                $inventario_id = $combo['inventario_id'];
+                // Devolver las porciones al almacén
                 $stmtStock = $db->prepare("UPDATE inventario SET stock_actual = stock_actual + ? WHERE id = ?");
-                $stmtStock->execute([$litros, $inventario_id]);
+                $stmtStock->execute([$cantidad, $inventario_id]);
 
-                // Descontar de la lectura acumulada del surtidor
-                $stmtLectura = $db->prepare("UPDATE surtidores SET lectura_acumulada_litros = lectura_acumulada_litros - ? WHERE id = ?");
-                $stmtLectura->execute([$litros, $surtidor_id]);
+                // Descontar de las ventas acumuladas del combo
+                $stmtLectura = $db->prepare("UPDATE combos SET ventas_acumuladas = ventas_acumuladas - ? WHERE id = ?");
+                $stmtLectura->execute([$cantidad, $combo_id]);
             }
 
             // 3. Eliminar físicamente la transacción
@@ -259,12 +258,12 @@ class VentasController {
             $stmtDelete->execute([$id]);
 
             $db->commit();
-            $_SESSION['success'] = "¡Boleta #$id anulada con éxito! Se devolvieron $litros Gal al tanque subterráneo.";
+            $_SESSION['success'] = "¡Pedido #$id anula con éxito! Se devolvieron $cantidad porciones al stock.";
         } catch (\Exception $e) {
             if ($db->inTransaction()) {
                 $db->rollBack();
             }
-            $_SESSION['error'] = 'Error al anular la boleta: ' . $e->getMessage();
+            $_SESSION['error'] = 'Error al anular el pedido: ' . $e->getMessage();
         }
 
         header('Location: reportes');

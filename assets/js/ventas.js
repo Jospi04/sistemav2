@@ -1,47 +1,47 @@
 /**
  * ==========================================================================
- * JOSPERÚ OPERACIONES — LÓGICA DE REGISTRO DE DESPACHOS (ventas.js)
+ * BROSTERIA 24/7 OPERACIONES — LÓGICA DE REGISTRO DE COMANDAS (ventas.js)
  * ==========================================================================
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    const surtidorSelect = document.getElementById('surtidor_id');
-    const litrosInput = document.getElementById('litros');
-    const importeInput = document.getElementById('importe');
-    const infoFuelName = document.getElementById('infoFuelName');
-    const infoFuelPrice = document.getElementById('infoFuelPrice');
+    const comboSelect = document.getElementById('surtidor_id'); // Mapea al ID en la vista
+    const cantidadInput = document.getElementById('litros');    // Mapea al ID en la vista (litros)
+    const importeInput = document.getElementById('importe');      // Mapea al ID en la vista (importe)
+    const infoComboName = document.getElementById('infoFuelName');
+    const infoComboPrice = document.getElementById('infoFuelPrice');
     const billboardAmount = document.getElementById('billboardAmount');
 
-    if (!surtidorSelect || !litrosInput || !importeInput) return;
+    if (!comboSelect || !cantidadInput || !importeInput) return;
 
-    let precioPorGalon = 0;
+    let precioPorUnidad = 0;
 
-    surtidorSelect.addEventListener('change', function() {
-        const option = surtidorSelect.options[surtidorSelect.selectedIndex];
+    comboSelect.addEventListener('change', function() {
+        const option = comboSelect.options[comboSelect.selectedIndex];
         if (option && option.value !== "") {
-            precioPorGalon = parseFloat(option.getAttribute('data-precio')) || 0;
-            const nombreCombustible = option.getAttribute('data-combustible') || '-';
+            precioPorUnidad = parseFloat(option.getAttribute('data-precio')) || 0;
+            const nombreCombo = option.getAttribute('data-combustible') || '-';
             
-            if (infoFuelName) infoFuelName.textContent = nombreCombustible;
-            if (infoFuelPrice) infoFuelPrice.textContent = 'S/. ' + precioPorGalon.toFixed(2);
+            if (infoComboName) infoComboName.textContent = nombreCombo;
+            if (infoComboPrice) infoComboPrice.textContent = 'S/. ' + precioPorUnidad.toFixed(2);
         } else {
-            precioPorGalon = 0;
-            if (infoFuelName) infoFuelName.textContent = '-';
-            if (infoFuelPrice) infoFuelPrice.textContent = 'S/. 0.00';
+            precioPorUnidad = 0;
+            if (infoComboName) infoComboName.textContent = '-';
+            if (infoComboPrice) infoComboPrice.textContent = 'S/. 0.00';
         }
-        recalcularDesdeGalones();
+        recalcularDesdeUnidades();
     });
 
-    litrosInput.addEventListener('input', recalcularDesdeGalones);
+    cantidadInput.addEventListener('input', recalcularDesdeUnidades);
     importeInput.addEventListener('input', recalcularDesdeSoles);
 
-    function recalcularDesdeGalones() {
-        const galones = parseFloat(litrosInput.value) || 0;
-        if (precioPorGalon > 0 && galones > 0) {
-            const total = galones * precioPorGalon;
+    function recalcularDesdeUnidades() {
+        const cantidad = parseFloat(cantidadInput.value) || 0;
+        if (precioPorUnidad > 0 && cantidad > 0) {
+            const total = cantidad * precioPorUnidad;
             importeInput.value = total.toFixed(2);
             if (billboardAmount) billboardAmount.textContent = 'S/. ' + total.toFixed(2);
-        } else if (galones === 0) {
+        } else if (cantidad === 0) {
             importeInput.value = '';
             if (billboardAmount) billboardAmount.textContent = 'S/. 0.00';
         }
@@ -49,12 +49,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function recalcularDesdeSoles() {
         const soles = parseFloat(importeInput.value) || 0;
-        if (precioPorGalon > 0 && soles > 0) {
-            const galones = soles / precioPorGalon;
-            litrosInput.value = galones.toFixed(4);
+        if (precioPorUnidad > 0 && soles > 0) {
+            const cantidad = soles / precioPorUnidad;
+            // Redondear a cantidad entera para plato/combo
+            cantidadInput.value = Math.round(cantidad);
             if (billboardAmount) billboardAmount.textContent = 'S/. ' + soles.toFixed(2);
         } else if (soles === 0) {
-            litrosInput.value = '';
+            cantidadInput.value = '';
             if (billboardAmount) billboardAmount.textContent = 'S/. 0.00';
         }
     }

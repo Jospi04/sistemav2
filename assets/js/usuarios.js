@@ -1,6 +1,6 @@
 /**
  * ==========================================================================
- * JOSPERÚ OPERACIONES — LÓGICA DE GESTIÓN DE VENDEDORES (usuarios.js)
+ * BROSTERIA 24/7 OPERACIONES — LÓGICA DE GESTIÓN DE PERSONAL (usuarios.js)
  * ==========================================================================
  */
 
