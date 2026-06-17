@@ -12,7 +12,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS `reabastecimientos`;
 DROP TABLE IF EXISTS `ventas`;
-DROP TABLE IF EXISTS `combos`;
+DROP TABLE IF EXISTS `com bos`;
 DROP TABLE IF EXISTS `inventario`;
 DROP TABLE IF EXISTS `productos`;
 DROP TABLE IF EXISTS `usuarios`;
@@ -116,8 +116,8 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- admin: admin123 (Cifrado BCRYPT)
 -- operador: operador123 (Cifrado BCRYPT)
 INSERT INTO `usuarios` (`nombre`, `usuario`, `password`, `rol`) VALUES
-('Piero Administrador', 'admin', '$2y$10$w0M8jVfE4.rT4aQ9gN3YVud7E5qM/u6T6yYQ/BvXk8hTqLp5fN/8a', 'admin'),
-('Carlos Cajero', 'operador', '$2y$10$0zX7f7q8MvUeX5bZ7Wf2be2r4YyK8M07Xw7fNqZ4r2M6YV3Z6n5d.', 'operario');
+('Piero Administrador', 'admin', '$2y$10$vGbN0QA4.fWFVp88dtJn4OFub6dBvxM9GeQVj8OtYDU7piIYzLSZS', 'admin'),
+('Carlos Cajero', 'operador', '$2y$10$nyyRVYazBeTju9hy/w6gEe1RDmLibzCHGc0xacpFCQklnUE62BT5C', 'operario');
 
 -- B. Catálogo de Productos Base (Precios oficiales de porciones)
 INSERT INTO `productos` (`nombre`, `precio_venta`) VALUES

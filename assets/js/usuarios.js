@@ -1,9 +1,3 @@
-/**
- * ==========================================================================
- * BROSTERIA 24/7 OPERACIONES — LÓGICA DE GESTIÓN DE PERSONAL (usuarios.js)
- * ==========================================================================
- */
-
 function openDeleteModal(event, deleteUrl, nombreUsuario) {
     if (event) event.preventDefault();
     
@@ -31,7 +25,6 @@ function closeDeleteModal() {
     }
 }
 
-// Cerrar modal al hacer clic en el fondo gris translúcido del overlay
 document.addEventListener('DOMContentLoaded', function() {
     const overlay = document.getElementById('deleteConfirmModal');
     if (overlay) {

@@ -14,7 +14,7 @@
     <!-- CSS Modular exclusivo del Login -->
     <link rel="stylesheet" href="assets/css/login.css">
     <!-- Identidad de Marca: Favicon para Pestañas del Navegador -->
-    <link rel="icon" type="image/png" href="assets/images/icon.png">
+    <link rel="icon" type="image/png" href="assets/images/comida.jpg">
 </head>
 
 <body>

@@ -163,7 +163,7 @@ $refillsHistoryList = $refillsList ?? [];
         <section class="transactions-section">
             <div class="section-title-bar">
                 <h2 style="font-family: 'Outfit', sans-serif; font-weight: 700;">Últimos Pedidos Procesados</h2>
-                <a href="ventas" class="btn-shortcut-new" style="background-color: #e11d48;">+ Tomar Pedido</a>
+                <a href="ventas" class="btn-shortcut-new btn-refill-trigger">+ Tomar Pedido</a>
             </div>
 
             <div class="table-wrapper">

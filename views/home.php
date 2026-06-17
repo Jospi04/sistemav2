@@ -14,7 +14,7 @@
     <!-- CSS Modular Adaline -->
     <link rel="stylesheet" href="assets/css/home.css">
     <!-- Identidad de Marca: Favicon para Pestañas del Navegador -->
-    <link rel="icon" type="image/png" href="assets/images/icon.png">
+    <link rel="icon" type="image/png" href="assets/images/comida.jpg">
 </head>
 
 <body>

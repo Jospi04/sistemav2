@@ -1,9 +1,3 @@
-/**
- * ==========================================================================
- * BROSTERIA 24/7 OPERACIONES — LÓGICA DEL PANEL DE CONTROL (dashboard.js)
- * ==========================================================================
- */
-
 function openRefillModal() {
     const modal = document.getElementById('refillModal');
     if (!modal) return;
@@ -39,14 +33,12 @@ function updateRefillCapacity() {
     }
 }
 
-// Inicializar escuchadores cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
     const refillSelect = document.getElementById('refill_inventario_id');
     if (refillSelect) {
         refillSelect.addEventListener('change', updateRefillCapacity);
     }
 
-    // Cerrar modal al hacer clic en el fondo grisáceo del lightbox
     window.addEventListener('click', function(event) {
         const modal = document.getElementById('refillModal');
         if (modal && event.target === modal) {

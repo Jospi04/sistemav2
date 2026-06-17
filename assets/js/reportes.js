@@ -1,9 +1,3 @@
-/**
- * ==========================================================================
- * BROSTERIA 24/7 OPERACIONES — LÓGICA DE REPORTES Y AUDITORÍA DE PEDIDOS (reportes.js)
- * ==========================================================================
- */
-
 function openDeleteVentaModal(event, id) {
     event.preventDefault();
     const modal = document.getElementById('deleteVentaConfirmModal');
@@ -27,7 +21,6 @@ function closeDeleteVentaModal() {
 function openEditVentaModal(event, id) {
     event.preventDefault();
     
-    // Traer datos de la venta vía fetch JSON
     fetch(`/ventas/editar?id=${id}`)
         .then(response => response.json())
         .then(data => {
@@ -36,7 +29,6 @@ function openEditVentaModal(event, id) {
                 document.getElementById('editVentaIdInput').value = data.id;
                 document.getElementById('editPrecioLitroInput').value = data.precio_litro;
                 document.getElementById('editCombustibleName').value = data.combustible_nombre;
-                // Redondear a cantidad entera para combos/platos
                 document.getElementById('editLitrosInput').value = Math.round(parseFloat(data.litros));
                 document.getElementById('editTotalInput').value = parseFloat(data.total).toFixed(2);
                 document.getElementById('editPlacaInput').value = data.placa_vehiculo || '';

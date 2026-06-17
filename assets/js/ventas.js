@@ -1,13 +1,7 @@
-/**
- * ==========================================================================
- * BROSTERIA 24/7 OPERACIONES — LÓGICA DE REGISTRO DE COMANDAS (ventas.js)
- * ==========================================================================
- */
-
 document.addEventListener('DOMContentLoaded', function() {
-    const comboSelect = document.getElementById('surtidor_id'); // Mapea al ID en la vista
-    const cantidadInput = document.getElementById('litros');    // Mapea al ID en la vista (litros)
-    const importeInput = document.getElementById('importe');      // Mapea al ID en la vista (importe)
+    const comboSelect = document.getElementById('surtidor_id');
+    const cantidadInput = document.getElementById('litros');
+    const importeInput = document.getElementById('importe');
     const infoComboName = document.getElementById('infoFuelName');
     const infoComboPrice = document.getElementById('infoFuelPrice');
     const billboardAmount = document.getElementById('billboardAmount');
@@ -51,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const soles = parseFloat(importeInput.value) || 0;
         if (precioPorUnidad > 0 && soles > 0) {
             const cantidad = soles / precioPorUnidad;
-            // Redondear a cantidad entera para plato/combo
             cantidadInput.value = Math.round(cantidad);
             if (billboardAmount) billboardAmount.textContent = 'S/. ' + soles.toFixed(2);
         } else if (soles === 0) {
